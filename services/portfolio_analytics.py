@@ -789,6 +789,284 @@ def drawdown_series(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame) -> 
     return drawdown.dropna()
 
 
+def _portfolio_simple_returns(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame) -> pd.Series:
+    portfolio_prices = _portfolio_price_series(portfolio_df, historical_df)
+    if len(portfolio_prices) < 2:
+        return pd.Series(dtype=float)
+    returns = portfolio_prices.pct_change().dropna()
+    returns.name = "Portfolio"
+    return returns
+
+
+def _portfolio_context(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame) -> tuple[pd.DataFrame, pd.Series]:
+    columns = _available_asset_columns(portfolio_df, historical_df)
+    if not columns:
+        return pd.DataFrame(), pd.Series(dtype=float)
+
+    weights = _normalized_weights(portfolio_df, columns)
+    if weights.empty:
+        return pd.DataFrame(), pd.Series(dtype=float)
+
+    active_assets = _active_assets(portfolio_df).set_index("ticker")
+    context = active_assets.reindex(columns).copy()
+    context["weight"] = weights.reindex(columns).fillna(0.0)
+    context = context.reset_index().rename(columns={"index": "ticker"})
+    return context, weights
+
+
+def _base_stressed_var(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame, confidence: float = 0.95) -> float | None:
+    portfolio_returns = _portfolio_simple_returns(portfolio_df, historical_df)
+    if len(portfolio_returns) < 20:
+        return None
+    quantile_level = max(0.0, min(1.0, 1 - confidence))
+    return abs(float(portfolio_returns.quantile(quantile_level)))
+
+
+def _path_drawdown(path: pd.Series) -> float | None:
+    clean_path = pd.to_numeric(path, errors="coerce").dropna()
+    if len(clean_path) < 2:
+        return None
+    drawdown = (clean_path / clean_path.cummax()) - 1
+    return abs(float(drawdown.min()))
+
+
+def _asset_beta_to_benchmark(ticker: str, historical_df: pd.DataFrame) -> float:
+    if ticker not in historical_df.columns or "IBOVESPA" not in historical_df.columns:
+        return 1.0
+
+    returns = historical_df[[ticker, "IBOVESPA"]].pct_change().dropna()
+    if len(returns) < 20:
+        return 1.0
+
+    benchmark_variance = float(returns["IBOVESPA"].var())
+    if benchmark_variance <= 0:
+        return 1.0
+
+    beta = float(returns[ticker].cov(returns["IBOVESPA"]) / benchmark_variance)
+    return float(np.clip(beta, 0.25, 2.5))
+
+
+def _treasury_duration_proxy(row: pd.Series) -> float:
+    asset_name = str(row.get("nome", "") or row.get("ticker", "")).lower()
+    maturity_date = pd.to_datetime(row.get("data_vencimento"), errors="coerce")
+    today = pd.Timestamp(datetime.today().date())
+    years_to_maturity = max((maturity_date - today).days / 365.25, 0.25) if not pd.isna(maturity_date) else 2.0
+
+    duration = min(years_to_maturity, 10.0)
+    if "selic" in asset_name:
+        duration *= 0.25
+    elif "ipca" in asset_name:
+        duration *= 0.85
+    elif "prefixado" in asset_name:
+        duration *= 0.95
+    return float(np.clip(duration, 0.2, 10.0))
+
+
+def _build_asset_impact_frame(
+    asset_context: pd.DataFrame,
+    asset_returns: pd.Series,
+    total_pl: float,
+) -> pd.DataFrame:
+    if asset_context.empty or asset_returns.empty:
+        return pd.DataFrame()
+
+    impact_df = asset_context.copy()
+    impact_df["asset_return"] = impact_df["ticker"].map(asset_returns.to_dict())
+    impact_df["portfolio_impact"] = impact_df["asset_return"] * impact_df["weight"]
+    impact_df["pnl_impact"] = impact_df["portfolio_impact"] * total_pl
+    impact_df["tipo_ativo"] = impact_df.apply(_asset_type, axis=1)
+    impact_df = impact_df.rename(
+        columns={
+            "ticker": "Ticker",
+            "nome": "Nome",
+            "tipo_ativo": "Tipo",
+            "weight": "Peso",
+            "asset_return": "Retorno do ativo",
+            "portfolio_impact": "Impacto na carteira",
+            "pnl_impact": "Impacto em valor",
+        }
+    )
+    columns = ["Ticker", "Nome", "Tipo", "Peso", "Retorno do ativo", "Impacto na carteira", "Impacto em valor"]
+    return impact_df[columns].sort_values("Impacto na carteira")
+
+
+def historical_stress_cases(
+    portfolio_df: pd.DataFrame,
+    historical_df: pd.DataFrame,
+    total_pl: float,
+) -> list[StressScenarioCase]:
+    if historical_df.empty:
+        return []
+
+    asset_context, _ = _portfolio_context(portfolio_df, historical_df)
+    if asset_context.empty:
+        return []
+
+    portfolio_prices = _portfolio_price_series(portfolio_df, historical_df)
+    if len(portfolio_prices) < 2:
+        return []
+
+    results: list[StressScenarioCase] = []
+    for scenario in HISTORICAL_STRESS_WINDOWS:
+        start_date = pd.Timestamp(scenario["start"])
+        end_date = pd.Timestamp(scenario["end"])
+        window_history = historical_df.loc[start_date:end_date]
+        window_prices = portfolio_prices.loc[start_date:end_date]
+
+        if window_history.empty or len(window_prices.dropna()) < 2:
+            results.append(
+                StressScenarioCase(
+                    key=scenario["key"],
+                    label=scenario["label"],
+                    category="historical",
+                    reference=scenario["reference"],
+                    expected_return=None,
+                    drawdown=None,
+                    stressed_var=None,
+                    pnl_impact=None,
+                    available=False,
+                    reason="Janela fora da base histórica disponível da carteira.",
+                    path=pd.Series(dtype=float),
+                    asset_impacts=pd.DataFrame(),
+                )
+            )
+            continue
+
+        clean_prices = window_prices.dropna()
+        normalized_path = clean_prices.divide(clean_prices.iloc[0]).multiply(100)
+        expected_return = float((clean_prices.iloc[-1] / clean_prices.iloc[0]) - 1)
+        window_returns = clean_prices.pct_change().dropna()
+        stressed_var = abs(float(window_returns.quantile(0.05))) if len(window_returns) >= 5 else None
+
+        scenario_returns = pd.Series(dtype=float)
+        available_columns = [ticker for ticker in asset_context["ticker"].tolist() if ticker in window_history.columns]
+        if available_columns:
+            scenario_prices = window_history[available_columns].ffill().bfill().dropna(how="all")
+            if len(scenario_prices) >= 2:
+                scenario_returns = (scenario_prices.iloc[-1] / scenario_prices.iloc[0]) - 1
+
+        results.append(
+            StressScenarioCase(
+                key=scenario["key"],
+                label=scenario["label"],
+                category="historical",
+                reference=scenario["reference"],
+                expected_return=expected_return,
+                drawdown=_path_drawdown(normalized_path),
+                stressed_var=stressed_var,
+                pnl_impact=expected_return * total_pl,
+                available=True,
+                reason="",
+                path=normalized_path.rename("Portfolio"),
+                asset_impacts=_build_asset_impact_frame(asset_context, scenario_returns, total_pl),
+            )
+        )
+
+    return results
+
+
+def custom_stress_scenario(
+    portfolio_df: pd.DataFrame,
+    historical_df: pd.DataFrame,
+    total_pl: float,
+    scenario_type: str,
+    magnitude: float,
+) -> StressScenarioCase | None:
+    asset_context, _ = _portfolio_context(portfolio_df, historical_df)
+    if asset_context.empty:
+        return None
+
+    if total_pl <= 0:
+        total_pl = float(pd.to_numeric(asset_context.get("valor_real"), errors="coerce").fillna(0).sum())
+
+    last_reference_date = historical_df.index.max() if not historical_df.empty else pd.Timestamp(datetime.today().date())
+    portfolio_returns = _portfolio_simple_returns(portfolio_df, historical_df)
+    recent_asset_returns = historical_df[asset_context["ticker"].tolist()].pct_change().dropna(how="all") if not historical_df.empty else pd.DataFrame()
+    base_var = _base_stressed_var(portfolio_df, historical_df) or 0.0
+
+    asset_shocks: dict[str, float] = {}
+    volatility_multiplier = 1.0
+    horizon_days = 10
+    reference = ""
+    label = ""
+
+    for _, row in asset_context.iterrows():
+        ticker = str(row["ticker"])
+        asset_type = _asset_type(row)
+        shock = 0.0
+
+        if scenario_type == "market_drop":
+            label = f"Queda de mercado ({magnitude:.0f}%)"
+            reference = "Choque instantâneo aplicado nas posições atuais."
+            volatility_multiplier = 1 + (magnitude / 20)
+            horizon_days = 7
+            if asset_type == "titulo_publico":
+                shock = -0.10 * (magnitude / 100)
+            else:
+                beta = _asset_beta_to_benchmark(ticker, historical_df)
+                shock = -(magnitude / 100) * beta
+        elif scenario_type == "rate_hike":
+            label = f"Aumento de juros (+{magnitude:.0f} bps)"
+            reference = "Choque de taxa modelado por duration proxy e beta histórico."
+            volatility_multiplier = 1 + (magnitude / 200)
+            horizon_days = 10
+            if asset_type == "titulo_publico":
+                shock = -_treasury_duration_proxy(row) * (magnitude / 10000)
+            else:
+                beta = _asset_beta_to_benchmark(ticker, historical_df)
+                shock = -0.015 * (magnitude / 100) * beta
+        elif scenario_type == "vol_spike":
+            label = f"Alta de volatilidade (+{magnitude:.0f}%)"
+            reference = "Stress calculado a partir da volatilidade recente de cada ativo."
+            volatility_multiplier = 1 + (magnitude / 100)
+            horizon_days = 15
+            recent_vol = 0.02
+            if not recent_asset_returns.empty and ticker in recent_asset_returns.columns:
+                asset_vol = float(recent_asset_returns[ticker].dropna().tail(63).std())
+                if np.isfinite(asset_vol) and asset_vol > 0:
+                    recent_vol = asset_vol
+            shock = -recent_vol * np.sqrt(10) * (magnitude / 100)
+        else:
+            return None
+
+        asset_shocks[ticker] = float(np.clip(shock, -0.45, 0.10))
+
+    asset_shock_series = pd.Series(asset_shocks, dtype=float)
+    weights = asset_context.set_index("ticker")["weight"].astype(float)
+    expected_return = float(asset_shock_series.reindex(weights.index).fillna(0.0).mul(weights).sum())
+
+    future_index = pd.bdate_range(start=last_reference_date, periods=horizon_days + 1)
+    if scenario_type == "market_drop":
+        values = np.full(len(future_index), 100 * (1 + expected_return), dtype=float)
+        values[0] = 100.0
+    elif scenario_type == "rate_hike":
+        values = 100 * (1 + np.linspace(0, expected_return, len(future_index)))
+    else:
+        base_curve = np.linspace(0, expected_return, len(future_index))
+        oscillation = np.sin(np.linspace(0, 3 * np.pi, len(future_index))) * abs(expected_return) * 0.18
+        values = 100 * (1 + base_curve + oscillation)
+        values[0] = 100.0
+
+    path = pd.Series(np.clip(values, 1.0, None), index=future_index, name="Portfolio")
+    drawdown = _path_drawdown(path)
+    stressed_var = min(base_var * volatility_multiplier + max(-expected_return, 0.0) * 0.35, 1.0)
+
+    return StressScenarioCase(
+        key=scenario_type,
+        label=label,
+        category="custom",
+        reference=reference,
+        expected_return=expected_return,
+        drawdown=drawdown,
+        stressed_var=stressed_var,
+        pnl_impact=expected_return * total_pl,
+        available=True,
+        reason="",
+        path=path,
+        asset_impacts=_build_asset_impact_frame(asset_context, asset_shock_series, total_pl),
+    )
+
+
 def monte_carlo_simulation(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame) -> MonteCarloResult | None:
     columns = _available_asset_columns(portfolio_df, historical_df)
     if len(columns) == 0:
