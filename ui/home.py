@@ -1,0 +1,265 @@
+from __future__ import annotations
+
+from datetime import datetime
+from pathlib import Path
+
+import pandas as pd
+import streamlit as st
+
+from core.portfolio_repository import PortfolioRepository
+from services.portfolio_analytics import (
+    PortfolioAnalyticsError,
+    append_position,
+    build_historical_dataset,
+    create_equity_position,
+    create_treasury_position,
+    empty_portfolio_frame,
+    ensure_portfolio_schema,
+    load_treasury_data,
+    normalized_history_with_portfolio,
+    portfolio_overview,
+    recalculate_portfolio,
+    remove_position,
+    treasury_year_options,
+    TREASURY_TYPES,
+)
+
+
+def _get_repository() -> PortfolioRepository:
+    return PortfolioRepository(base_path=Path(__file__).resolve().parents[1])
+
+
+def _bootstrap_state() -> None:
+    if "portfolio_df" in st.session_state and "historical_df" in st.session_state:
+        return
+
+    snapshot = _get_repository().load_snapshot()
+    portfolio_df = ensure_portfolio_schema(snapshot.portfolio)
+    historical_df = snapshot.historical.copy()
+    total_pl = float(pd.to_numeric(portfolio_df["valor_real"], errors="coerce").fillna(0).sum())
+
+    st.session_state["portfolio_df"] = portfolio_df
+    st.session_state["historical_df"] = historical_df
+    st.session_state["portfolio_total_pl"] = total_pl if total_pl > 0 else 100000000.0
+    st.session_state["invalid_tickers"] = []
+    st.session_state["portfolio_notice"] = ""
+
+
+def _save_portfolio() -> None:
+    repo = _get_repository()
+    repo.save_portfolio_data(st.session_state["portfolio_df"])
+
+
+def _save_historical() -> None:
+    repo = _get_repository()
+    repo.save_historical_data(st.session_state["historical_df"])
+
+
+def _refresh_history(show_success: bool = True) -> None:
+    with st.spinner("Atualizando historico, benchmarks e titulos publicos..."):
+        result = build_historical_dataset(st.session_state["portfolio_df"])
+    st.session_state["historical_df"] = result.historical
+    st.session_state["invalid_tickers"] = result.invalid_tickers
+    _save_historical()
+    if show_success:
+        st.session_state["portfolio_notice"] = "Historico atualizado com sucesso."
+
+
+def _sync_total_pl(total_pl: float) -> None:
+    current_total_pl = float(st.session_state["portfolio_total_pl"])
+    if abs(total_pl - current_total_pl) < 0.01:
+        return
+
+    st.session_state["portfolio_total_pl"] = total_pl
+    st.session_state["portfolio_df"] = recalculate_portfolio(st.session_state["portfolio_df"], total_pl)
+    _save_portfolio()
+
+
+def _format_currency(value: float) -> str:
+    return f"R$ {value:,.2f}"
+
+
+def _portfolio_table_view(portfolio_df: pd.DataFrame, total_pl: float) -> pd.DataFrame:
+    if portfolio_df.empty:
+        return pd.DataFrame()
+
+    view_df = ensure_portfolio_schema(portfolio_df).copy()
+    view_df = view_df.sort_values("porcentagem_real", ascending=False)
+    view_df = view_df.rename(
+        columns={
+            "ticker": "Ticker",
+            "nome": "Nome",
+            "tipo_ativo": "Tipo",
+            "preco": "Preco/Titulo",
+            "taxa": "Taxa (%)",
+            "porcentagem_desejada": "Peso Desejado (%)",
+            "porcentagem_real": "Peso Real (%)",
+            "qtd_acoes": "Quantidade",
+            "valor_real": "Valor Real (R$)",
+            "data_fechamento": "Data Base",
+            "data_vencimento": "Vencimento",
+        }
+    )
+
+    cash_remaining = max(total_pl - pd.to_numeric(portfolio_df["valor_real"], errors="coerce").fillna(0).sum(), 0.0)
+    cash_row = pd.DataFrame(
+        [
+            {
+                "Ticker": "Valor Restante",
+                "Nome": "",
+                "Tipo": "caixa",
+                "Preco/Titulo": "",
+                "Taxa (%)": "",
+                "Peso Desejado (%)": "",
+                "Peso Real (%)": (cash_remaining / total_pl) * 100 if total_pl > 0 else 0.0,
+                "Quantidade": "",
+                "Valor Real (R$)": cash_remaining,
+                "Data Base": "",
+                "Vencimento": "",
+            }
+        ]
+    )
+    view_df = pd.concat([view_df, cash_row], ignore_index=True)
+
+    for column in ["Preco/Titulo", "Taxa (%)", "Peso Desejado (%)", "Peso Real (%)", "Quantidade", "Valor Real (R$)"]:
+        if column in view_df.columns:
+            view_df[column] = pd.to_numeric(view_df[column], errors="coerce")
+
+    return view_df
+
+
+def render_home_page() -> None:
+    _bootstrap_state()
+
+    st.title("Portfólio")
+    st.caption("Monte a carteira com acoes e titulos publicos, gere o historico consolidado e compare com benchmark.")
+
+    if st.session_state.get("portfolio_notice"):
+        st.success(st.session_state["portfolio_notice"])
+        st.session_state["portfolio_notice"] = ""
+
+    total_pl = st.number_input(
+        "Patrimonio Liquido (R$)",
+        min_value=0.0,
+        value=float(st.session_state["portfolio_total_pl"]),
+        step=100000.0,
+        format="%.2f",
+    )
+    _sync_total_pl(total_pl)
+
+    controls_col_1, controls_col_2 = st.columns([1, 1])
+    with controls_col_1:
+        if st.button("Atualizar historico e benchmarks", use_container_width=True):
+            _refresh_history()
+    with controls_col_2:
+        if st.button("Recalcular quantidades", use_container_width=True):
+            st.session_state["portfolio_df"] = recalculate_portfolio(st.session_state["portfolio_df"], total_pl)
+            _save_portfolio()
+            st.session_state["portfolio_notice"] = "Quantidades recalculadas com base no PL atual."
+            st.rerun()
+
+    add_tab_equity, add_tab_treasury = st.tabs(["Bolsa de Valores", "Titulos Publicos"])
+
+    with add_tab_equity:
+        with st.form("equity-form", clear_on_submit=True):
+            equity_col_1, equity_col_2 = st.columns([2, 1])
+            ticker_input = equity_col_1.text_input("Ticker", placeholder="Ex.: PETR4, PETR4.SA, AAPL, MSFT")
+            target_weight = equity_col_2.number_input("Peso (%)", min_value=0.0, max_value=100.0, step=0.5, format="%.2f")
+            add_equity = st.form_submit_button("Adicionar ativo", use_container_width=True)
+
+        if add_equity:
+            try:
+                position = create_equity_position(st.session_state["portfolio_df"], ticker_input, target_weight, total_pl)
+                st.session_state["portfolio_df"] = append_position(st.session_state["portfolio_df"], position, total_pl)
+                _save_portfolio()
+                _refresh_history(show_success=False)
+                st.session_state["portfolio_notice"] = f'{position["ticker"]} adicionado ao portfolio.'
+                st.rerun()
+            except PortfolioAnalyticsError as exc:
+                st.error(str(exc))
+
+    with add_tab_treasury:
+        treasury_df = load_treasury_data()
+        selected_type = st.selectbox("Tipo de titulo", TREASURY_TYPES, key="treasury-type")
+        available_years = treasury_year_options(treasury_df, selected_type)
+        default_year = available_years[0] if available_years else datetime.now().year + 1
+
+        with st.form("treasury-form", clear_on_submit=True):
+            treasury_col_1, treasury_col_2 = st.columns([2, 1])
+            selected_year = treasury_col_1.selectbox("Ano de vencimento", available_years or [default_year])
+            treasury_weight = treasury_col_2.number_input("Peso (%)", min_value=0.0, max_value=100.0, step=0.5, format="%.2f", key="treasury-weight")
+            add_treasury = st.form_submit_button("Adicionar titulo", use_container_width=True)
+
+        if add_treasury:
+            try:
+                position = create_treasury_position(
+                    st.session_state["portfolio_df"],
+                    treasury_df,
+                    selected_type,
+                    int(selected_year),
+                    treasury_weight,
+                    total_pl,
+                )
+                st.session_state["portfolio_df"] = append_position(st.session_state["portfolio_df"], position, total_pl)
+                _save_portfolio()
+                _refresh_history(show_success=False)
+                st.session_state["portfolio_notice"] = f'{position["ticker"]} adicionado ao portfolio.'
+                st.rerun()
+            except PortfolioAnalyticsError as exc:
+                st.error(str(exc))
+
+    if st.session_state["invalid_tickers"]:
+        st.warning(
+            "Tickers ignorados por falta de historico valido no Yahoo Finance: "
+            + ", ".join(st.session_state["invalid_tickers"])
+        )
+
+    portfolio_df = st.session_state["portfolio_df"]
+    historical_df = st.session_state["historical_df"]
+    overview = portfolio_overview(portfolio_df, historical_df, total_pl)
+
+    metric_col_1, metric_col_2, metric_col_3, metric_col_4 = st.columns(4)
+    metric_col_1.metric("Ativos", overview["asset_count"])
+    metric_col_2.metric("Investido", _format_currency(overview["invested_value"]))
+    metric_col_3.metric("Caixa livre", _format_currency(overview["cash_remaining"]))
+    metric_col_4.metric("Ultimo historico", overview["latest_history_date"])
+
+    st.subheader("Carteira atual")
+    if portfolio_df.empty:
+        st.info("Adicione pelo menos um ativo para montar o portfolio.")
+    else:
+        st.dataframe(
+            _portfolio_table_view(portfolio_df, total_pl),
+            use_container_width=True,
+            hide_index=True,
+            column_config={
+                "Preco/Titulo": st.column_config.NumberColumn(format="R$ %.2f"),
+                "Taxa (%)": st.column_config.NumberColumn(format="%.2f"),
+                "Peso Desejado (%)": st.column_config.NumberColumn(format="%.2f"),
+                "Peso Real (%)": st.column_config.NumberColumn(format="%.2f"),
+                "Quantidade": st.column_config.NumberColumn(format="%.2f"),
+                "Valor Real (R$)": st.column_config.NumberColumn(format="R$ %.2f"),
+            },
+        )
+
+        remove_col_1, remove_col_2 = st.columns([3, 1])
+        selected_ticker = remove_col_1.selectbox("Remover ativo", portfolio_df["ticker"].astype(str).tolist())
+        if remove_col_2.button("Remover selecionado", use_container_width=True):
+            st.session_state["portfolio_df"] = remove_position(portfolio_df, selected_ticker, total_pl)
+            _save_portfolio()
+            _refresh_history(show_success=False)
+            st.session_state["portfolio_notice"] = f"{selected_ticker} removido do portfolio."
+            st.rerun()
+
+    st.subheader("Evolucao normalizada")
+    normalized_df = normalized_history_with_portfolio(portfolio_df, historical_df)
+    if normalized_df.empty:
+        st.info("Atualize o historico para visualizar a evolucao consolidada da carteira.")
+    else:
+        st.line_chart(normalized_df, use_container_width=True)
+
+    with st.expander("Historico bruto consolidado"):
+        if historical_df.empty:
+            st.write("Nenhum historico disponivel.")
+        else:
+            st.dataframe(historical_df.tail(120), use_container_width=True)
