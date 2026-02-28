@@ -158,6 +158,12 @@ def _render_home_styles() -> None:
             padding: 1.05rem;
             box-shadow: 0 14px 34px rgba(16, 33, 112, 0.05);
         }
+        div[data-testid="stVerticalBlockBorderWrapper"] {
+            background: rgba(255, 255, 255, 0.82);
+            border: 1px solid rgba(73, 121, 246, 0.12);
+            border-radius: 22px;
+            box-shadow: 0 14px 34px rgba(16, 33, 112, 0.05);
+        }
         [data-testid="stNumberInput"] label,
         [data-testid="stTextInput"] label,
         [data-testid="stSelectbox"] label {
@@ -308,42 +314,39 @@ def render_home_page() -> None:
 
     config_col_1, config_col_2 = st.columns([1.3, 1], gap="large")
     with config_col_1:
-        st.markdown('<div class="alfa-surface">', unsafe_allow_html=True)
-        total_pl = st.number_input(
-            "Patrimonio Liquido (R$)",
-            min_value=0.0,
-            value=float(st.session_state["portfolio_total_pl"]),
-            step=100000.0,
-            format="%.2f",
-        )
-        st.markdown("</div>", unsafe_allow_html=True)
+        with st.container(border=True):
+            total_pl = st.number_input(
+                "Patrimonio Liquido (R$)",
+                min_value=0.0,
+                value=float(st.session_state["portfolio_total_pl"]),
+                step=100000.0,
+                format="%.2f",
+            )
     with config_col_2:
-        st.markdown('<div class="alfa-surface">', unsafe_allow_html=True)
-        st.caption("Ações rápidas")
-        controls_col_1, controls_col_2 = st.columns([1, 1])
-        with controls_col_1:
-            if st.button("Atualizar histórico", use_container_width=True, type="primary"):
-                _refresh_history()
-        with controls_col_2:
-            if st.button("Recalcular lotes", use_container_width=True):
-                st.session_state["portfolio_df"] = recalculate_portfolio(st.session_state["portfolio_df"], total_pl)
-                _save_portfolio()
-                st.session_state["portfolio_notice"] = "Quantidades recalculadas com base no PL atual."
-                st.rerun()
-        st.markdown("</div>", unsafe_allow_html=True)
+        with st.container(border=True):
+            st.caption("Ações rápidas")
+            controls_col_1, controls_col_2 = st.columns([1, 1])
+            with controls_col_1:
+                if st.button("Atualizar histórico", use_container_width=True, type="primary"):
+                    _refresh_history()
+            with controls_col_2:
+                if st.button("Recalcular lotes", use_container_width=True):
+                    st.session_state["portfolio_df"] = recalculate_portfolio(st.session_state["portfolio_df"], total_pl)
+                    _save_portfolio()
+                    st.session_state["portfolio_notice"] = "Quantidades recalculadas com base no PL atual."
+                    st.rerun()
 
     _sync_total_pl(total_pl)
 
     add_tab_equity, add_tab_treasury = st.tabs(["Bolsa de Valores", "Titulos Publicos"])
 
     with add_tab_equity:
-        st.markdown('<div class="alfa-surface">', unsafe_allow_html=True)
-        with st.form("equity-form", clear_on_submit=True):
-            equity_col_1, equity_col_2 = st.columns([2, 1])
-            ticker_input = equity_col_1.text_input("Ticker", placeholder="Ex.: PETR4, PETR4.SA, AAPL, MSFT")
-            target_weight = equity_col_2.number_input("Peso (%)", min_value=0.0, max_value=100.0, step=0.5, format="%.2f")
-            add_equity = st.form_submit_button("Adicionar ativo", use_container_width=True, type="primary")
-        st.markdown("</div>", unsafe_allow_html=True)
+        with st.container(border=True):
+            with st.form("equity-form", clear_on_submit=True):
+                equity_col_1, equity_col_2 = st.columns([2, 1])
+                ticker_input = equity_col_1.text_input("Ticker", placeholder="Ex.: PETR4, PETR4.SA, AAPL, MSFT")
+                target_weight = equity_col_2.number_input("Peso (%)", min_value=0.0, max_value=100.0, step=0.5, format="%.2f")
+                add_equity = st.form_submit_button("Adicionar ativo", use_container_width=True, type="primary")
 
         if add_equity:
             try:
@@ -358,17 +361,16 @@ def render_home_page() -> None:
 
     with add_tab_treasury:
         treasury_df = load_treasury_data()
-        st.markdown('<div class="alfa-surface">', unsafe_allow_html=True)
-        selected_type = st.selectbox("Tipo de titulo", TREASURY_TYPES, key="treasury-type")
-        available_years = treasury_year_options(treasury_df, selected_type)
-        default_year = available_years[0] if available_years else datetime.now().year + 1
+        with st.container(border=True):
+            selected_type = st.selectbox("Tipo de titulo", TREASURY_TYPES, key="treasury-type")
+            available_years = treasury_year_options(treasury_df, selected_type)
+            default_year = available_years[0] if available_years else datetime.now().year + 1
 
-        with st.form("treasury-form", clear_on_submit=True):
-            treasury_col_1, treasury_col_2 = st.columns([2, 1])
-            selected_year = treasury_col_1.selectbox("Ano de vencimento", available_years or [default_year])
-            treasury_weight = treasury_col_2.number_input("Peso (%)", min_value=0.0, max_value=100.0, step=0.5, format="%.2f", key="treasury-weight")
-            add_treasury = st.form_submit_button("Adicionar titulo", use_container_width=True, type="primary")
-        st.markdown("</div>", unsafe_allow_html=True)
+            with st.form("treasury-form", clear_on_submit=True):
+                treasury_col_1, treasury_col_2 = st.columns([2, 1])
+                selected_year = treasury_col_1.selectbox("Ano de vencimento", available_years or [default_year])
+                treasury_weight = treasury_col_2.number_input("Peso (%)", min_value=0.0, max_value=100.0, step=0.5, format="%.2f", key="treasury-weight")
+                add_treasury = st.form_submit_button("Adicionar titulo", use_container_width=True, type="primary")
 
         if add_treasury:
             try:
@@ -411,39 +413,37 @@ def render_home_page() -> None:
     if portfolio_df.empty:
         st.info("Adicione pelo menos um ativo para montar o portfolio.")
     else:
-        st.markdown('<div class="alfa-surface">', unsafe_allow_html=True)
-        st.dataframe(
-            _portfolio_table_view(portfolio_df, total_pl),
-            use_container_width=True,
-            hide_index=True,
-            column_config={
-                "Preco/Titulo": st.column_config.NumberColumn(format="R$ %.2f"),
-                "Taxa (%)": st.column_config.NumberColumn(format="%.2f"),
-                "Peso Desejado (%)": st.column_config.NumberColumn(format="%.2f"),
-                "Peso Real (%)": st.column_config.NumberColumn(format="%.2f"),
-                "Quantidade": st.column_config.NumberColumn(format="%.2f"),
-                "Valor Real (R$)": st.column_config.NumberColumn(format="R$ %.2f"),
-            },
-        )
+        with st.container(border=True):
+            st.dataframe(
+                _portfolio_table_view(portfolio_df, total_pl),
+                use_container_width=True,
+                hide_index=True,
+                column_config={
+                    "Preco/Titulo": st.column_config.NumberColumn(format="R$ %.2f"),
+                    "Taxa (%)": st.column_config.NumberColumn(format="%.2f"),
+                    "Peso Desejado (%)": st.column_config.NumberColumn(format="%.2f"),
+                    "Peso Real (%)": st.column_config.NumberColumn(format="%.2f"),
+                    "Quantidade": st.column_config.NumberColumn(format="%.2f"),
+                    "Valor Real (R$)": st.column_config.NumberColumn(format="R$ %.2f"),
+                },
+            )
 
-        remove_col_1, remove_col_2 = st.columns([3, 1])
-        selected_ticker = remove_col_1.selectbox("Remover ativo", portfolio_df["ticker"].astype(str).tolist())
-        if remove_col_2.button("Remover selecionado", use_container_width=True):
-            st.session_state["portfolio_df"] = remove_position(portfolio_df, selected_ticker, total_pl)
-            _save_portfolio()
-            _refresh_history(show_success=False)
-            st.session_state["portfolio_notice"] = f"{selected_ticker} removido do portfolio."
-            st.rerun()
-        st.markdown("</div>", unsafe_allow_html=True)
+            remove_col_1, remove_col_2 = st.columns([3, 1])
+            selected_ticker = remove_col_1.selectbox("Remover ativo", portfolio_df["ticker"].astype(str).tolist())
+            if remove_col_2.button("Remover selecionado", use_container_width=True):
+                st.session_state["portfolio_df"] = remove_position(portfolio_df, selected_ticker, total_pl)
+                _save_portfolio()
+                _refresh_history(show_success=False)
+                st.session_state["portfolio_notice"] = f"{selected_ticker} removido do portfolio."
+                st.rerun()
 
     _render_section_title("Evolução Normalizada")
     normalized_df = normalized_history_with_portfolio(portfolio_df, historical_df)
     if normalized_df.empty:
         st.info("Atualize o historico para visualizar a evolucao consolidada da carteira.")
     else:
-        st.markdown('<div class="alfa-surface">', unsafe_allow_html=True)
-        st.line_chart(normalized_df, use_container_width=True)
-        st.markdown("</div>", unsafe_allow_html=True)
+        with st.container(border=True):
+            st.line_chart(normalized_df, use_container_width=True)
 
     with st.expander("Historico bruto consolidado"):
         if historical_df.empty:
