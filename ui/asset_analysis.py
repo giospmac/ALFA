@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import pandas as pd
 import streamlit as st
 
 from services.market_data import AssetSnapshot, MarketDataError, MetricValue, fetch_asset_snapshot
@@ -61,7 +62,7 @@ def _render_metric_history(snapshot: AssetSnapshot) -> None:
             continue
         with columns[index % 2]:
             st.markdown(f"**{label}**")
-            st.line_chart(chart_df, use_container_width=True)
+            st.line_chart(chart_df, use_container_width=True, color=["#4979f6"])
             st.caption(_reference_note(snapshot, metric))
 
     with st.expander("Tabela histórica dos indicadores"):
