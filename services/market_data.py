@@ -83,12 +83,26 @@ def _safe_ratio(numerator: float | None, denominator: float | None) -> float | N
     return numerator / denominator
 
 
+def _normalize_datetime_index(index_like: Any) -> pd.DatetimeIndex:
+    index = pd.DatetimeIndex(pd.to_datetime(index_like, errors="coerce"))
+    if getattr(index, "tz", None) is not None:
+        index = index.tz_localize(None)
+    return index
+
+
+def _normalize_timestamp(date_value: Any) -> pd.Timestamp:
+    timestamp = pd.Timestamp(date_value)
+    if timestamp.tzinfo is not None:
+        timestamp = timestamp.tz_localize(None)
+    return timestamp
+
+
 def _safe_frame(frame: Any) -> pd.DataFrame:
     if not isinstance(frame, pd.DataFrame) or frame.empty:
         return pd.DataFrame()
 
     normalized = frame.copy()
-    normalized.columns = pd.to_datetime(normalized.columns, errors="coerce")
+    normalized.columns = _normalize_datetime_index(normalized.columns)
     normalized = normalized.loc[:, normalized.columns.notna()]
     if normalized.empty:
         return pd.DataFrame()
@@ -105,7 +119,7 @@ def _statement_series(frame: pd.DataFrame, row_names: list[str]) -> pd.Series:
         if row_name not in frame.index:
             continue
         series = pd.to_numeric(frame.loc[row_name], errors="coerce")
-        series.index = pd.to_datetime(series.index, errors="coerce")
+        series.index = _normalize_datetime_index(series.index)
         series = series[series.index.notna()].sort_index()
         if not series.empty:
             return series
@@ -225,7 +239,7 @@ def _extract_download_close_history(raw_history: pd.DataFrame, tickers: list[str
         close_history.columns = tickers[:1]
 
     close_history = close_history.loc[:, ~close_history.columns.duplicated()]
-    close_history.index = pd.to_datetime(close_history.index, errors="coerce")
+    close_history.index = _normalize_datetime_index(close_history.index)
     close_history = close_history[close_history.index.notna()].sort_index()
     return close_history.apply(pd.to_numeric, errors="coerce")
 
@@ -237,7 +251,7 @@ def _extract_single_close_series(raw_history: pd.DataFrame, ticker: str) -> pd.S
 
     first_column = close_history.columns[0]
     series = pd.to_numeric(close_history[first_column], errors="coerce").dropna()
-    series.index = pd.to_datetime(series.index, errors="coerce")
+    series.index = _normalize_datetime_index(series.index)
     return series[series.index.notna()].sort_index()
 
 
@@ -261,7 +275,7 @@ def _extract_history_prices(history: pd.DataFrame) -> tuple[float | None, float 
 def _date_label(date_value: pd.Timestamp | None) -> str:
     if date_value is None or pd.isna(date_value):
         return "N/A"
-    return pd.Timestamp(date_value).strftime("%d/%m/%Y")
+    return _normalize_timestamp(date_value).strftime("%d/%m/%Y")
 
 
 def _build_details_table(info: dict[str, Any]) -> pd.DataFrame:
@@ -334,17 +348,17 @@ def _build_metric_history(asset: yf.Ticker, ticker: str, info: dict[str, Any]) -
         if not isinstance(shares_full, pd.Series):
             shares_full = pd.Series(dtype=float)
         shares_full = pd.to_numeric(shares_full, errors="coerce").dropna()
-        shares_full.index = pd.to_datetime(shares_full.index, errors="coerce")
+        shares_full.index = _normalize_datetime_index(shares_full.index)
         shares_full = shares_full[shares_full.index.notna()].sort_index()
 
         dividends = getattr(asset, "dividends", pd.Series(dtype=float))
         dividends = pd.to_numeric(dividends, errors="coerce").dropna()
-        dividends.index = pd.to_datetime(dividends.index, errors="coerce")
+        dividends.index = _normalize_datetime_index(dividends.index)
         dividends = dividends[dividends.index.notna()].sort_index()
 
         rows: list[dict[str, Any]] = []
         for date in statement_dates[-12:]:
-            date = pd.Timestamp(date)
+            date = _normalize_timestamp(date)
             price = _price_on_or_before(close_prices, date)
             weekly_change = _weekly_price_change_at(close_prices, date)
 
@@ -399,7 +413,7 @@ def _build_metric_history(asset: yf.Ticker, ticker: str, info: dict[str, Any]) -
     except Exception:
         return pd.DataFrame()
 
-    history_df.index = pd.to_datetime(history_df.index, errors="coerce")
+    history_df.index = _normalize_datetime_index(history_df.index)
     history_df = history_df[history_df.index.notna()].sort_index()
     return history_df.dropna(how="all")
 
@@ -567,7 +581,7 @@ def fetch_asset_snapshot(ticker: str) -> AssetSnapshot:
     dividends = getattr(asset, "dividends", pd.Series(dtype=float))
     if not isinstance(dividends, pd.Series):
         dividends = pd.Series(dtype=float)
-    dividends.index = pd.to_datetime(dividends.index, errors="coerce")
+    dividends.index = _normalize_datetime_index(dividends.index)
     dividends = dividends[dividends.index.notna()].sort_index()
     dividend_reference_date = dividends.index.max() if not dividends.empty else price_reference_date
 
