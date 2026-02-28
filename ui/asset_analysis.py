@@ -7,6 +7,19 @@ import streamlit as st
 from services.market_data import AssetSnapshot, MarketDataError, MetricValue, fetch_asset_snapshot
 
 
+HISTORY_WINDOW_OPTIONS = {
+    "Último dia": {"days": 1},
+    "Última semana": {"weeks": 1},
+    "Último mês": {"months": 1},
+    "Últimos 3 meses": {"months": 3},
+    "Últimos 6 meses": {"months": 6},
+    "Último ano": {"years": 1},
+    "Últimos 2 anos": {"years": 2},
+    "Últimos 3 anos": {"years": 3},
+    "Últimos 5 anos": {"years": 5},
+}
+
+
 def _render_asset_analysis_styles() -> None:
     st.markdown(
         """
@@ -123,6 +136,26 @@ def _render_history_chart(chart_df: pd.DataFrame, label: str) -> None:
     st.altair_chart(chart, use_container_width=True)
 
 
+def _filter_history_window(history_df: pd.DataFrame, window_label: str) -> pd.DataFrame:
+    if history_df.empty or window_label not in HISTORY_WINDOW_OPTIONS:
+        return history_df
+
+    end_date = pd.Timestamp(history_df.index.max())
+    window = HISTORY_WINDOW_OPTIONS[window_label]
+
+    if "days" in window:
+        start_date = end_date - pd.Timedelta(days=window["days"])
+    elif "weeks" in window:
+        start_date = end_date - pd.Timedelta(weeks=window["weeks"])
+    elif "months" in window:
+        start_date = end_date - pd.DateOffset(months=window["months"])
+    else:
+        start_date = end_date - pd.DateOffset(years=window["years"])
+
+    filtered_df = history_df.loc[history_df.index >= start_date]
+    return filtered_df if not filtered_df.empty else history_df.tail(1)
+
+
 def _render_metric_history(snapshot: AssetSnapshot) -> None:
     st.subheader("Histórico dos Indicadores")
     reference_df = snapshot.metric_reference.copy()
@@ -140,20 +173,30 @@ def _render_metric_history(snapshot: AssetSnapshot) -> None:
     if not display_metrics:
         return
 
+    selected_window = st.selectbox(
+        "Filtro de data",
+        options=list(HISTORY_WINDOW_OPTIONS.keys()),
+        index=4,
+        key=f"asset-history-window-{snapshot.ticker}",
+    )
+
     columns = st.columns(2, gap="large")
     for index, metric in enumerate(display_metrics):
         label = snapshot.metric_labels.get(metric, metric)
         chart_df = snapshot.metric_history[[metric]].dropna().rename(columns={metric: label})
+        chart_df = _filter_history_window(chart_df, selected_window)
         if chart_df.empty:
             continue
         with columns[index % 2]:
             with st.container(border=True):
                 st.markdown(f"**{label}**")
                 _render_history_chart(chart_df, label)
+                st.caption(f"Janela exibida: {selected_window}")
                 st.caption(_reference_note(snapshot, metric))
 
     with st.expander("Tabela histórica dos indicadores"):
         raw_history = snapshot.metric_history[display_metrics].rename(columns=snapshot.metric_labels).copy()
+        raw_history = _filter_history_window(raw_history, selected_window)
         st.dataframe(raw_history, use_container_width=True)
 
 
