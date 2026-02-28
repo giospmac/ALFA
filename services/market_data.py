@@ -218,6 +218,17 @@ def _extract_download_close_history(raw_history: pd.DataFrame, tickers: list[str
     return close_history.apply(pd.to_numeric, errors="coerce")
 
 
+def _extract_single_close_series(raw_history: pd.DataFrame, ticker: str) -> pd.Series:
+    close_history = _extract_download_close_history(raw_history, [ticker])
+    if close_history.empty:
+        return pd.Series(dtype=float)
+
+    first_column = close_history.columns[0]
+    series = pd.to_numeric(close_history[first_column], errors="coerce").dropna()
+    series.index = pd.to_datetime(series.index, errors="coerce")
+    return series[series.index.notna()].sort_index()
+
+
 def _extract_history_prices(history: pd.DataFrame) -> tuple[float | None, float | None]:
     if history.empty or "Close" not in history.columns:
         return None, None
@@ -266,7 +277,7 @@ def _build_details_table(info: dict[str, Any]) -> pd.DataFrame:
 
 def _build_metric_history(asset: yf.Ticker, ticker: str, info: dict[str, Any]) -> pd.DataFrame:
     price_history = asset.history(period="10y", auto_adjust=False)
-    close_prices = pd.to_numeric(price_history.get("Close"), errors="coerce").dropna() if not price_history.empty else pd.Series(dtype=float)
+    close_prices = _extract_single_close_series(price_history, ticker)
 
     income_stmt = _safe_frame(getattr(asset, "quarterly_income_stmt", pd.DataFrame()))
     if income_stmt.empty:
@@ -321,7 +332,7 @@ def _build_metric_history(asset: yf.Ticker, ticker: str, info: dict[str, Any]) -
         )
     except Exception:
         benchmark_history = pd.DataFrame()
-    benchmark_close = pd.to_numeric(benchmark_history.get("Close"), errors="coerce").dropna() if not benchmark_history.empty else pd.Series(dtype=float)
+    benchmark_close = _extract_single_close_series(benchmark_history, benchmark_symbol)
     beta_series = _rolling_beta_series(close_prices, benchmark_close)
 
     rows: list[dict[str, Any]] = []
@@ -480,7 +491,7 @@ def fetch_asset_snapshot(ticker: str) -> AssetSnapshot:
     currency = info.get("currency") or "BRL"
 
     current_price, _ = _extract_history_prices(history)
-    weekly_price_change_pct = _weekly_price_change_at(pd.to_numeric(history.get("Close"), errors="coerce").dropna(), pd.Timestamp.now())
+    weekly_price_change_pct = _weekly_price_change_at(_extract_single_close_series(history, normalized_ticker), pd.Timestamp.now())
     current_price = _coalesce_number(
         info.get("currentPrice"),
         info.get("regularMarketPrice"),
