@@ -298,54 +298,58 @@ def _render_asset_analysis_styles() -> None:
         .asset-metric-note.unavailable {
             color: #9c3131;
         }
+        .asset-table-wrap {
+            margin-top: 0.75rem;
+            border: 1px solid var(--asset-border);
+            border-radius: 20px;
+            overflow: auto;
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow: 0 10px 24px rgba(23, 32, 51, 0.04);
+        }
+        .asset-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 620px;
+        }
+        .asset-table thead th {
+            background: #f2efe8;
+            color: var(--asset-text);
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            text-align: left;
+            padding: 0.9rem 1rem;
+            border-bottom: 1px solid var(--asset-border);
+            white-space: nowrap;
+        }
+        .asset-table tbody td {
+            background: rgba(255, 255, 255, 0.98);
+            color: var(--asset-text);
+            font-size: 0.94rem;
+            line-height: 1.45;
+            padding: 0.92rem 1rem;
+            border-bottom: 1px solid rgba(21, 33, 53, 0.06);
+            vertical-align: top;
+        }
+        .asset-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+        .asset-table tbody tr:nth-child(even) td {
+            background: #fcfbf8;
+        }
         section.main [data-testid="stExpander"] {
             border: 1px solid var(--asset-border) !important;
             border-radius: 20px !important;
             background: rgba(255, 255, 255, 0.74) !important;
         }
-        section.main [data-testid="stDataFrame"] {
-            border-radius: 18px;
-            overflow: hidden;
-            border: 1px solid var(--asset-border);
-            background: rgba(255, 255, 255, 0.82) !important;
-            box-shadow: 0 10px 24px rgba(23, 32, 51, 0.04);
+        section.main [data-baseweb="input"] {
+            border-radius: 16px !important;
+            border-color: var(--asset-border) !important;
+            background: rgba(255, 255, 255, 0.88) !important;
         }
-        section.main [data-testid="stDataFrame"] [data-testid="stDataFrameResizable"] {
-            background: rgba(255, 255, 255, 0.92) !important;
-        }
-        section.main [data-testid="stDataFrame"] [role="grid"] {
-            background: rgba(255, 255, 255, 0.92) !important;
-            color: var(--asset-text) !important;
-        }
-        section.main [data-testid="stDataFrame"] [role="columnheader"] {
-            background: #f2efe8 !important;
-            color: var(--asset-text) !important;
-            border-bottom: 1px solid var(--asset-border) !important;
-        }
-        section.main [data-testid="stDataFrame"] [role="gridcell"] {
-            background: rgba(255, 255, 255, 0.96) !important;
-            color: var(--asset-text) !important;
-            border-color: rgba(21, 33, 53, 0.06) !important;
-        }
-        section.main [data-testid="stDataFrame"] * {
-            color: var(--asset-text) !important;
-        }
-        section.main [data-testid="stTable"] {
-            border-radius: 18px;
-            overflow: hidden;
-            border: 1px solid var(--asset-border);
-        }
-        section.main [data-testid="stTable"] table {
-            background: rgba(255, 255, 255, 0.92) !important;
-            color: var(--asset-text) !important;
-        }
-        section.main [data-testid="stTable"] thead tr th {
-            background: #f2efe8 !important;
-            color: var(--asset-text) !important;
-        }
-        section.main [data-testid="stTable"] tbody tr td {
-            background: rgba(255, 255, 255, 0.96) !important;
-            color: var(--asset-text) !important;
+        section.main [data-baseweb="input"] > div {
+            background: transparent !important;
         }
         @media (max-width: 900px) {
             .asset-page-hero,
@@ -402,6 +406,40 @@ def _format_reference_note(reference_note: str) -> str:
     if not reference_note:
         return ""
     return escape(reference_note).replace("|", " &middot; ")
+
+
+def _format_table_value(value: object) -> str:
+    if value is None or pd.isna(value):
+        return "N/A"
+    return escape(str(value))
+
+
+def _render_clean_table(dataframe: pd.DataFrame) -> None:
+    if dataframe.empty:
+        st.caption("Sem dados disponiveis.")
+        return
+
+    columns = "".join(f"<th>{escape(str(column))}</th>" for column in dataframe.columns)
+    rows = []
+    for _, row in dataframe.iterrows():
+        cells = "".join(f"<td>{_format_table_value(value)}</td>" for value in row.tolist())
+        rows.append(f"<tr>{cells}</tr>")
+
+    st.markdown(
+        f"""
+        <div class="asset-table-wrap">
+            <table class="asset-table">
+                <thead>
+                    <tr>{columns}</tr>
+                </thead>
+                <tbody>
+                    {''.join(rows)}
+                </tbody>
+            </table>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 def _render_asset_summary(snapshot: AssetSnapshot) -> None:
@@ -481,7 +519,7 @@ def _render_section(snapshot: AssetSnapshot, title: str, description: str, metri
 
 def _render_details(snapshot: AssetSnapshot) -> None:
     with st.expander("Detalhes completos retornados pelo Yahoo Finance"):
-        st.dataframe(snapshot.details, use_container_width=True, hide_index=True)
+        _render_clean_table(snapshot.details)
 
 
 def _render_metric_reference(snapshot: AssetSnapshot) -> None:
@@ -496,10 +534,10 @@ def _render_metric_reference(snapshot: AssetSnapshot) -> None:
     if without_history.empty:
         st.caption("Todos os indicadores exibidos acima possuem alguma série histórica utilizável no Yahoo Finance.")
     else:
-        st.dataframe(without_history, use_container_width=True, hide_index=True)
+        _render_clean_table(without_history)
 
     with st.expander("Mapa completo de disponibilidade"):
-        st.dataframe(reference_df.drop(columns=["key"]), use_container_width=True, hide_index=True)
+        _render_clean_table(reference_df.drop(columns=["key"]))
 
 
 def render_asset_analysis_page(default_ticker: str = "") -> None:
