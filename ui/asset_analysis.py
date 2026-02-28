@@ -222,28 +222,37 @@ def render_asset_analysis_page(default_ticker: str = "") -> None:
     st.title("Análise de Ativos")
     st.caption("Consulta de indicadores fundamentalistas e de mercado via Yahoo Finance.")
 
+    if "asset_analysis_selected_ticker" not in st.session_state:
+        st.session_state["asset_analysis_selected_ticker"] = default_ticker.strip()
+
     shell = st.container(border=True)
     with shell:
         st.markdown('<div class="asset-analysis-shell"></div>', unsafe_allow_html=True)
         with st.form("asset-analysis-form", clear_on_submit=False):
             ticker = st.text_input(
                 "Ticker",
-                value=default_ticker,
+                value=st.session_state["asset_analysis_selected_ticker"],
                 placeholder="Ex.: AAPL, MSFT, PETR4.SA, VALE3.SA",
+                key="asset-analysis-input",
             )
             submitted = st.form_submit_button("Analisar", use_container_width=True)
 
-    if not submitted and not default_ticker:
+    if submitted and ticker.strip():
+        st.session_state["asset_analysis_selected_ticker"] = ticker.strip()
+
+    analyzed_ticker = st.session_state["asset_analysis_selected_ticker"].strip()
+
+    if not submitted and not analyzed_ticker:
         shell.info("Informe um ticker e clique em 'Analisar'.")
         return
 
-    if not ticker.strip():
+    if submitted and not ticker.strip():
         shell.warning("Digite um ticker válido para iniciar a consulta.")
         return
 
     try:
         with st.spinner("Consultando Yahoo Finance..."):
-            snapshot = fetch_asset_snapshot(ticker)
+            snapshot = fetch_asset_snapshot(analyzed_ticker)
     except MarketDataError as exc:
         shell.error(str(exc))
         return
