@@ -74,14 +74,30 @@ def _render_asset_analysis_styles() -> None:
             box-shadow: none !important;
         }
         [data-testid="stVerticalBlockBorderWrapper"]:has([data-testid="stVegaLiteChart"]) {
-            border: 1px solid var(--asset-border) !important;
-            border-radius: var(--asset-radius) !important;
-            background: #f4f5f0 !important;
-            padding: 0.35rem 0.35rem 0.15rem 0.35rem;
+            border: 1px solid #385271 !important;
+            border-radius: 20px !important;
+            background: linear-gradient(180deg, #1f2f4a 0%, #1b2940 100%) !important;
+            padding: 1rem 1rem 0.6rem 1rem;
+            box-shadow: none !important;
         }
         [data-testid="stVegaLiteChart"],
         [data-testid="stVegaLiteChart"] > div {
-            background: #f4f5f0 !important;
+            background: transparent !important;
+        }
+        [data-testid="stVerticalBlockBorderWrapper"]:has(.asset-history-card) [data-testid="stMarkdownContainer"] p {
+            color: #ecf1f8 !important;
+        }
+        .asset-history-title {
+            color: #ecf1f8;
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 0.35rem;
+        }
+        .asset-history-note {
+            color: #c8d3e3;
+            font-size: 0.9rem;
+            line-height: 1.45;
+            margin-top: 0.45rem;
         }
         </style>
         """,
@@ -124,16 +140,47 @@ def _render_history_chart(chart_df: pd.DataFrame, label: str) -> None:
     plot_df = chart_df.reset_index().rename(columns={chart_df.index.name or "index": "Data", label: "Valor"})
     chart = (
         alt.Chart(plot_df)
-        .mark_line(color="#4979f6", strokeWidth=2.5)
-        .encode(
-            x=alt.X("Data:T", title=None, axis=alt.Axis(labelColor="#717171", domainColor="#dddddd", tickColor="#dddddd")),
-            y=alt.Y("Valor:Q", title=None, axis=alt.Axis(labelColor="#717171", domainColor="#dddddd", tickColor="#dddddd")),
-            tooltip=[alt.Tooltip("Data:T", title="Data"), alt.Tooltip("Valor:Q", title=label, format=",.4f")],
+        .mark_area(
+            color="#8bc8f5",
+            opacity=0.9,
+            line={"color": "#8bc8f5", "strokeWidth": 2.2},
         )
-        .properties(height=240)
-        .configure(background="#f4f5f0")
-        .configure_view(stroke="#cfd4de", cornerRadius=18)
-        .configure_axis(gridColor="#dddddd", gridOpacity=0.35)
+        .encode(
+            x=alt.X(
+                "Data:T",
+                title="Date",
+                axis=alt.Axis(
+                    labelColor="#ecf1f8",
+                    titleColor="#ecf1f8",
+                    domain=False,
+                    tickColor="#32475f",
+                    grid=False,
+                    labelPadding=10,
+                    titlePadding=18,
+                ),
+            ),
+            y=alt.Y(
+                "Valor:Q",
+                title=label,
+                axis=alt.Axis(
+                    labelColor="#ecf1f8",
+                    titleColor="#ecf1f8",
+                    domain=False,
+                    tickColor="#32475f",
+                    gridColor="#32475f",
+                    gridOpacity=0.9,
+                    labelPadding=12,
+                    titlePadding=16,
+                ),
+            ),
+            tooltip=[
+                alt.Tooltip("Data:T", title="Data"),
+                alt.Tooltip("Valor:Q", title=label, format=",.4f"),
+            ],
+        )
+        .properties(height=255)
+        .configure(background="#1b2940")
+        .configure_view(stroke=None)
     )
     st.altair_chart(chart, use_container_width=True)
 
@@ -191,10 +238,11 @@ def _render_metric_history(snapshot: AssetSnapshot) -> None:
             continue
         with columns[index % 2]:
             with st.container(border=True):
-                st.markdown(f"**{label}**")
+                st.markdown('<div class="asset-history-card"></div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="asset-history-title">{label}</div>', unsafe_allow_html=True)
                 _render_history_chart(chart_df, label)
-                st.caption(f"Janela exibida: {selected_window}")
-                st.caption(_reference_note(snapshot, metric))
+                st.markdown(f'<div class="asset-history-note">Janela exibida: {selected_window}</div>', unsafe_allow_html=True)
+                st.markdown(f'<div class="asset-history-note">{_reference_note(snapshot, metric)}</div>', unsafe_allow_html=True)
 
     with st.expander("Tabela histórica dos indicadores"):
         raw_history = snapshot.metric_history[display_metrics].rename(columns=snapshot.metric_labels).copy()
