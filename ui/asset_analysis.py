@@ -1,23 +1,11 @@
 from __future__ import annotations
 
-import altair as alt
 from html import escape
 
 import pandas as pd
 import streamlit as st
 
 from services.market_data import AssetSnapshot, MarketDataError, MetricValue, fetch_asset_snapshot
-
-
-HISTORY_WINDOW_OPTIONS = {
-    "1M": {"months": 1, "label": "1 mes"},
-    "3M": {"months": 3, "label": "3 meses"},
-    "6M": {"months": 6, "label": "6 meses"},
-    "1A": {"years": 1, "label": "1 ano"},
-    "5A": {"years": 5, "label": "5 anos"},
-    "10A": {"years": 10, "label": "10 anos"},
-    "20A": {"years": 20, "label": "20 anos"},
-}
 
 
 def _render_asset_analysis_styles() -> None:
@@ -74,12 +62,17 @@ def _render_asset_analysis_styles() -> None:
         section.main div[data-testid="stTextInput"] input {
             border-radius: 16px;
             border: 1px solid var(--asset-border);
-            background: rgba(255, 255, 255, 0.66);
+            background: rgba(255, 255, 255, 0.88);
             color: var(--asset-text);
             min-height: 3.2rem;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
         }
         section.main div[data-testid="stTextInput"] input::placeholder {
             color: #9aa1ad;
+        }
+        section.main div[data-testid="stTextInput"] input:focus {
+            border-color: rgba(47, 90, 122, 0.28);
+            box-shadow: 0 0 0 1px rgba(47, 90, 122, 0.10);
         }
         section.main div[data-testid="stFormSubmitButton"] > button,
         section.main div[data-testid="stButton"] > button {
@@ -110,17 +103,6 @@ def _render_asset_analysis_styles() -> None:
             backdrop-filter: blur(10px);
             box-shadow: var(--asset-shadow);
             padding: 1.25rem 1.25rem 0.85rem 1.25rem;
-        }
-        [data-testid="stVerticalBlockBorderWrapper"]:has(.asset-history-shell) {
-            border: 1px solid var(--asset-border) !important;
-            border-radius: var(--asset-radius-md) !important;
-            background: var(--asset-surface-strong) !important;
-            padding: 1.05rem 1.1rem 0.85rem 1.1rem;
-            box-shadow: 0 12px 26px rgba(23, 32, 51, 0.04);
-        }
-        [data-testid="stVegaLiteChart"],
-        [data-testid="stVegaLiteChart"] > div {
-            background: transparent !important;
         }
         .asset-page-hero {
             position: relative;
@@ -316,51 +298,54 @@ def _render_asset_analysis_styles() -> None:
         .asset-metric-note.unavailable {
             color: #9c3131;
         }
-        .asset-history-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            gap: 1rem;
-            margin-bottom: 0.4rem;
-            flex-wrap: wrap;
-        }
-        .asset-history-title {
-            color: var(--asset-text);
-            font-size: 1.02rem;
-            font-weight: 700;
-        }
-        .asset-history-window {
-            color: var(--asset-soft);
-            font-size: 0.78rem;
-            font-weight: 700;
-            letter-spacing: 0.10em;
-            text-transform: uppercase;
-        }
-        .asset-history-note {
-            color: var(--asset-muted);
-            font-size: 0.88rem;
-            line-height: 1.5;
-            margin-top: 0.35rem;
-        }
-        .asset-filter-title {
-            color: var(--asset-text);
-            font-size: 1.05rem;
-            font-weight: 600;
-            margin-bottom: 0.3rem;
-        }
-        .asset-filter-copy {
-            color: var(--asset-muted);
-            font-size: 0.9rem;
-            margin-bottom: 0.9rem;
-        }
         section.main [data-testid="stExpander"] {
             border: 1px solid var(--asset-border) !important;
             border-radius: 20px !important;
-            background: rgba(255, 255, 255, 0.66) !important;
+            background: rgba(255, 255, 255, 0.74) !important;
         }
         section.main [data-testid="stDataFrame"] {
             border-radius: 18px;
             overflow: hidden;
+            border: 1px solid var(--asset-border);
+            background: rgba(255, 255, 255, 0.82) !important;
+            box-shadow: 0 10px 24px rgba(23, 32, 51, 0.04);
+        }
+        section.main [data-testid="stDataFrame"] [data-testid="stDataFrameResizable"] {
+            background: rgba(255, 255, 255, 0.92) !important;
+        }
+        section.main [data-testid="stDataFrame"] [role="grid"] {
+            background: rgba(255, 255, 255, 0.92) !important;
+            color: var(--asset-text) !important;
+        }
+        section.main [data-testid="stDataFrame"] [role="columnheader"] {
+            background: #f2efe8 !important;
+            color: var(--asset-text) !important;
+            border-bottom: 1px solid var(--asset-border) !important;
+        }
+        section.main [data-testid="stDataFrame"] [role="gridcell"] {
+            background: rgba(255, 255, 255, 0.96) !important;
+            color: var(--asset-text) !important;
+            border-color: rgba(21, 33, 53, 0.06) !important;
+        }
+        section.main [data-testid="stDataFrame"] * {
+            color: var(--asset-text) !important;
+        }
+        section.main [data-testid="stTable"] {
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid var(--asset-border);
+        }
+        section.main [data-testid="stTable"] table {
+            background: rgba(255, 255, 255, 0.92) !important;
+            color: var(--asset-text) !important;
+        }
+        section.main [data-testid="stTable"] thead tr th {
+            background: #f2efe8 !important;
+            color: var(--asset-text) !important;
+        }
+        section.main [data-testid="stTable"] tbody tr td {
+            background: rgba(255, 255, 255, 0.96) !important;
+            color: var(--asset-text) !important;
         }
         @media (max-width: 900px) {
             .asset-page-hero,
@@ -499,165 +484,6 @@ def _render_details(snapshot: AssetSnapshot) -> None:
         st.dataframe(snapshot.details, use_container_width=True, hide_index=True)
 
 
-def _render_history_chart(chart_df: pd.DataFrame, label: str) -> None:
-    plot_df = chart_df.reset_index().rename(columns={chart_df.index.name or "index": "Data", label: "Valor"})
-    area = (
-        alt.Chart(plot_df)
-        .mark_area(
-            color="#d6e2ec",
-            opacity=0.75,
-        )
-        .encode(
-            x=alt.X(
-                "Data:T",
-                title="Data",
-                axis=alt.Axis(
-                    labelColor="#6c7483",
-                    titleColor="#6c7483",
-                    domain=False,
-                    tickColor="#d7dde5",
-                    grid=False,
-                    labelPadding=10,
-                    titlePadding=18,
-                ),
-            ),
-            y=alt.Y(
-                "Valor:Q",
-                title=label,
-                axis=alt.Axis(
-                    labelColor="#6c7483",
-                    titleColor="#6c7483",
-                    domain=False,
-                    tickColor="#d7dde5",
-                    gridColor="#e7ebf0",
-                    gridOpacity=1,
-                    labelPadding=12,
-                    titlePadding=16,
-                ),
-            ),
-            tooltip=[
-                alt.Tooltip("Data:T", title="Data"),
-                alt.Tooltip("Valor:Q", title=label, format=",.4f"),
-            ],
-        )
-        .properties(height=255)
-    )
-    line = (
-        alt.Chart(plot_df)
-        .mark_line(color="#2f5a7a", strokeWidth=2.4)
-        .encode(
-            x=alt.X("Data:T", title="Data"),
-            y=alt.Y("Valor:Q", title=label),
-            tooltip=[
-                alt.Tooltip("Data:T", title="Data"),
-                alt.Tooltip("Valor:Q", title=label, format=",.4f"),
-            ],
-        )
-    )
-    chart = (
-        (area + line)
-        .properties(height=255)
-        .configure(background="transparent")
-        .configure_view(stroke=None)
-    )
-    st.altair_chart(chart, use_container_width=True)
-
-
-def _filter_history_window(history_df: pd.DataFrame, window_label: str) -> pd.DataFrame:
-    if history_df.empty or window_label not in HISTORY_WINDOW_OPTIONS:
-        return history_df
-
-    end_date = pd.Timestamp(history_df.index.max())
-    window = HISTORY_WINDOW_OPTIONS[window_label]
-
-    if "days" in window:
-        start_date = end_date - pd.Timedelta(days=window["days"])
-    elif "weeks" in window:
-        start_date = end_date - pd.Timedelta(weeks=window["weeks"])
-    elif "months" in window:
-        start_date = end_date - pd.DateOffset(months=window["months"])
-    else:
-        start_date = end_date - pd.DateOffset(years=window["years"])
-
-    filtered_df = history_df.loc[history_df.index >= start_date]
-    return filtered_df if not filtered_df.empty else history_df.tail(1)
-
-
-def _render_history_window_selector(ticker: str) -> str:
-    state_key = f"asset-history-window-{ticker}"
-    if st.session_state.get(state_key) not in HISTORY_WINDOW_OPTIONS:
-        st.session_state[state_key] = "6M"
-
-    st.markdown('<div class="asset-filter-title">Horizonte da serie</div>', unsafe_allow_html=True)
-    st.markdown('<div class="asset-filter-copy">Selecione a janela para limpar a leitura dos graficos e focar no recorte relevante.</div>', unsafe_allow_html=True)
-    button_rows = [
-        ["1M", "3M", "6M", "1A"],
-        ["5A", "10A", "20A"],
-    ]
-
-    for row in button_rows:
-        columns = st.columns(len(row))
-        for column, label in zip(columns, row):
-            button_type = "primary" if st.session_state[state_key] == label else "secondary"
-            if column.button(label, key=f"{state_key}-{label}", use_container_width=True, type=button_type):
-                st.session_state[state_key] = label
-
-    return st.session_state[state_key]
-
-
-def _render_metric_history(snapshot: AssetSnapshot) -> None:
-    _render_section_heading(
-        "Historico dos Indicadores",
-        "Visualize a evolucao das metricas com series disponiveis no Yahoo Finance em um layout mais contido e facil de comparar.",
-    )
-    reference_df = snapshot.metric_reference.copy()
-    history_keys = reference_df.loc[reference_df["Histórico disponível"] == "Sim", "key"].tolist()
-
-    if snapshot.metric_history.empty or not history_keys:
-        st.info("Entre os indicadores solicitados, o Yahoo Finance não retornou séries históricas suficientes para gráfico.")
-        return
-
-    display_metrics = [
-        metric
-        for metric in ["market_cap", "enterprise_value", "ebitda_margin", "ev_to_ebitda", "roic", "dividend_yield", "pe_ratio", "financial_leverage", "weekly_price_change_pct"]
-        if metric in history_keys and metric in snapshot.metric_history.columns
-    ]
-    if not display_metrics:
-        return
-
-    selected_window = _render_history_window_selector(snapshot.ticker)
-
-    columns = st.columns(2, gap="large")
-    for index, metric in enumerate(display_metrics):
-        label = snapshot.metric_labels.get(metric, metric)
-        chart_df = snapshot.metric_history[[metric]].dropna().rename(columns={metric: label})
-        chart_df = _filter_history_window(chart_df, selected_window)
-        if chart_df.empty:
-            continue
-        with columns[index % 2]:
-            with st.container(border=True):
-                st.markdown('<div class="asset-history-shell"></div>', unsafe_allow_html=True)
-                st.markdown(
-                    f"""
-                    <div class="asset-history-header">
-                        <div class="asset-history-title">{escape(label)}</div>
-                        <div class="asset-history-window">{escape(HISTORY_WINDOW_OPTIONS[selected_window]["label"])}</div>
-                    </div>
-                    """,
-                    unsafe_allow_html=True,
-                )
-                _render_history_chart(chart_df, label)
-                st.markdown(
-                    f'<div class="asset-history-note">{_format_reference_note(_reference_note(snapshot, metric))}</div>',
-                    unsafe_allow_html=True,
-                )
-
-    with st.expander("Tabela histórica dos indicadores"):
-        raw_history = snapshot.metric_history[display_metrics].rename(columns=snapshot.metric_labels).copy()
-        raw_history = _filter_history_window(raw_history, selected_window)
-        st.dataframe(raw_history, use_container_width=True)
-
-
 def _render_metric_reference(snapshot: AssetSnapshot) -> None:
     _render_section_heading(
         "Referencia dos Indicadores",
@@ -752,7 +578,6 @@ def render_asset_analysis_page(default_ticker: str = "") -> None:
         ["ebitda_margin", "financial_leverage", "beta"],
     )
 
-    _render_metric_history(snapshot)
     _render_metric_reference(snapshot)
 
     st.caption("Quando um campo aparece como N/A, o dado não foi disponibilizado pelo Yahoo Finance para este ticker.")
