@@ -491,23 +491,17 @@ def _render_section_heading(title: str, description: str) -> None:
 
 def _render_metric_card(column, metric: MetricValue, reference_note: str) -> None:
     with column:
-        note_markup = f'<div class="asset-metric-note">{_format_reference_note(reference_note)}</div>' if reference_note else ""
-        unavailable_markup = (
-            f'<div class="asset-metric-note unavailable">{escape(metric.unavailable_reason)}</div>'
-            if not metric.is_available
-            else ""
-        )
-        st.markdown(
-            f"""
-            <div class="asset-metric-card">
-                <div class="asset-metric-label">{escape(metric.label)}</div>
-                <div class="asset-metric-value">{escape(metric.formatted())}</div>
-                {unavailable_markup}
-                {note_markup}
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        card_parts = [
+            '<div class="asset-metric-card">',
+            f'<div class="asset-metric-label">{escape(metric.label)}</div>',
+            f'<div class="asset-metric-value">{escape(metric.formatted())}</div>',
+        ]
+        if not metric.is_available:
+            card_parts.append(f'<div class="asset-metric-note unavailable">{escape(metric.unavailable_reason)}</div>')
+        if reference_note:
+            card_parts.append(f'<div class="asset-metric-note">{_format_reference_note(reference_note)}</div>')
+        card_parts.append("</div>")
+        st.markdown("".join(card_parts), unsafe_allow_html=True)
 
 
 def _render_section(snapshot: AssetSnapshot, title: str, description: str, metric_keys: list[str]) -> None:
