@@ -34,35 +34,26 @@ def _render_metric_history(snapshot: AssetSnapshot) -> None:
         st.info("Entre os indicadores solicitados, o Yahoo Finance não retornou séries históricas suficientes para gráfico.")
         return
 
-    available_metrics = [metric for metric in history_keys if metric in snapshot.metric_history.columns]
-    default_metrics = [
+    display_metrics = [
         metric
-        for metric in ["market_cap", "enterprise_value", "ebitda_margin", "ev_to_ebitda", "roic"]
-        if metric in available_metrics
+        for metric in ["market_cap", "enterprise_value", "ebitda_margin", "ev_to_ebitda", "roic", "dividend_yield", "pe_ratio", "financial_leverage", "weekly_price_change_pct"]
+        if metric in history_keys and metric in snapshot.metric_history.columns
     ]
-    if not default_metrics:
-        default_metrics = available_metrics[:4]
-
-    selected_metrics = st.multiselect(
-        "Indicadores para exibir",
-        options=available_metrics,
-        default=default_metrics,
-        format_func=lambda metric: snapshot.metric_labels.get(metric, metric),
-    )
-    if not selected_metrics:
-        st.info("Selecione pelo menos um indicador para exibir o gráfico histórico.")
+    if not display_metrics:
         return
 
-    for metric in selected_metrics:
+    columns = st.columns(2, gap="large")
+    for index, metric in enumerate(display_metrics):
         label = snapshot.metric_labels.get(metric, metric)
         chart_df = snapshot.metric_history[[metric]].dropna().rename(columns={metric: label})
         if chart_df.empty:
             continue
-        st.markdown(f"**{label}**")
-        st.line_chart(chart_df, use_container_width=True)
+        with columns[index % 2]:
+            st.markdown(f"**{label}**")
+            st.line_chart(chart_df, use_container_width=True)
 
     with st.expander("Tabela histórica dos indicadores"):
-        raw_history = snapshot.metric_history[selected_metrics].rename(columns=snapshot.metric_labels).copy()
+        raw_history = snapshot.metric_history[display_metrics].rename(columns=snapshot.metric_labels).copy()
         st.dataframe(raw_history, use_container_width=True)
 
 
