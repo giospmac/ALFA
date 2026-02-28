@@ -108,8 +108,8 @@ def render_asset_analysis_page(default_ticker: str = "") -> None:
     except MarketDataError as exc:
         st.error(str(exc))
         return
-    except Exception:
-        st.error("Ocorreu um erro inesperado ao montar a análise do ativo.")
+    except Exception as exc:
+        st.error(f"Erro inesperado ao montar a análise do ativo: {exc}")
         return
 
     st.success(f"{snapshot.long_name} ({snapshot.ticker})")

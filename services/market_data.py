@@ -230,18 +230,15 @@ def _extract_single_close_series(raw_history: pd.DataFrame, ticker: str) -> pd.S
 
 
 def _extract_history_prices(history: pd.DataFrame) -> tuple[float | None, float | None]:
-    if history.empty or "Close" not in history.columns:
+    close_series = _extract_single_close_series(history, "Close")
+    if close_series.empty:
         return None, None
 
-    closes = pd.to_numeric(history["Close"], errors="coerce").dropna()
-    if closes.empty:
-        return None, None
-
-    current_price = float(closes.iloc[-1])
-    if len(closes) < 2:
+    current_price = float(close_series.iloc[-1])
+    if len(close_series) < 2:
         return current_price, None
 
-    previous_close = float(closes.iloc[-2])
+    previous_close = float(close_series.iloc[-2])
     if previous_close == 0:
         return current_price, None
 
@@ -276,122 +273,123 @@ def _build_details_table(info: dict[str, Any]) -> pd.DataFrame:
 
 
 def _build_metric_history(asset: yf.Ticker, ticker: str, info: dict[str, Any]) -> pd.DataFrame:
-    price_history = asset.history(period="10y", auto_adjust=False)
-    close_prices = _extract_single_close_series(price_history, ticker)
-
-    income_stmt = _safe_frame(getattr(asset, "quarterly_income_stmt", pd.DataFrame()))
-    if income_stmt.empty:
-        income_stmt = _safe_frame(getattr(asset, "income_stmt", pd.DataFrame()))
-
-    balance_sheet = _safe_frame(getattr(asset, "quarterly_balance_sheet", pd.DataFrame()))
-    if balance_sheet.empty:
-        balance_sheet = _safe_frame(getattr(asset, "balance_sheet", pd.DataFrame()))
-
-    statement_dates = sorted(set(income_stmt.columns.tolist() + balance_sheet.columns.tolist()))
-    if not statement_dates:
-        return pd.DataFrame()
-
-    revenue_series = _statement_series(income_stmt, ["Total Revenue", "Operating Revenue"])
-    ebitda_series = _statement_series(income_stmt, ["EBITDA", "Normalized EBITDA"])
-    operating_income_series = _statement_series(income_stmt, ["Operating Income"])
-    pretax_income_series = _statement_series(income_stmt, ["Pretax Income", "Pre Tax Income"])
-    tax_series = _statement_series(income_stmt, ["Tax Provision", "Tax Rate For Calcs"])
-    net_income_series = _statement_series(income_stmt, ["Net Income", "Net Income Common Stockholders"])
-
-    debt_series = _statement_series(balance_sheet, ["Total Debt", "Total Borrowings", "Long Term Debt And Capital Lease Obligation"])
-    cash_series = _statement_series(
-        balance_sheet,
-        [
-            "Cash And Cash Equivalents",
-            "Cash Cash Equivalents And Short Term Investments",
-            "Cash And Short Term Investments",
-        ],
-    )
-    equity_series = _statement_series(
-        balance_sheet,
-        ["Stockholders Equity", "Total Equity Gross Minority Interest", "Common Stock Equity"],
-    )
-    minority_interest_series = _statement_series(balance_sheet, ["Minority Interest", "Minority Interests"])
-    preferred_equity_series = _statement_series(balance_sheet, ["Preferred Stock Equity", "Preferred Securities Outside Stock Equity"])
-
-    shares_outstanding = _coalesce_number(info.get("sharesOutstanding"), info.get("impliedSharesOutstanding"))
-
-    dividends = getattr(asset, "dividends", pd.Series(dtype=float))
-    dividends = pd.to_numeric(dividends, errors="coerce").dropna()
-    dividends.index = pd.to_datetime(dividends.index, errors="coerce")
-    dividends = dividends[dividends.index.notna()].sort_index()
-
-    benchmark_symbol = "^BVSP" if ticker.endswith(".SA") else "^GSPC"
     try:
-        benchmark_history = yf.download(
-            benchmark_symbol,
-            period="10y",
-            auto_adjust=True,
-            progress=False,
-            threads=False,
+        price_history = asset.history(period="10y", auto_adjust=False)
+        close_prices = _extract_single_close_series(price_history, ticker)
+
+        income_stmt = _safe_frame(getattr(asset, "quarterly_income_stmt", pd.DataFrame()))
+        if income_stmt.empty:
+            income_stmt = _safe_frame(getattr(asset, "income_stmt", pd.DataFrame()))
+
+        balance_sheet = _safe_frame(getattr(asset, "quarterly_balance_sheet", pd.DataFrame()))
+        if balance_sheet.empty:
+            balance_sheet = _safe_frame(getattr(asset, "balance_sheet", pd.DataFrame()))
+
+        statement_dates = sorted(set(income_stmt.columns.tolist() + balance_sheet.columns.tolist()))
+        if not statement_dates:
+            return pd.DataFrame()
+
+        revenue_series = _statement_series(income_stmt, ["Total Revenue", "Operating Revenue"])
+        ebitda_series = _statement_series(income_stmt, ["EBITDA", "Normalized EBITDA"])
+        operating_income_series = _statement_series(income_stmt, ["Operating Income"])
+        pretax_income_series = _statement_series(income_stmt, ["Pretax Income", "Pre Tax Income"])
+        tax_series = _statement_series(income_stmt, ["Tax Provision", "Tax Rate For Calcs"])
+        net_income_series = _statement_series(income_stmt, ["Net Income", "Net Income Common Stockholders"])
+
+        debt_series = _statement_series(balance_sheet, ["Total Debt", "Total Borrowings", "Long Term Debt And Capital Lease Obligation"])
+        cash_series = _statement_series(
+            balance_sheet,
+            [
+                "Cash And Cash Equivalents",
+                "Cash Cash Equivalents And Short Term Investments",
+                "Cash And Short Term Investments",
+            ],
         )
+        equity_series = _statement_series(
+            balance_sheet,
+            ["Stockholders Equity", "Total Equity Gross Minority Interest", "Common Stock Equity"],
+        )
+        minority_interest_series = _statement_series(balance_sheet, ["Minority Interest", "Minority Interests"])
+        preferred_equity_series = _statement_series(balance_sheet, ["Preferred Stock Equity", "Preferred Securities Outside Stock Equity"])
+
+        shares_outstanding = _coalesce_number(info.get("sharesOutstanding"), info.get("impliedSharesOutstanding"))
+
+        dividends = getattr(asset, "dividends", pd.Series(dtype=float))
+        dividends = pd.to_numeric(dividends, errors="coerce").dropna()
+        dividends.index = pd.to_datetime(dividends.index, errors="coerce")
+        dividends = dividends[dividends.index.notna()].sort_index()
+
+        benchmark_symbol = "^BVSP" if ticker.endswith(".SA") else "^GSPC"
+        try:
+            benchmark_history = yf.download(
+                benchmark_symbol,
+                period="10y",
+                auto_adjust=True,
+                progress=False,
+                threads=False,
+            )
+        except Exception:
+            benchmark_history = pd.DataFrame()
+        benchmark_close = _extract_single_close_series(benchmark_history, benchmark_symbol)
+        beta_series = _rolling_beta_series(close_prices, benchmark_close)
+
+        rows: list[dict[str, Any]] = []
+        for date in statement_dates[-12:]:
+            date = pd.Timestamp(date)
+            price = _price_on_or_before(close_prices, date)
+            weekly_change = _weekly_price_change_at(close_prices, date)
+
+            revenue_ttm = _ttm_value(revenue_series, date)
+            ebitda_ttm = _ttm_value(ebitda_series, date)
+            operating_income_ttm = _ttm_value(operating_income_series, date)
+            pretax_income_ttm = _ttm_value(pretax_income_series, date)
+            tax_ttm = _ttm_value(tax_series, date)
+            net_income_ttm = _ttm_value(net_income_series, date)
+
+            total_debt = _value_at_or_before(debt_series, date)
+            cash = _value_at_or_before(cash_series, date) or 0.0
+            equity = _value_at_or_before(equity_series, date)
+            minority_interest = _value_at_or_before(minority_interest_series, date) or 0.0
+            preferred_equity = _value_at_or_before(preferred_equity_series, date) or 0.0
+
+            market_cap = (price * shares_outstanding) if price is not None and shares_outstanding is not None else None
+            enterprise_value = None
+            if market_cap is not None:
+                enterprise_value = market_cap + (total_debt or 0.0) + minority_interest + preferred_equity - cash
+
+            effective_tax_rate = _safe_ratio(tax_ttm, pretax_income_ttm)
+            if effective_tax_rate is None or not np.isfinite(effective_tax_rate):
+                effective_tax_rate = 0.25
+            effective_tax_rate = float(min(max(effective_tax_rate, 0.0), 0.5))
+
+            invested_capital = None
+            if equity is not None:
+                invested_capital = (total_debt or 0.0) + equity - cash
+
+            trailing_dividends = None
+            if not dividends.empty:
+                trailing_dividends = _coalesce_number(dividends[(dividends.index <= date) & (dividends.index > date - pd.Timedelta(days=365))].sum())
+
+            beta_value = _value_at_or_before(beta_series, date)
+
+            rows.append(
+                {
+                    "date": date,
+                    "weekly_price_change_pct": weekly_change,
+                    "market_cap": market_cap,
+                    "enterprise_value": enterprise_value,
+                    "roic": _safe_ratio(operating_income_ttm * (1 - effective_tax_rate), invested_capital) if operating_income_ttm is not None else None,
+                    "ebitda_margin": _safe_ratio(ebitda_ttm, revenue_ttm),
+                    "ev_to_ebitda": _safe_ratio(enterprise_value, ebitda_ttm),
+                    "dividend_yield": _safe_ratio(trailing_dividends, price),
+                    "pe_ratio": _safe_ratio(market_cap, net_income_ttm),
+                    "financial_leverage": _safe_ratio(total_debt, equity),
+                    "beta": beta_value,
+                }
+            )
+
+        history_df = pd.DataFrame(rows).set_index("date") if rows else pd.DataFrame()
     except Exception:
-        benchmark_history = pd.DataFrame()
-    benchmark_close = _extract_single_close_series(benchmark_history, benchmark_symbol)
-    beta_series = _rolling_beta_series(close_prices, benchmark_close)
-
-    rows: list[dict[str, Any]] = []
-    for date in statement_dates[-12:]:
-        date = pd.Timestamp(date)
-        price = _price_on_or_before(close_prices, date)
-        weekly_change = _weekly_price_change_at(close_prices, date)
-
-        revenue_ttm = _ttm_value(revenue_series, date)
-        ebitda_ttm = _ttm_value(ebitda_series, date)
-        operating_income_ttm = _ttm_value(operating_income_series, date)
-        pretax_income_ttm = _ttm_value(pretax_income_series, date)
-        tax_ttm = _ttm_value(tax_series, date)
-        net_income_ttm = _ttm_value(net_income_series, date)
-
-        total_debt = _value_at_or_before(debt_series, date)
-        cash = _value_at_or_before(cash_series, date) or 0.0
-        equity = _value_at_or_before(equity_series, date)
-        minority_interest = _value_at_or_before(minority_interest_series, date) or 0.0
-        preferred_equity = _value_at_or_before(preferred_equity_series, date) or 0.0
-
-        market_cap = (price * shares_outstanding) if price is not None and shares_outstanding is not None else None
-        enterprise_value = None
-        if market_cap is not None:
-            enterprise_value = market_cap + (total_debt or 0.0) + minority_interest + preferred_equity - cash
-
-        effective_tax_rate = _safe_ratio(tax_ttm, pretax_income_ttm)
-        if effective_tax_rate is None or not np.isfinite(effective_tax_rate):
-            effective_tax_rate = 0.25
-        effective_tax_rate = float(min(max(effective_tax_rate, 0.0), 0.5))
-
-        invested_capital = None
-        if equity is not None:
-            invested_capital = (total_debt or 0.0) + equity - cash
-
-        trailing_dividends = None
-        if not dividends.empty:
-            trailing_dividends = _coalesce_number(dividends[(dividends.index <= date) & (dividends.index > date - pd.Timedelta(days=365))].sum())
-
-        beta_value = _value_at_or_before(beta_series, date)
-
-        rows.append(
-            {
-                "date": date,
-                "weekly_price_change_pct": weekly_change,
-                "market_cap": market_cap,
-                "enterprise_value": enterprise_value,
-                "roic": _safe_ratio(operating_income_ttm * (1 - effective_tax_rate), invested_capital) if operating_income_ttm is not None else None,
-                "ebitda_margin": _safe_ratio(ebitda_ttm, revenue_ttm),
-                "ev_to_ebitda": _safe_ratio(enterprise_value, ebitda_ttm),
-                "dividend_yield": _safe_ratio(trailing_dividends, price),
-                "pe_ratio": _safe_ratio(market_cap, net_income_ttm),
-                "financial_leverage": _safe_ratio(total_debt, equity),
-                "beta": beta_value,
-            }
-        )
-
-    history_df = pd.DataFrame(rows).set_index("date") if rows else pd.DataFrame()
-    if history_df.empty:
         return pd.DataFrame()
 
     history_df.index = pd.to_datetime(history_df.index, errors="coerce")
@@ -475,16 +473,27 @@ def fetch_asset_snapshot(ticker: str) -> AssetSnapshot:
     if not normalized_ticker:
         raise MarketDataError("Informe um ticker antes de analisar.")
 
+    asset = yf.Ticker(normalized_ticker)
+    info: dict[str, Any] = {}
+    history = pd.DataFrame()
+    info_error: Exception | None = None
+    history_error: Exception | None = None
+
     try:
-        asset = yf.Ticker(normalized_ticker)
         info = asset.info or {}
+    except Exception as exc:
+        info_error = exc
+
+    try:
         history = asset.history(period="1mo", auto_adjust=False)
     except Exception as exc:
-        raise MarketDataError("Falha ao consultar o Yahoo Finance no momento.") from exc
+        history_error = exc
 
     has_metadata = bool(info) and info.get("quoteType") != "NONE"
     has_prices = not history.empty
     if not has_metadata and not has_prices:
+        if info_error is not None or history_error is not None:
+            raise MarketDataError("Falha ao consultar o Yahoo Finance no momento. Verifique a conexão e tente novamente.")
         raise MarketDataError(f'Ticker "{normalized_ticker}" inválido ou sem dados disponíveis no Yahoo Finance.')
 
     long_name = info.get("longName") or info.get("shortName") or normalized_ticker
