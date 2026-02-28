@@ -83,6 +83,13 @@ def _safe_ratio(numerator: float | None, denominator: float | None) -> float | N
     return numerator / denominator
 
 
+def _normalize_fractional_percent(value: float | None) -> float | None:
+    if value is None or pd.isna(value):
+        return None
+    numeric_value = float(value)
+    return numeric_value / 100 if abs(numeric_value) > 1 else numeric_value
+
+
 def _normalize_datetime_index(index_like: Any) -> pd.DatetimeIndex:
     index = pd.DatetimeIndex(pd.to_datetime(index_like, errors="coerce"))
     if getattr(index, "tz", None) is not None:
@@ -640,7 +647,7 @@ def fetch_asset_snapshot(ticker: str) -> AssetSnapshot:
     )
     roic = _coalesce_number(latest_history.get("roic") if not latest_history.empty else None)
     dividend_yield = _coalesce_number(
-        info.get("dividendYield"),
+        _normalize_fractional_percent(_coalesce_number(info.get("dividendYield"))),
         latest_history.get("dividend_yield") if not latest_history.empty else None,
     )
     beta = _coalesce_number(
