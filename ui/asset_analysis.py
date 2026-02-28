@@ -53,6 +53,11 @@ def _render_asset_analysis_styles() -> None:
             border-radius: var(--asset-radius) !important;
             background: #f4f5f0 !important;
         }
+        [data-testid="stVerticalBlockBorderWrapper"]:has(.asset-analysis-shell) {
+            border: 1px solid var(--asset-border) !important;
+            border-radius: var(--asset-radius) !important;
+            background: #f4f5f0 !important;
+        }
         [data-testid="stVerticalBlockBorderWrapper"]:has([data-testid="stVegaLiteChart"]) {
             border: 1px solid var(--asset-border) !important;
             border-radius: var(--asset-radius) !important;
@@ -172,34 +177,37 @@ def render_asset_analysis_page(default_ticker: str = "") -> None:
     st.title("Análise de Ativos")
     st.caption("Consulta de indicadores fundamentalistas e de mercado via Yahoo Finance.")
 
-    with st.form("asset-analysis-form", clear_on_submit=False):
-        ticker = st.text_input(
-            "Ticker",
-            value=default_ticker,
-            placeholder="Ex.: AAPL, MSFT, PETR4.SA, VALE3.SA",
-        )
-        submitted = st.form_submit_button("Analisar", use_container_width=True)
+    shell = st.container(border=True)
+    with shell:
+        st.markdown('<div class="asset-analysis-shell"></div>', unsafe_allow_html=True)
+        with st.form("asset-analysis-form", clear_on_submit=False):
+            ticker = st.text_input(
+                "Ticker",
+                value=default_ticker,
+                placeholder="Ex.: AAPL, MSFT, PETR4.SA, VALE3.SA",
+            )
+            submitted = st.form_submit_button("Analisar", use_container_width=True)
 
     if not submitted and not default_ticker:
-        st.info("Informe um ticker e clique em 'Analisar'.")
+        shell.info("Informe um ticker e clique em 'Analisar'.")
         return
 
     if not ticker.strip():
-        st.warning("Digite um ticker válido para iniciar a consulta.")
+        shell.warning("Digite um ticker válido para iniciar a consulta.")
         return
 
     try:
         with st.spinner("Consultando Yahoo Finance..."):
             snapshot = fetch_asset_snapshot(ticker)
     except MarketDataError as exc:
-        st.error(str(exc))
+        shell.error(str(exc))
         return
     except Exception as exc:
-        st.error(f"Erro inesperado ao montar a análise do ativo: {exc}")
+        shell.error(f"Erro inesperado ao montar a análise do ativo: {exc}")
         return
 
-    st.success(f"{snapshot.long_name} ({snapshot.ticker})")
-    st.caption(f"Moeda reportada pelo Yahoo Finance: {snapshot.currency}")
+    shell.success(f"{snapshot.long_name} ({snapshot.ticker})")
+    shell.caption(f"Moeda reportada pelo Yahoo Finance: {snapshot.currency}")
 
     _render_section(
         snapshot,
