@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import altair as alt
 import pandas as pd
 import streamlit as st
 
@@ -48,13 +49,15 @@ def _render_asset_analysis_styles() -> None:
             border-radius: 0.75rem !important;
             background: #f4f5f0;
         }
-        [data-testid="stVegaLiteChart"] {
-            background: #f4f5f0;
-            border-radius: 12px;
-            padding: 0.25rem;
+        [data-testid="stVerticalBlockBorderWrapper"]:has([data-testid="stVegaLiteChart"]) {
+            border: 1px solid #dddddd !important;
+            border-radius: 0.9rem !important;
+            background: #f4f5f0 !important;
+            padding: 0.25rem 0.25rem 0.1rem 0.25rem;
         }
+        [data-testid="stVegaLiteChart"],
         [data-testid="stVegaLiteChart"] > div {
-            background: #f4f5f0;
+            background: #f4f5f0 !important;
         }
         </style>
         """,
@@ -93,6 +96,24 @@ def _render_details(snapshot: AssetSnapshot) -> None:
         st.dataframe(snapshot.details, use_container_width=True, hide_index=True)
 
 
+def _render_history_chart(chart_df: pd.DataFrame, label: str) -> None:
+    plot_df = chart_df.reset_index().rename(columns={chart_df.index.name or "index": "Data", label: "Valor"})
+    chart = (
+        alt.Chart(plot_df)
+        .mark_line(color="#4979f6", strokeWidth=2.5)
+        .encode(
+            x=alt.X("Data:T", title=None, axis=alt.Axis(labelColor="#717171", domainColor="#dddddd", tickColor="#dddddd")),
+            y=alt.Y("Valor:Q", title=None, axis=alt.Axis(labelColor="#717171", domainColor="#dddddd", tickColor="#dddddd")),
+            tooltip=[alt.Tooltip("Data:T", title="Data"), alt.Tooltip("Valor:Q", title=label, format=",.4f")],
+        )
+        .properties(height=240)
+        .configure(background="#f4f5f0")
+        .configure_view(stroke="#dddddd", cornerRadius=12)
+        .configure_axis(gridColor="#dddddd", gridOpacity=0.35)
+    )
+    st.altair_chart(chart, use_container_width=True)
+
+
 def _render_metric_history(snapshot: AssetSnapshot) -> None:
     st.subheader("Histórico dos Indicadores")
     reference_df = snapshot.metric_reference.copy()
@@ -117,9 +138,10 @@ def _render_metric_history(snapshot: AssetSnapshot) -> None:
         if chart_df.empty:
             continue
         with columns[index % 2]:
-            st.markdown(f"**{label}**")
-            st.line_chart(chart_df, use_container_width=True, color=["#4979f6"])
-            st.caption(_reference_note(snapshot, metric))
+            with st.container(border=True):
+                st.markdown(f"**{label}**")
+                _render_history_chart(chart_df, label)
+                st.caption(_reference_note(snapshot, metric))
 
     with st.expander("Tabela histórica dos indicadores"):
         raw_history = snapshot.metric_history[display_metrics].rename(columns=snapshot.metric_labels).copy()
