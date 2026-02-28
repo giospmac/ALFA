@@ -18,12 +18,12 @@ st.set_page_config(
 
 
 PAGE_CONFIG = {
-    "portfolio": {"label": "Home", "icon": "◈", "render": render_home_page},
-    "charts": {"label": "Histórico", "icon": "◌", "render": render_charts_page},
-    "risk": {"label": "Indicadores de Risco", "icon": "◍", "render": render_risk_analysis_page},
-    "frontier": {"label": "Markowitz", "icon": "◎", "render": render_markowitz_page},
-    "assets": {"label": "Análise de Ativos", "icon": "◇", "render": render_asset_analysis_page},
-    "comparison": {"label": "Comparador", "icon": "◫", "render": render_stock_comparison_page},
+    "portfolio": {"label": "Home", "render": render_home_page},
+    "charts": {"label": "Histórico", "render": render_charts_page},
+    "risk": {"label": "Indicadores de Risco", "render": render_risk_analysis_page},
+    "frontier": {"label": "Markowitz", "render": render_markowitz_page},
+    "assets": {"label": "Análise de Ativos", "render": render_asset_analysis_page},
+    "comparison": {"label": "Comparador", "render": render_stock_comparison_page},
 }
 
 
@@ -121,7 +121,7 @@ def _render_navigation() -> str:
         for page_key, page_meta in PAGE_CONFIG.items():
             is_selected = current_page == page_key
             if st.button(
-                f'{page_meta["icon"]}  {page_meta["label"]}',
+                page_meta["label"],
                 key=f"nav-{page_key}",
                 use_container_width=True,
                 type="primary" if is_selected else "secondary",
