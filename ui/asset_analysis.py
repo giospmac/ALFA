@@ -23,6 +23,7 @@ def _render_asset_analysis_styles() -> None:
             --asset-soft: #8c93a3;
             --asset-accent: #2f5a7a;
             --asset-accent-soft: rgba(47, 90, 122, 0.10);
+            --asset-primary-blue: #4979f6;
             --asset-radius-lg: 28px;
             --asset-radius-md: 22px;
             --asset-radius-sm: 18px;
@@ -60,19 +61,19 @@ def _render_asset_analysis_styles() -> None:
             font-weight: 600;
         }
         section.main div[data-testid="stTextInput"] input {
-            border-radius: 16px;
+            border-radius: 24px;
             border: 1px solid var(--asset-border);
-            background: rgba(255, 255, 255, 0.88);
-            color: var(--asset-text);
+            background: rgba(255, 255, 255, 0.82);
+            color: var(--asset-primary-blue) !important;
             min-height: 3.2rem;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+            box-shadow: 0 10px 24px rgba(23, 32, 51, 0.04);
         }
         section.main div[data-testid="stTextInput"] input::placeholder {
             color: #9aa1ad;
         }
         section.main div[data-testid="stTextInput"] input:focus {
-            border-color: rgba(47, 90, 122, 0.28);
-            box-shadow: 0 0 0 1px rgba(47, 90, 122, 0.10);
+            border-color: rgba(73, 121, 246, 0.32);
+            box-shadow: 0 0 0 1px rgba(73, 121, 246, 0.12);
         }
         section.main div[data-testid="stFormSubmitButton"] > button,
         section.main div[data-testid="stButton"] > button {
@@ -92,9 +93,15 @@ def _render_asset_analysis_styles() -> None:
         }
         section.main div[data-testid="stFormSubmitButton"] > button[kind="primary"],
         section.main div[data-testid="stButton"] > button[kind="primary"] {
-            border-color: rgba(47, 90, 122, 0.30);
-            background: linear-gradient(180deg, #23374a 0%, #1c2f40 100%);
-            color: #f9fafb;
+            border-color: rgba(73, 121, 246, 0.30);
+            background: var(--asset-primary-blue);
+            color: #ffffff !important;
+        }
+        section.main div[data-testid="stFormSubmitButton"] > button[kind="primary"]:hover,
+        section.main div[data-testid="stButton"] > button[kind="primary"]:hover {
+            border-color: rgba(73, 121, 246, 0.34);
+            background: #3f6fec;
+            color: #ffffff !important;
         }
         [data-testid="stVerticalBlockBorderWrapper"]:has(.asset-analysis-search-shell) {
             border: 1px solid var(--asset-border) !important;
@@ -344,12 +351,17 @@ def _render_asset_analysis_styles() -> None:
             background: rgba(255, 255, 255, 0.74) !important;
         }
         section.main [data-baseweb="input"] {
-            border-radius: 16px !important;
+            border-radius: 24px !important;
             border-color: var(--asset-border) !important;
-            background: rgba(255, 255, 255, 0.88) !important;
+            background: rgba(255, 255, 255, 0.82) !important;
+            box-shadow: 0 10px 24px rgba(23, 32, 51, 0.04);
         }
         section.main [data-baseweb="input"] > div {
             background: transparent !important;
+        }
+        section.main [data-baseweb="base-input"] {
+            color: var(--asset-primary-blue) !important;
+            -webkit-text-fill-color: var(--asset-primary-blue) !important;
         }
         @media (max-width: 900px) {
             .asset-page-hero,
