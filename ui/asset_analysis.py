@@ -11,6 +11,10 @@ def _render_asset_analysis_styles() -> None:
     st.markdown(
         """
         <style>
+        :root {
+            --asset-border: #cfd4de;
+            --asset-radius: 18px;
+        }
         .stApp {
             background: #f4f5f0;
         }
@@ -45,15 +49,15 @@ def _render_asset_analysis_styles() -> None:
             border-color: rgba(113, 113, 113, 0.25);
         }
         [data-testid="stVerticalBlockBorderWrapper"]:has(.stMetric) {
-            border: 1px solid #dddddd !important;
-            border-radius: 0.75rem !important;
-            background: #f4f5f0;
+            border: 1px solid var(--asset-border) !important;
+            border-radius: var(--asset-radius) !important;
+            background: #f4f5f0 !important;
         }
         [data-testid="stVerticalBlockBorderWrapper"]:has([data-testid="stVegaLiteChart"]) {
-            border: 1px solid #dddddd !important;
-            border-radius: 0.9rem !important;
+            border: 1px solid var(--asset-border) !important;
+            border-radius: var(--asset-radius) !important;
             background: #f4f5f0 !important;
-            padding: 0.25rem 0.25rem 0.1rem 0.25rem;
+            padding: 0.35rem 0.35rem 0.15rem 0.35rem;
         }
         [data-testid="stVegaLiteChart"],
         [data-testid="stVegaLiteChart"] > div {
@@ -108,7 +112,7 @@ def _render_history_chart(chart_df: pd.DataFrame, label: str) -> None:
         )
         .properties(height=240)
         .configure(background="#f4f5f0")
-        .configure_view(stroke="#dddddd", cornerRadius=12)
+        .configure_view(stroke="#cfd4de", cornerRadius=18)
         .configure_axis(gridColor="#dddddd", gridOpacity=0.35)
     )
     st.altair_chart(chart, use_container_width=True)
