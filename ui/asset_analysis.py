@@ -6,6 +6,19 @@ import streamlit as st
 from services.market_data import AssetSnapshot, MarketDataError, MetricValue, fetch_asset_snapshot
 
 
+def _render_asset_analysis_styles() -> None:
+    st.markdown(
+        """
+        <style>
+        .stApp {
+            background: #102170;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def _reference_note(snapshot: AssetSnapshot, metric_key: str) -> str:
     reference_df = snapshot.metric_reference
     selected = reference_df[reference_df["key"] == metric_key]
@@ -86,6 +99,7 @@ def _render_metric_reference(snapshot: AssetSnapshot) -> None:
 
 
 def render_asset_analysis_page(default_ticker: str = "") -> None:
+    _render_asset_analysis_styles()
     st.title("Análise de Ativos")
     st.caption("Consulta de indicadores fundamentalistas e de mercado via Yahoo Finance.")
 
