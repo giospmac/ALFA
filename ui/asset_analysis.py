@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import pandas as pd
 import streamlit as st
 
 from services.market_data import AssetSnapshot, MarketDataError, MetricValue, fetch_asset_snapshot
@@ -26,21 +25,6 @@ def _render_details(snapshot: AssetSnapshot) -> None:
         st.dataframe(snapshot.details, use_container_width=True, hide_index=True)
 
 
-def _normalize_metric_history(history_df: pd.DataFrame) -> pd.DataFrame:
-    normalized = pd.DataFrame(index=history_df.index)
-    for column in history_df.columns:
-        series = pd.to_numeric(history_df[column], errors="coerce")
-        valid = series.dropna()
-        if valid.empty:
-            continue
-        base_value = float(valid.iloc[0])
-        if base_value == 0:
-            normalized[column] = series
-            continue
-        normalized[column] = series / base_value * 100
-    return normalized.dropna(how="all")
-
-
 def _render_metric_history(snapshot: AssetSnapshot) -> None:
     st.subheader("Histórico dos Indicadores")
     reference_df = snapshot.metric_reference.copy()
@@ -60,7 +44,7 @@ def _render_metric_history(snapshot: AssetSnapshot) -> None:
         default_metrics = available_metrics[:4]
 
     selected_metrics = st.multiselect(
-        "Indicadores para comparar",
+        "Indicadores para exibir",
         options=available_metrics,
         default=default_metrics,
         format_func=lambda metric: snapshot.metric_labels.get(metric, metric),
@@ -69,19 +53,16 @@ def _render_metric_history(snapshot: AssetSnapshot) -> None:
         st.info("Selecione pelo menos um indicador para exibir o gráfico histórico.")
         return
 
-    compare_mode = st.toggle("Normalizar séries para comparação", value=True)
-
-    chart_df = snapshot.metric_history[selected_metrics].copy()
-    if compare_mode:
-        chart_df = _normalize_metric_history(chart_df)
-        st.caption("Séries normalizadas em 100 no primeiro ponto disponível para facilitar a comparação.")
-
-    chart_df = chart_df.rename(columns=snapshot.metric_labels)
-    st.line_chart(chart_df, use_container_width=True)
+    for metric in selected_metrics:
+        label = snapshot.metric_labels.get(metric, metric)
+        chart_df = snapshot.metric_history[[metric]].dropna().rename(columns={metric: label})
+        if chart_df.empty:
+            continue
+        st.markdown(f"**{label}**")
+        st.line_chart(chart_df, use_container_width=True)
 
     with st.expander("Tabela histórica dos indicadores"):
         raw_history = snapshot.metric_history[selected_metrics].rename(columns=snapshot.metric_labels).copy()
-        raw_history.index = pd.to_datetime(raw_history.index, errors="coerce")
         st.dataframe(raw_history, use_container_width=True)
 
 
