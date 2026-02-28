@@ -69,6 +69,54 @@ class MarkowitzResult:
     min_vol_volatility: float
 
 
+@dataclass(frozen=True)
+class StressScenarioCase:
+    key: str
+    label: str
+    category: str
+    reference: str
+    expected_return: float | None
+    drawdown: float | None
+    stressed_var: float | None
+    pnl_impact: float | None
+    available: bool
+    reason: str
+    path: pd.Series
+    asset_impacts: pd.DataFrame
+
+
+HISTORICAL_STRESS_WINDOWS = [
+    {
+        "key": "gfc_2008",
+        "label": "Crise 2008",
+        "reference": "01/09/2008 a 09/03/2009",
+        "start": "2008-09-01",
+        "end": "2009-03-09",
+    },
+    {
+        "key": "covid_2020",
+        "label": "Covid",
+        "reference": "19/02/2020 a 23/03/2020",
+        "start": "2020-02-19",
+        "end": "2020-03-23",
+    },
+    {
+        "key": "year_2020",
+        "label": "Ano 2020",
+        "reference": "02/01/2020 a 30/12/2020",
+        "start": "2020-01-02",
+        "end": "2020-12-30",
+    },
+    {
+        "key": "year_2022",
+        "label": "Ano 2022",
+        "reference": "03/01/2022 a 30/12/2022",
+        "start": "2022-01-03",
+        "end": "2022-12-30",
+    },
+]
+
+
 def empty_portfolio_frame() -> pd.DataFrame:
     return pd.DataFrame(columns=DEFAULT_PORTFOLIO_COLUMNS)
 
