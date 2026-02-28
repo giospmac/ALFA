@@ -43,8 +43,10 @@ def _render_asset_analysis_styles() -> None:
         [data-testid="stTextInput"] input {
             border-color: rgba(113, 113, 113, 0.25);
         }
-        [data-testid="stVerticalBlockBorderWrapper"] {
-            border-color: #dddddd !important;
+        [data-testid="stVerticalBlockBorderWrapper"]:has(.stMetric) {
+            border: 1px solid #dddddd !important;
+            border-radius: 0.75rem !important;
+            background: #f4f5f0;
         }
         [data-testid="stVegaLiteChart"] {
             background: #f4f5f0;
