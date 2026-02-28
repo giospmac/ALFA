@@ -5,19 +5,30 @@ import streamlit as st
 from services.market_data import AssetSnapshot, MarketDataError, MetricValue, fetch_asset_snapshot
 
 
-def _render_metric_card(column, metric: MetricValue) -> None:
+def _reference_note(snapshot: AssetSnapshot, metric_key: str) -> str:
+    reference_df = snapshot.metric_reference
+    selected = reference_df[reference_df["key"] == metric_key]
+    if selected.empty:
+        return ""
+    row = selected.iloc[0]
+    return f'Periodo: {row["Periodo de referencia"]} | Data-base: {row["Data de referência"]}'
+
+
+def _render_metric_card(column, metric: MetricValue, reference_note: str) -> None:
     with column:
         with st.container(border=True):
             st.metric(metric.label, metric.formatted())
             if not metric.is_available:
                 st.caption(metric.unavailable_reason)
+            if reference_note:
+                st.caption(reference_note)
 
 
-def _render_section(title: str, metrics: list[MetricValue]) -> None:
+def _render_section(snapshot: AssetSnapshot, title: str, metric_keys: list[str]) -> None:
     st.subheader(title)
-    columns = st.columns(len(metrics))
-    for column, metric in zip(columns, metrics):
-        _render_metric_card(column, metric)
+    columns = st.columns(len(metric_keys))
+    for column, metric_key in zip(columns, metric_keys):
+        _render_metric_card(column, snapshot.metrics[metric_key], _reference_note(snapshot, metric_key))
 
 
 def _render_details(snapshot: AssetSnapshot) -> None:
@@ -51,6 +62,7 @@ def _render_metric_history(snapshot: AssetSnapshot) -> None:
         with columns[index % 2]:
             st.markdown(f"**{label}**")
             st.line_chart(chart_df, use_container_width=True)
+            st.caption(_reference_note(snapshot, metric))
 
     with st.expander("Tabela histórica dos indicadores"):
         raw_history = snapshot.metric_history[display_metrics].rename(columns=snapshot.metric_labels).copy()
@@ -106,30 +118,19 @@ def render_asset_analysis_page(default_ticker: str = "") -> None:
     st.caption(f"Moeda reportada pelo Yahoo Finance: {snapshot.currency}")
 
     _render_section(
+        snapshot,
         "Preço & Mercado",
-        [
-            snapshot.metrics["current_price"],
-            snapshot.metrics["weekly_price_change_pct"],
-            snapshot.metrics["market_cap"],
-            snapshot.metrics["enterprise_value"],
-        ],
+        ["current_price", "weekly_price_change_pct", "market_cap", "enterprise_value"],
     )
     _render_section(
+        snapshot,
         "Valuation",
-        [
-            snapshot.metrics["roic"],
-            snapshot.metrics["pe_ratio"],
-            snapshot.metrics["dividend_yield"],
-            snapshot.metrics["ev_to_ebitda"],
-        ],
+        ["roic", "pe_ratio", "dividend_yield", "ev_to_ebitda"],
     )
     _render_section(
+        snapshot,
         "Qualidade & Risco",
-        [
-            snapshot.metrics["ebitda_margin"],
-            snapshot.metrics["financial_leverage"],
-            snapshot.metrics["beta"],
-        ],
+        ["ebitda_margin", "financial_leverage", "beta"],
     )
 
     _render_metric_history(snapshot)

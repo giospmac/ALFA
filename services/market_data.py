@@ -97,6 +97,50 @@ def _normalize_timestamp(date_value: Any) -> pd.Timestamp:
     return timestamp
 
 
+def _period_label_from_dates(start_date: Any, end_date: Any) -> str:
+    start = _normalize_timestamp(start_date)
+    end = _normalize_timestamp(end_date)
+    days = max((end - start).days, 0)
+
+    if days >= 540:
+        years = max(1, round(days / 365.25))
+        return f'ultimos {years} ano{"s" if years > 1 else ""}'
+    if days >= 45:
+        months = max(1, round(days / 30.44))
+        return f'ultimos {months} mese{"s" if months > 1 else ""}'
+    if days >= 14:
+        weeks = max(1, round(days / 7))
+        return f'ultimas {weeks} semana{"s" if weeks > 1 else ""}'
+    if days >= 1:
+        return f'ultimos {days} dia{"s" if days > 1 else ""}'
+    return "ultimo dado disponivel"
+
+
+def _metric_default_period(metric_key: str) -> str:
+    defaults = {
+        "current_price": "ultimo pregao disponivel",
+        "weekly_price_change_pct": "ultimos 5 pregoes",
+        "market_cap": "ultimo trimestre disponivel",
+        "enterprise_value": "ultimo trimestre disponivel",
+        "roic": "ultimos 12 meses (TTM)",
+        "ebitda_margin": "ultimos 12 meses (TTM)",
+        "ev_to_ebitda": "ultimos 12 meses (TTM)",
+        "dividend_yield": "ultimos 12 meses",
+        "pe_ratio": "ultimos 12 meses (TTM)",
+        "financial_leverage": "ultimo trimestre disponivel",
+        "beta": "janela nao informada pelo Yahoo Finance",
+    }
+    return defaults.get(metric_key, "ultimo valor disponivel")
+
+
+def _metric_reference_period(metric_key: str, metric_history: pd.DataFrame) -> str:
+    if metric_key in metric_history.columns:
+        series = pd.to_numeric(metric_history[metric_key], errors="coerce").dropna()
+        if len(series) >= 2:
+            return _period_label_from_dates(series.index.min(), series.index.max())
+    return _metric_default_period(metric_key)
+
+
 def _safe_frame(frame: Any) -> pd.DataFrame:
     if not isinstance(frame, pd.DataFrame) or frame.empty:
         return pd.DataFrame()
@@ -454,6 +498,7 @@ def _build_metric_reference(
                 "key": key,
                 "Indicador": label,
                 "Histórico disponível": "Sim" if has_history else "Não",
+                "Periodo de referencia": _metric_reference_period(key, metric_history),
                 "Data de referência": _date_label(reference_dates.get(key)),
                 "Fonte": source_map.get(key, "Yahoo Finance"),
             }
