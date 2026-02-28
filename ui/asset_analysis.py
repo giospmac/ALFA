@@ -44,7 +44,7 @@ def _render_asset_analysis_styles() -> None:
             border-color: rgba(113, 113, 113, 0.25);
         }
         [data-testid="stVerticalBlockBorderWrapper"] {
-            border-color: rgba(113, 113, 113, 0.16) !important;
+            border-color: #dddddd !important;
         }
         [data-testid="stVegaLiteChart"] {
             background: #f4f5f0;
