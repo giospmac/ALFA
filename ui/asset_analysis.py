@@ -43,14 +43,17 @@ def _normalize_metric_history(history_df: pd.DataFrame) -> pd.DataFrame:
 
 def _render_metric_history(snapshot: AssetSnapshot) -> None:
     st.subheader("Histórico dos Indicadores")
-    if snapshot.metric_history.empty:
-        st.info("O Yahoo Finance não retornou histórico fundamentalista suficiente para montar os indicadores.")
+    reference_df = snapshot.metric_reference.copy()
+    history_keys = reference_df.loc[reference_df["Histórico disponível"] == "Sim", "key"].tolist()
+
+    if snapshot.metric_history.empty or not history_keys:
+        st.info("Entre os indicadores solicitados, o Yahoo Finance não retornou séries históricas suficientes para gráfico.")
         return
 
-    available_metrics = snapshot.metric_history.dropna(axis=1, how="all").columns.tolist()
+    available_metrics = [metric for metric in history_keys if metric in snapshot.metric_history.columns]
     default_metrics = [
         metric
-        for metric in ["market_cap", "enterprise_value", "pe_ratio", "ev_to_ebitda", "roic"]
+        for metric in ["market_cap", "enterprise_value", "ebitda_margin", "ev_to_ebitda", "roic"]
         if metric in available_metrics
     ]
     if not default_metrics:
@@ -80,6 +83,21 @@ def _render_metric_history(snapshot: AssetSnapshot) -> None:
         raw_history = snapshot.metric_history[selected_metrics].rename(columns=snapshot.metric_labels).copy()
         raw_history.index = pd.to_datetime(raw_history.index, errors="coerce")
         st.dataframe(raw_history, use_container_width=True)
+
+
+def _render_metric_reference(snapshot: AssetSnapshot) -> None:
+    st.subheader("Referência dos Indicadores")
+    st.caption("Indicadores sem histórico suficiente ficam apenas com o último valor disponível e a respectiva data-base.")
+
+    reference_df = snapshot.metric_reference.copy()
+    without_history = reference_df[reference_df["Histórico disponível"] == "Não"].drop(columns=["key"])
+    if without_history.empty:
+        st.caption("Todos os indicadores exibidos acima possuem alguma série histórica utilizável no Yahoo Finance.")
+    else:
+        st.dataframe(without_history, use_container_width=True, hide_index=True)
+
+    with st.expander("Mapa completo de disponibilidade"):
+        st.dataframe(reference_df.drop(columns=["key"]), use_container_width=True, hide_index=True)
 
 
 def render_asset_analysis_page(default_ticker: str = "") -> None:
@@ -143,6 +161,7 @@ def render_asset_analysis_page(default_ticker: str = "") -> None:
     )
 
     _render_metric_history(snapshot)
+    _render_metric_reference(snapshot)
 
     st.caption("Quando um campo aparece como N/A, o dado não foi disponibilizado pelo Yahoo Finance para este ticker.")
     _render_details(snapshot)

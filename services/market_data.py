@@ -56,6 +56,7 @@ class AssetSnapshot:
     details: pd.DataFrame
     metric_history: pd.DataFrame
     metric_labels: dict[str, str]
+    metric_reference: pd.DataFrame
 
 
 @dataclass(frozen=True)
@@ -149,27 +150,6 @@ def _weekly_price_change_at(close_prices: pd.Series, date: pd.Timestamp) -> floa
     return _safe_ratio(current_price, prior_price) - 1 if current_price is not None and prior_price not in (None, 0) else None
 
 
-def _rolling_beta_series(asset_prices: pd.Series, benchmark_prices: pd.Series) -> pd.Series:
-    aligned = pd.concat(
-        [
-            pd.to_numeric(asset_prices, errors="coerce").rename("asset"),
-            pd.to_numeric(benchmark_prices, errors="coerce").rename("benchmark"),
-        ],
-        axis=1,
-    ).dropna()
-    if len(aligned) < 60:
-        return pd.Series(dtype=float)
-
-    returns = aligned.pct_change().dropna()
-    if len(returns) < 60:
-        return pd.Series(dtype=float)
-
-    rolling_cov = returns["asset"].rolling(window=126).cov(returns["benchmark"])
-    rolling_var = returns["benchmark"].rolling(window=126).var()
-    beta = rolling_cov.divide(rolling_var.replace(0, np.nan))
-    return beta.dropna()
-
-
 def _metric_label_map() -> dict[str, str]:
     return {
         "current_price": "Preço atual",
@@ -183,6 +163,38 @@ def _metric_label_map() -> dict[str, str]:
         "pe_ratio": "P/L",
         "financial_leverage": "Alavancagem financeira",
         "beta": "Beta",
+    }
+
+
+def _metric_source_map() -> dict[str, str]:
+    return {
+        "current_price": "Yahoo Finance price history",
+        "weekly_price_change_pct": "Derivado do Yahoo Finance price history",
+        "market_cap": "Derivado de prices + get_shares_full do Yahoo Finance",
+        "enterprise_value": "Derivado de prices + get_shares_full + balance sheet do Yahoo Finance",
+        "roic": "Derivado dos demonstrativos trimestrais do Yahoo Finance",
+        "ebitda_margin": "Derivado do quarterly_income_stmt do Yahoo Finance",
+        "ev_to_ebitda": "Derivado de EV + EBITDA trimestral do Yahoo Finance",
+        "dividend_yield": "Derivado de dividends + prices do Yahoo Finance",
+        "pe_ratio": "Derivado de market cap + lucro trimestral do Yahoo Finance",
+        "financial_leverage": "Derivado do quarterly_balance_sheet do Yahoo Finance",
+        "beta": "Yahoo Finance info",
+    }
+
+
+def _history_support_map() -> dict[str, bool]:
+    return {
+        "current_price": False,
+        "weekly_price_change_pct": True,
+        "market_cap": True,
+        "enterprise_value": True,
+        "roic": True,
+        "ebitda_margin": True,
+        "ev_to_ebitda": True,
+        "dividend_yield": True,
+        "pe_ratio": True,
+        "financial_leverage": True,
+        "beta": False,
     }
 
 
@@ -244,6 +256,12 @@ def _extract_history_prices(history: pd.DataFrame) -> tuple[float | None, float 
 
     day_change_pct = (current_price / previous_close) - 1
     return current_price, day_change_pct
+
+
+def _date_label(date_value: pd.Timestamp | None) -> str:
+    if date_value is None or pd.isna(date_value):
+        return "N/A"
+    return pd.Timestamp(date_value).strftime("%d/%m/%Y")
 
 
 def _build_details_table(info: dict[str, Any]) -> pd.DataFrame:
@@ -312,26 +330,17 @@ def _build_metric_history(asset: yf.Ticker, ticker: str, info: dict[str, Any]) -
         minority_interest_series = _statement_series(balance_sheet, ["Minority Interest", "Minority Interests"])
         preferred_equity_series = _statement_series(balance_sheet, ["Preferred Stock Equity", "Preferred Securities Outside Stock Equity"])
 
-        shares_outstanding = _coalesce_number(info.get("sharesOutstanding"), info.get("impliedSharesOutstanding"))
+        shares_full = asset.get_shares_full(start=(pd.Timestamp.today() - pd.DateOffset(years=10)).strftime("%Y-%m-%d"))
+        if not isinstance(shares_full, pd.Series):
+            shares_full = pd.Series(dtype=float)
+        shares_full = pd.to_numeric(shares_full, errors="coerce").dropna()
+        shares_full.index = pd.to_datetime(shares_full.index, errors="coerce")
+        shares_full = shares_full[shares_full.index.notna()].sort_index()
 
         dividends = getattr(asset, "dividends", pd.Series(dtype=float))
         dividends = pd.to_numeric(dividends, errors="coerce").dropna()
         dividends.index = pd.to_datetime(dividends.index, errors="coerce")
         dividends = dividends[dividends.index.notna()].sort_index()
-
-        benchmark_symbol = "^BVSP" if ticker.endswith(".SA") else "^GSPC"
-        try:
-            benchmark_history = yf.download(
-                benchmark_symbol,
-                period="10y",
-                auto_adjust=True,
-                progress=False,
-                threads=False,
-            )
-        except Exception:
-            benchmark_history = pd.DataFrame()
-        benchmark_close = _extract_single_close_series(benchmark_history, benchmark_symbol)
-        beta_series = _rolling_beta_series(close_prices, benchmark_close)
 
         rows: list[dict[str, Any]] = []
         for date in statement_dates[-12:]:
@@ -352,6 +361,7 @@ def _build_metric_history(asset: yf.Ticker, ticker: str, info: dict[str, Any]) -
             minority_interest = _value_at_or_before(minority_interest_series, date) or 0.0
             preferred_equity = _value_at_or_before(preferred_equity_series, date) or 0.0
 
+            shares_outstanding = _value_at_or_before(shares_full, date)
             market_cap = (price * shares_outstanding) if price is not None and shares_outstanding is not None else None
             enterprise_value = None
             if market_cap is not None:
@@ -370,8 +380,6 @@ def _build_metric_history(asset: yf.Ticker, ticker: str, info: dict[str, Any]) -
             if not dividends.empty:
                 trailing_dividends = _coalesce_number(dividends[(dividends.index <= date) & (dividends.index > date - pd.Timedelta(days=365))].sum())
 
-            beta_value = _value_at_or_before(beta_series, date)
-
             rows.append(
                 {
                     "date": date,
@@ -384,7 +392,6 @@ def _build_metric_history(asset: yf.Ticker, ticker: str, info: dict[str, Any]) -
                     "dividend_yield": _safe_ratio(trailing_dividends, price),
                     "pe_ratio": _safe_ratio(market_cap, net_income_ttm),
                     "financial_leverage": _safe_ratio(total_debt, equity),
-                    "beta": beta_value,
                 }
             )
 
@@ -395,6 +402,50 @@ def _build_metric_history(asset: yf.Ticker, ticker: str, info: dict[str, Any]) -
     history_df.index = pd.to_datetime(history_df.index, errors="coerce")
     history_df = history_df[history_df.index.notna()].sort_index()
     return history_df.dropna(how="all")
+
+
+def _build_metric_reference(
+    metric_labels: dict[str, str],
+    metric_history: pd.DataFrame,
+    price_reference_date: pd.Timestamp | None,
+    statement_reference_date: pd.Timestamp | None,
+    dividend_reference_date: pd.Timestamp | None,
+) -> pd.DataFrame:
+    source_map = _metric_source_map()
+    history_support = _history_support_map()
+
+    reference_dates: dict[str, pd.Timestamp | None] = {
+        "current_price": price_reference_date,
+        "weekly_price_change_pct": price_reference_date,
+        "market_cap": statement_reference_date or price_reference_date,
+        "enterprise_value": statement_reference_date or price_reference_date,
+        "roic": statement_reference_date,
+        "ebitda_margin": statement_reference_date,
+        "ev_to_ebitda": statement_reference_date,
+        "dividend_yield": dividend_reference_date or price_reference_date,
+        "pe_ratio": statement_reference_date,
+        "financial_leverage": statement_reference_date,
+        "beta": price_reference_date,
+    }
+
+    rows: list[dict[str, Any]] = []
+    for key, label in metric_labels.items():
+        has_history = False
+        if history_support.get(key, False) and key in metric_history.columns:
+            history_series = pd.to_numeric(metric_history[key], errors="coerce").dropna()
+            has_history = len(history_series) >= 2
+
+        rows.append(
+            {
+                "key": key,
+                "Indicador": label,
+                "Histórico disponível": "Sim" if has_history else "Não",
+                "Data de referência": _date_label(reference_dates.get(key)),
+                "Fonte": source_map.get(key, "Yahoo Finance"),
+            }
+        )
+
+    return pd.DataFrame(rows)
 
 
 @st.cache_data(ttl=900, show_spinner=False)
@@ -500,7 +551,8 @@ def fetch_asset_snapshot(ticker: str) -> AssetSnapshot:
     currency = info.get("currency") or "BRL"
 
     current_price, _ = _extract_history_prices(history)
-    weekly_price_change_pct = _weekly_price_change_at(_extract_single_close_series(history, normalized_ticker), pd.Timestamp.now())
+    close_series = _extract_single_close_series(history, normalized_ticker)
+    weekly_price_change_pct = _weekly_price_change_at(close_series, pd.Timestamp.now())
     current_price = _coalesce_number(
         info.get("currentPrice"),
         info.get("regularMarketPrice"),
@@ -509,6 +561,15 @@ def fetch_asset_snapshot(ticker: str) -> AssetSnapshot:
     metric_history = _build_metric_history(asset, normalized_ticker, info)
     metric_labels = _metric_label_map()
     latest_history = metric_history.iloc[-1] if not metric_history.empty else pd.Series(dtype=float)
+    statement_reference_date = metric_history.index.max() if not metric_history.empty else None
+    price_reference_date = close_series.index.max() if not close_series.empty else None
+
+    dividends = getattr(asset, "dividends", pd.Series(dtype=float))
+    if not isinstance(dividends, pd.Series):
+        dividends = pd.Series(dtype=float)
+    dividends.index = pd.to_datetime(dividends.index, errors="coerce")
+    dividends = dividends[dividends.index.notna()].sort_index()
+    dividend_reference_date = dividends.index.max() if not dividends.empty else price_reference_date
 
     enterprise_value = _coalesce_number(
         info.get("enterpriseValue"),
@@ -574,6 +635,14 @@ def fetch_asset_snapshot(ticker: str) -> AssetSnapshot:
         "financial_leverage": MetricValue("Alavancagem financeira", financial_leverage, is_ratio=True),
     }
 
+    metric_reference = _build_metric_reference(
+        metric_labels,
+        metric_history,
+        price_reference_date,
+        statement_reference_date,
+        dividend_reference_date,
+    )
+
     return AssetSnapshot(
         ticker=normalized_ticker,
         long_name=long_name,
@@ -582,4 +651,5 @@ def fetch_asset_snapshot(ticker: str) -> AssetSnapshot:
         details=_build_details_table(info),
         metric_history=metric_history,
         metric_labels=metric_labels,
+        metric_reference=metric_reference,
     )
