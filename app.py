@@ -7,6 +7,7 @@ from ui.markowitz import render_markowitz_page
 from ui.quant_projections import render_quant_projections_page
 from ui.risk_analysis import render_risk_analysis_page
 from ui.stock_comparison import render_stock_comparison_page
+from ui.stress_scenarios import render_stress_scenarios_page
 
 import streamlit as st
 
@@ -22,6 +23,7 @@ PAGE_CONFIG = {
     "portfolio": {"label": "Home", "render": render_home_page},
     "charts": {"label": "Histórico", "render": render_charts_page},
     "risk": {"label": "Indicadores de Risco", "render": render_risk_analysis_page},
+    "stress": {"label": "Stress Test & Cenários", "render": render_stress_scenarios_page},
     "frontier": {"label": "Markowitz", "render": render_markowitz_page},
     "assets": {"label": "Análise de Ativos", "render": render_asset_analysis_page},
     "comparison": {"label": "Comparador", "render": render_stock_comparison_page},
