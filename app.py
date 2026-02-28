@@ -5,6 +5,7 @@ from ui.charts import render_charts_page
 from ui.home import render_home_page
 from ui.markowitz import render_markowitz_page
 from ui.risk_analysis import render_risk_analysis_page
+from ui.stock_comparison import render_stock_comparison_page
 
 import streamlit as st
 
@@ -26,6 +27,7 @@ def main() -> None:
             "Indicadores de Risco",
             "Fronteira Eficiente",
             "Análise de Ativos",
+            "Comparador de Ações",
         ],
     )
 
@@ -45,9 +47,12 @@ def main() -> None:
         render_markowitz_page()
         return
 
+    if page == "Comparador de Ações":
+        render_stock_comparison_page()
+        return
+
     render_asset_analysis_page()
 
 
 if __name__ == "__main__":
     main()
-

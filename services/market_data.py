@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import re
 from typing import Any
 
 import pandas as pd
@@ -54,6 +55,13 @@ class AssetSnapshot:
     details: pd.DataFrame
 
 
+@dataclass(frozen=True)
+class TickerComparisonResult:
+    normalized_history: pd.DataFrame
+    total_returns: dict[str, float]
+    invalid_tickers: list[str]
+
+
 def _coalesce_number(*values: Any) -> float | None:
     for value in values:
         if value is None or pd.isna(value):
@@ -63,6 +71,38 @@ def _coalesce_number(*values: Any) -> float | None:
         except (TypeError, ValueError):
             continue
     return None
+
+
+def normalize_market_ticker(ticker_input: str) -> str:
+    ticker = str(ticker_input or "").strip().upper()
+    if re.fullmatch(r"[A-Z]{4}\d{1,2}", ticker) and not ticker.endswith(".SA"):
+        return f"{ticker}.SA"
+    return ticker
+
+
+def _extract_download_close_history(raw_history: pd.DataFrame, tickers: list[str]) -> pd.DataFrame:
+    if raw_history.empty:
+        return pd.DataFrame()
+
+    if isinstance(raw_history.columns, pd.MultiIndex):
+        level_zero = raw_history.columns.get_level_values(0)
+        level_last = raw_history.columns.get_level_values(-1)
+        if "Close" in level_zero:
+            close_history = raw_history.xs("Close", axis=1, level=0)
+        elif "Close" in level_last:
+            close_history = raw_history.xs("Close", axis=1, level=-1)
+        else:
+            return pd.DataFrame()
+    else:
+        if "Close" not in raw_history.columns:
+            return pd.DataFrame()
+        close_history = raw_history[["Close"]].copy()
+        close_history.columns = tickers[:1]
+
+    close_history = close_history.loc[:, ~close_history.columns.duplicated()]
+    close_history.index = pd.to_datetime(close_history.index, errors="coerce")
+    close_history = close_history[close_history.index.notna()].sort_index()
+    return close_history.apply(pd.to_numeric, errors="coerce")
 
 
 def _extract_history_prices(history: pd.DataFrame) -> tuple[float | None, float | None]:
@@ -106,6 +146,76 @@ def _build_details_table(info: dict[str, Any]) -> pd.DataFrame:
         [{"Campo": key, "Valor": "N/A" if value is None or pd.isna(value) else value} for key, value in fields.items()]
     )
     return details
+
+
+@st.cache_data(ttl=900, show_spinner=False)
+def fetch_ticker_comparison(tickers: tuple[str, ...], period: str) -> TickerComparisonResult:
+    normalized_tickers: list[str] = []
+    seen: set[str] = set()
+    for ticker in tickers:
+        normalized_ticker = normalize_market_ticker(ticker)
+        if not normalized_ticker or normalized_ticker in seen:
+            continue
+        normalized_tickers.append(normalized_ticker)
+        seen.add(normalized_ticker)
+
+    if not normalized_tickers:
+        raise MarketDataError("Selecione pelo menos um ticker para comparar.")
+
+    download_target: str | list[str]
+    download_target = normalized_tickers[0] if len(normalized_tickers) == 1 else normalized_tickers
+
+    try:
+        raw_history = yf.download(
+            download_target,
+            period=period,
+            auto_adjust=True,
+            progress=False,
+            threads=False,
+        )
+    except Exception as exc:
+        raise MarketDataError("Falha ao consultar as series historicas no Yahoo Finance.") from exc
+
+    close_history = _extract_download_close_history(raw_history, normalized_tickers)
+    if close_history.empty:
+        raise MarketDataError("Nao foi possivel montar o historico dos tickers selecionados.")
+
+    close_history = close_history.ffill().dropna(how="all")
+    valid_tickers: list[str] = []
+    invalid_tickers: list[str] = []
+
+    for ticker in normalized_tickers:
+        if ticker not in close_history.columns:
+            invalid_tickers.append(ticker)
+            continue
+        series = pd.to_numeric(close_history[ticker], errors="coerce").dropna()
+        if len(series) < 2:
+            invalid_tickers.append(ticker)
+            continue
+        valid_tickers.append(ticker)
+
+    if not valid_tickers:
+        raise MarketDataError("Nenhum ticker retornou historico suficiente para comparacao.")
+
+    comparison_history = close_history[valid_tickers].dropna()
+    if len(comparison_history) < 2:
+        comparison_history = close_history[valid_tickers].ffill().bfill().dropna(how="all")
+    if len(comparison_history) < 2:
+        raise MarketDataError("Os tickers selecionados nao possuem uma janela comum suficiente para comparacao.")
+
+    base_prices = comparison_history.iloc[0].replace(0, pd.NA)
+    normalized_history = comparison_history.divide(base_prices).dropna(how="all")
+    total_returns = {
+        ticker: float(normalized_history[ticker].dropna().iloc[-1] - 1.0)
+        for ticker in valid_tickers
+        if not normalized_history[ticker].dropna().empty
+    }
+
+    return TickerComparisonResult(
+        normalized_history=normalized_history,
+        total_returns=total_returns,
+        invalid_tickers=invalid_tickers,
+    )
 
 
 @st.cache_data(ttl=60, show_spinner=False)
