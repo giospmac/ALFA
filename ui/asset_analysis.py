@@ -8,15 +8,13 @@ from services.market_data import AssetSnapshot, MarketDataError, MetricValue, fe
 
 
 HISTORY_WINDOW_OPTIONS = {
-    "Último dia": {"days": 1},
-    "Última semana": {"weeks": 1},
-    "Último mês": {"months": 1},
-    "Últimos 3 meses": {"months": 3},
-    "Últimos 6 meses": {"months": 6},
-    "Último ano": {"years": 1},
-    "Últimos 2 anos": {"years": 2},
-    "Últimos 3 anos": {"years": 3},
-    "Últimos 5 anos": {"years": 5},
+    "1 Month": {"months": 1},
+    "3 Months": {"months": 3},
+    "6 Months": {"months": 6},
+    "1 Year": {"years": 1},
+    "5 Years": {"years": 5},
+    "10 Years": {"years": 10},
+    "20 Years": {"years": 20},
 }
 
 
@@ -98,6 +96,25 @@ def _render_asset_analysis_styles() -> None:
             font-size: 0.9rem;
             line-height: 1.45;
             margin-top: 0.45rem;
+        }
+        .asset-filter-title {
+            color: #ecf1f8;
+            font-size: 1.25rem;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        div[data-testid="stButton"] > button {
+            border-radius: 999px;
+            border: 1px solid #385271;
+            background: #1b2940;
+            color: #ecf1f8;
+            min-height: 3rem;
+            box-shadow: none;
+        }
+        div[data-testid="stButton"] > button[kind="primary"] {
+            background: #2b2f73;
+            color: #6f6bff;
+            border: 1px solid #6f6bff;
         }
         </style>
         """,
@@ -205,6 +222,27 @@ def _filter_history_window(history_df: pd.DataFrame, window_label: str) -> pd.Da
     return filtered_df if not filtered_df.empty else history_df.tail(1)
 
 
+def _render_history_window_selector(ticker: str) -> str:
+    state_key = f"asset-history-window-{ticker}"
+    if state_key not in st.session_state:
+        st.session_state[state_key] = "6 Months"
+
+    st.markdown('<div class="asset-filter-title">Time horizon</div>', unsafe_allow_html=True)
+    button_rows = [
+        ["1 Month", "3 Months", "6 Months"],
+        ["1 Year", "5 Years", "10 Years", "20 Years"],
+    ]
+
+    for row in button_rows:
+        columns = st.columns(len(row))
+        for column, label in zip(columns, row):
+            button_type = "primary" if st.session_state[state_key] == label else "secondary"
+            if column.button(label, key=f"{state_key}-{label}", use_container_width=True, type=button_type):
+                st.session_state[state_key] = label
+
+    return st.session_state[state_key]
+
+
 def _render_metric_history(snapshot: AssetSnapshot) -> None:
     st.subheader("Histórico dos Indicadores")
     reference_df = snapshot.metric_reference.copy()
@@ -222,12 +260,7 @@ def _render_metric_history(snapshot: AssetSnapshot) -> None:
     if not display_metrics:
         return
 
-    selected_window = st.selectbox(
-        "Filtro de data",
-        options=list(HISTORY_WINDOW_OPTIONS.keys()),
-        index=4,
-        key=f"asset-history-window-{snapshot.ticker}",
-    )
+    selected_window = _render_history_window_selector(snapshot.ticker)
 
     columns = st.columns(2, gap="large")
     for index, metric in enumerate(display_metrics):
