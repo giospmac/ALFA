@@ -66,6 +66,14 @@ class TickerComparisonResult:
     invalid_tickers: list[str]
 
 
+@dataclass(frozen=True)
+class QuantProjectionResult:
+    historical_history: pd.DataFrame
+    projected_history: pd.DataFrame
+    expected_returns: dict[str, float]
+    invalid_tickers: list[str]
+
+
 def _coalesce_number(*values: Any) -> float | None:
     for value in values:
         if value is None or pd.isna(value):
@@ -304,6 +312,44 @@ def _extract_single_close_series(raw_history: pd.DataFrame, ticker: str) -> pd.S
     series = pd.to_numeric(close_history[first_column], errors="coerce").dropna()
     series.index = _normalize_datetime_index(series.index)
     return series[series.index.notna()].sort_index()
+
+
+def _business_horizon_days(period: str) -> int:
+    mapping = {
+        "1mo": 21,
+        "3mo": 63,
+        "6mo": 126,
+        "1y": 252,
+        "5y": 1260,
+        "10y": 2520,
+        "20y": 5040,
+    }
+    return mapping.get(period, 126)
+
+
+def _simple_projection_path(price_series: pd.Series, horizon_days: int) -> pd.Series:
+    clean_prices = pd.to_numeric(price_series, errors="coerce").dropna()
+    if len(clean_prices) < 30:
+        return pd.Series(dtype=float)
+
+    log_returns = np.log(clean_prices / clean_prices.shift(1)).dropna()
+    if log_returns.empty:
+        return pd.Series(dtype=float)
+
+    recent_returns = log_returns.tail(min(252, len(log_returns)))
+    ema_drift = float(recent_returns.ewm(span=min(30, len(recent_returns)), adjust=False).mean().iloc[-1])
+    long_run_drift = float(recent_returns.mean())
+    daily_drift = (0.7 * ema_drift) + (0.3 * long_run_drift)
+    daily_drift = float(np.clip(daily_drift, -0.03, 0.03))
+
+    last_price = float(clean_prices.iloc[-1])
+    future_index = pd.bdate_range(start=clean_prices.index[-1] + pd.offsets.BDay(1), periods=horizon_days)
+    if len(future_index) == 0:
+        return pd.Series(dtype=float)
+
+    step_range = np.arange(1, horizon_days + 1, dtype=float)
+    projected_values = last_price * np.exp(daily_drift * step_range)
+    return pd.Series(projected_values, index=future_index, name=clean_prices.name)
 
 
 def _extract_history_prices(history: pd.DataFrame) -> tuple[float | None, float | None]:
@@ -580,6 +626,95 @@ def fetch_ticker_comparison(tickers: tuple[str, ...], period: str) -> TickerComp
     return TickerComparisonResult(
         normalized_history=normalized_history,
         total_returns=total_returns,
+        invalid_tickers=invalid_tickers,
+    )
+
+
+@st.cache_data(ttl=900, show_spinner=False)
+def fetch_ticker_quant_projection(tickers: tuple[str, ...], period: str) -> QuantProjectionResult:
+    normalized_tickers: list[str] = []
+    seen: set[str] = set()
+    for ticker in tickers:
+        normalized_ticker = normalize_market_ticker(ticker)
+        if not normalized_ticker or normalized_ticker in seen:
+            continue
+        normalized_tickers.append(normalized_ticker)
+        seen.add(normalized_ticker)
+
+    if not normalized_tickers:
+        raise MarketDataError("Selecione pelo menos um ticker para projetar.")
+
+    download_target: str | list[str] = normalized_tickers[0] if len(normalized_tickers) == 1 else normalized_tickers
+    lookback_period = "10y" if period in {"5y", "10y", "20y"} else "5y"
+
+    try:
+        raw_history = yf.download(
+            download_target,
+            period=lookback_period,
+            auto_adjust=True,
+            progress=False,
+            threads=False,
+        )
+    except Exception as exc:
+        raise MarketDataError("Falha ao consultar as séries históricas para projeção.") from exc
+
+    close_history = _extract_download_close_history(raw_history, normalized_tickers)
+    if close_history.empty:
+        raise MarketDataError("Não foi possível montar o histórico dos tickers selecionados.")
+
+    close_history = close_history.ffill().dropna(how="all")
+    historical_columns: list[str] = []
+    projected_columns: list[str] = []
+    invalid_tickers: list[str] = []
+    horizon_days = _business_horizon_days(period)
+
+    historical_frames: list[pd.Series] = []
+    projected_frames: list[pd.Series] = []
+    expected_returns: dict[str, float] = {}
+
+    for ticker in normalized_tickers:
+        if ticker not in close_history.columns:
+            invalid_tickers.append(ticker)
+            continue
+
+        series = pd.to_numeric(close_history[ticker], errors="coerce").dropna()
+        if len(series) < 30:
+            invalid_tickers.append(ticker)
+            continue
+
+        history_window = series.tail(min(len(series), max(horizon_days, 126)))
+        if len(history_window) < 2:
+            invalid_tickers.append(ticker)
+            continue
+
+        projected_path = _simple_projection_path(series, horizon_days)
+        if projected_path.empty:
+            invalid_tickers.append(ticker)
+            continue
+
+        historical_base = float(history_window.iloc[0])
+        projected_base = float(history_window.iloc[-1])
+        historical_series = history_window.divide(historical_base)
+        projected_series = projected_path.divide(projected_base) * historical_series.iloc[-1]
+        historical_series.name = ticker
+        projected_series.name = ticker
+
+        expected_returns[ticker] = float(projected_path.iloc[-1] / series.iloc[-1] - 1.0)
+        historical_frames.append(historical_series)
+        projected_frames.append(projected_series)
+        historical_columns.append(ticker)
+        projected_columns.append(ticker)
+
+    if not historical_frames or not projected_frames:
+        raise MarketDataError("Nenhum ticker retornou histórico suficiente para projeção.")
+
+    historical_df = pd.concat(historical_frames, axis=1).sort_index()
+    projected_df = pd.concat(projected_frames, axis=1).sort_index()
+
+    return QuantProjectionResult(
+        historical_history=historical_df,
+        projected_history=projected_df,
+        expected_returns=expected_returns,
         invalid_tickers=invalid_tickers,
     )
 

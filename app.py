@@ -4,6 +4,7 @@ from ui.asset_analysis import render_asset_analysis_page
 from ui.charts import render_charts_page
 from ui.home import render_home_page
 from ui.markowitz import render_markowitz_page
+from ui.quant_projections import render_quant_projections_page
 from ui.risk_analysis import render_risk_analysis_page
 from ui.stock_comparison import render_stock_comparison_page
 
@@ -24,6 +25,7 @@ PAGE_CONFIG = {
     "frontier": {"label": "Markowitz", "render": render_markowitz_page},
     "assets": {"label": "Análise de Ativos", "render": render_asset_analysis_page},
     "comparison": {"label": "Comparador", "render": render_stock_comparison_page},
+    "quant": {"label": "Projeções Quant", "render": render_quant_projections_page},
 }
 
 
