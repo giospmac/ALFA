@@ -13,6 +13,36 @@ def _render_asset_analysis_styles() -> None:
         .stApp {
             background: #f4f5f0;
         }
+        .stApp h1,
+        .stApp h2,
+        .stApp h3,
+        .stApp strong,
+        .stMetric label,
+        .stMetric [data-testid="stMetricValue"],
+        [data-testid="stMarkdownContainer"] p strong {
+            color: #4979f6;
+        }
+        .stApp p,
+        .stApp label,
+        .stApp .stCaption,
+        .stApp [data-testid="stCaptionContainer"],
+        .stApp [data-testid="stMarkdownContainer"] p,
+        .stApp [data-testid="stMarkdownContainer"] li {
+            color: #717171;
+        }
+        [data-testid="stTextInput"] label,
+        [data-testid="stTextInput"] input,
+        [data-testid="stTextInput"] input::placeholder {
+            color: #717171;
+        }
+        [data-testid="stMultiSelect"] label,
+        [data-testid="stSelectbox"] label,
+        [data-testid="stTextInput"] label {
+            color: #717171;
+        }
+        [data-testid="stTextInput"] input {
+            border-color: rgba(113, 113, 113, 0.25);
+        }
         [data-testid="stVegaLiteChart"] {
             background: #f4f5f0;
             border-radius: 12px;
