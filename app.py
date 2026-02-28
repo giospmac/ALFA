@@ -18,11 +18,11 @@ st.set_page_config(
 
 
 PAGE_CONFIG = {
-    "portfolio": {"label": "Portfólio", "icon": "◈", "render": render_home_page},
-    "charts": {"label": "Gráficos", "icon": "◌", "render": render_charts_page},
-    "risk": {"label": "Risco", "icon": "◍", "render": render_risk_analysis_page},
-    "frontier": {"label": "Fronteira", "icon": "◎", "render": render_markowitz_page},
-    "assets": {"label": "Ativos", "icon": "◇", "render": render_asset_analysis_page},
+    "portfolio": {"label": "Home", "icon": "◈", "render": render_home_page},
+    "charts": {"label": "Histórico", "icon": "◌", "render": render_charts_page},
+    "risk": {"label": "Indicadores de Risco", "icon": "◍", "render": render_risk_analysis_page},
+    "frontier": {"label": "Markowitz", "icon": "◎", "render": render_markowitz_page},
+    "assets": {"label": "Análise de Ativos", "icon": "◇", "render": render_asset_analysis_page},
     "comparison": {"label": "Comparador", "icon": "◫", "render": render_stock_comparison_page},
 }
 
