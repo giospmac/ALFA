@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import altair as alt
+from html import escape
+
 import pandas as pd
 import streamlit as st
 
@@ -8,13 +10,13 @@ from services.market_data import AssetSnapshot, MarketDataError, MetricValue, fe
 
 
 HISTORY_WINDOW_OPTIONS = {
-    "1 Month": {"months": 1},
-    "3 Months": {"months": 3},
-    "6 Months": {"months": 6},
-    "1 Year": {"years": 1},
-    "5 Years": {"years": 5},
-    "10 Years": {"years": 10},
-    "20 Years": {"years": 20},
+    "1M": {"months": 1, "label": "1 mes"},
+    "3M": {"months": 3, "label": "3 meses"},
+    "6M": {"months": 6, "label": "6 meses"},
+    "1A": {"years": 1, "label": "1 ano"},
+    "5A": {"years": 5, "label": "5 anos"},
+    "10A": {"years": 10, "label": "10 anos"},
+    "20A": {"years": 20, "label": "20 anos"},
 }
 
 
@@ -23,98 +25,351 @@ def _render_asset_analysis_styles() -> None:
         """
         <style>
         :root {
-            --asset-border: #cfd4de;
-            --asset-radius: 18px;
+            --asset-page-bg: #f6f4ef;
+            --asset-surface: rgba(255, 255, 255, 0.78);
+            --asset-surface-strong: rgba(255, 255, 255, 0.92);
+            --asset-border: rgba(21, 33, 53, 0.10);
+            --asset-border-strong: rgba(21, 33, 53, 0.16);
+            --asset-text: #172033;
+            --asset-muted: #6c7483;
+            --asset-soft: #8c93a3;
+            --asset-accent: #2f5a7a;
+            --asset-accent-soft: rgba(47, 90, 122, 0.10);
+            --asset-radius-lg: 28px;
+            --asset-radius-md: 22px;
+            --asset-radius-sm: 18px;
+            --asset-shadow: 0 18px 38px rgba(23, 32, 51, 0.06);
         }
         .stApp {
-            background: #f4f5f0;
+            background:
+                radial-gradient(circle at top left, rgba(210, 220, 228, 0.55), transparent 28%),
+                radial-gradient(circle at top right, rgba(235, 230, 220, 0.8), transparent 34%),
+                linear-gradient(180deg, #faf8f4 0%, var(--asset-page-bg) 42%, #f3f0e8 100%);
+            color: var(--asset-text);
         }
-        .stApp h1,
-        .stApp h2,
-        .stApp h3,
-        .stApp strong,
-        .stMetric label,
-        .stMetric [data-testid="stMetricValue"],
-        [data-testid="stMarkdownContainer"] p strong {
-            color: #4979f6;
+        section.main [data-testid="block-container"] {
+            max-width: 1220px;
+            padding-top: 2.3rem;
+            padding-bottom: 3.5rem;
         }
-        .stApp p,
-        .stApp label,
-        .stApp .stCaption,
-        .stApp [data-testid="stCaptionContainer"],
-        .stApp [data-testid="stMarkdownContainer"] p,
-        .stApp [data-testid="stMarkdownContainer"] li {
-            color: #717171;
+        section.main .block-container h1,
+        section.main .block-container h2,
+        section.main .block-container h3,
+        section.main .block-container strong {
+            color: var(--asset-text);
         }
-        [data-testid="stTextInput"] label,
-        [data-testid="stTextInput"] input,
-        [data-testid="stTextInput"] input::placeholder {
-            color: #717171;
+        section.main .block-container p,
+        section.main .block-container label,
+        section.main .block-container .stCaption,
+        section.main .block-container [data-testid="stCaptionContainer"],
+        section.main .block-container [data-testid="stMarkdownContainer"] p,
+        section.main .block-container [data-testid="stMarkdownContainer"] li {
+            color: var(--asset-muted);
         }
-        [data-testid="stMultiSelect"] label,
-        [data-testid="stSelectbox"] label,
-        [data-testid="stTextInput"] label {
-            color: #717171;
+        section.main div[data-testid="stTextInput"] label {
+            color: var(--asset-muted);
+            font-size: 0.92rem;
+            font-weight: 600;
         }
-        [data-testid="stTextInput"] input {
-            border-color: rgba(113, 113, 113, 0.25);
+        section.main div[data-testid="stTextInput"] input {
+            border-radius: 16px;
+            border: 1px solid var(--asset-border);
+            background: rgba(255, 255, 255, 0.66);
+            color: var(--asset-text);
+            min-height: 3.2rem;
         }
-        [data-testid="stVerticalBlockBorderWrapper"]:has(.stMetric) {
+        section.main div[data-testid="stTextInput"] input::placeholder {
+            color: #9aa1ad;
+        }
+        section.main div[data-testid="stFormSubmitButton"] > button,
+        section.main div[data-testid="stButton"] > button {
+            border-radius: 999px;
+            min-height: 3rem;
+            border: 1px solid var(--asset-border);
+            background: rgba(255, 255, 255, 0.68);
+            color: var(--asset-text);
+            box-shadow: none;
+            transition: all 0.18s ease;
+        }
+        section.main div[data-testid="stFormSubmitButton"] > button:hover,
+        section.main div[data-testid="stButton"] > button:hover {
+            border-color: rgba(47, 90, 122, 0.24);
+            background: rgba(255, 255, 255, 0.92);
+            color: var(--asset-text);
+        }
+        section.main div[data-testid="stFormSubmitButton"] > button[kind="primary"],
+        section.main div[data-testid="stButton"] > button[kind="primary"] {
+            border-color: rgba(47, 90, 122, 0.30);
+            background: linear-gradient(180deg, #23374a 0%, #1c2f40 100%);
+            color: #f9fafb;
+        }
+        [data-testid="stVerticalBlockBorderWrapper"]:has(.asset-analysis-search-shell) {
             border: 1px solid var(--asset-border) !important;
-            border-radius: var(--asset-radius) !important;
-            background: #f4f5f0 !important;
+            border-radius: var(--asset-radius-lg) !important;
+            background: var(--asset-surface) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--asset-shadow);
+            padding: 1.25rem 1.25rem 0.85rem 1.25rem;
         }
-        [data-testid="stVerticalBlockBorderWrapper"]:has(.asset-analysis-shell) {
-            border: 1px solid #dddddd !important;
-            border-radius: 20px !important;
-            background: #f4f5f0 !important;
-            padding: 0.85rem 0.85rem 0.35rem 0.85rem;
-            box-shadow: none !important;
-        }
-        [data-testid="stVerticalBlockBorderWrapper"]:has([data-testid="stVegaLiteChart"]) {
-            border: 1px solid #385271 !important;
-            border-radius: 20px !important;
-            background: linear-gradient(180deg, #1f2f4a 0%, #1b2940 100%) !important;
-            padding: 1rem 1rem 0.6rem 1rem;
-            box-shadow: none !important;
+        [data-testid="stVerticalBlockBorderWrapper"]:has(.asset-history-shell) {
+            border: 1px solid var(--asset-border) !important;
+            border-radius: var(--asset-radius-md) !important;
+            background: var(--asset-surface-strong) !important;
+            padding: 1.05rem 1.1rem 0.85rem 1.1rem;
+            box-shadow: 0 12px 26px rgba(23, 32, 51, 0.04);
         }
         [data-testid="stVegaLiteChart"],
         [data-testid="stVegaLiteChart"] > div {
             background: transparent !important;
         }
-        [data-testid="stVerticalBlockBorderWrapper"]:has(.asset-history-card) [data-testid="stMarkdownContainer"] p {
-            color: #ecf1f8 !important;
+        .asset-page-hero {
+            position: relative;
+            overflow: hidden;
+            border-radius: 30px;
+            border: 1px solid var(--asset-border);
+            background:
+                linear-gradient(135deg, rgba(255, 255, 255, 0.70), rgba(255, 255, 255, 0.38)),
+                radial-gradient(circle at top right, rgba(47, 90, 122, 0.10), transparent 35%);
+            padding: 1.7rem 1.75rem;
+            margin-bottom: 1.2rem;
+            box-shadow: var(--asset-shadow);
+            backdrop-filter: blur(12px);
         }
-        .asset-history-title {
-            color: #ecf1f8;
-            font-size: 1.05rem;
+        .asset-page-kicker {
+            color: var(--asset-soft);
+            font-size: 0.73rem;
             font-weight: 700;
-            margin-bottom: 0.35rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            margin-bottom: 0.7rem;
         }
-        .asset-history-note {
-            color: #c8d3e3;
-            font-size: 0.9rem;
-            line-height: 1.45;
+        .asset-page-title {
+            color: var(--asset-text);
+            font-size: clamp(2rem, 3.1vw, 3.35rem);
+            line-height: 0.98;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.7rem;
+        }
+        .asset-page-subtitle {
+            max-width: 760px;
+            color: var(--asset-muted);
+            font-size: 1rem;
+            line-height: 1.65;
+        }
+        .asset-panel-kicker {
+            color: var(--asset-soft);
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            margin-bottom: 0.45rem;
+        }
+        .asset-panel-title {
+            color: var(--asset-text);
+            font-size: 1.22rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        .asset-panel-copy {
+            color: var(--asset-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+        .asset-empty-state {
+            border: 1px dashed rgba(23, 32, 51, 0.16);
+            border-radius: 22px;
+            padding: 1rem 1.05rem;
+            margin-top: 0.65rem;
+            background: rgba(255, 255, 255, 0.40);
+            color: var(--asset-muted);
+        }
+        .asset-summary-card {
+            border: 1px solid var(--asset-border);
+            border-radius: 30px;
+            background: var(--asset-surface-strong);
+            padding: 1.5rem 1.55rem;
+            margin: 1.15rem 0 1.2rem 0;
+            box-shadow: var(--asset-shadow);
+        }
+        .asset-summary-kicker {
+            color: var(--asset-soft);
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            margin-bottom: 0.55rem;
+        }
+        .asset-summary-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        .asset-summary-name {
+            color: var(--asset-text);
+            font-size: clamp(1.7rem, 2.3vw, 2.5rem);
+            line-height: 1.05;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.28rem;
+        }
+        .asset-summary-code {
+            color: var(--asset-muted);
+            font-size: 0.96rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .asset-summary-price {
+            color: var(--asset-text);
+            font-size: clamp(1.7rem, 2.4vw, 2.35rem);
+            line-height: 1;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            text-align: right;
+        }
+        .asset-summary-change {
             margin-top: 0.45rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 999px;
+            padding: 0.38rem 0.78rem;
+            font-size: 0.86rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
         }
-        .asset-filter-title {
-            color: #ecf1f8;
-            font-size: 1.25rem;
-            font-weight: 500;
+        .asset-summary-change.positive {
+            background: rgba(34, 117, 78, 0.10);
+            color: #1f6b4b;
+        }
+        .asset-summary-change.negative {
+            background: rgba(163, 62, 62, 0.10);
+            color: #9c3131;
+        }
+        .asset-summary-change.neutral {
+            background: rgba(23, 32, 51, 0.06);
+            color: var(--asset-muted);
+        }
+        .asset-pill-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+            margin-top: 1rem;
+        }
+        .asset-pill {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 999px;
+            padding: 0.5rem 0.78rem;
+            background: var(--asset-accent-soft);
+            color: var(--asset-accent);
+            font-size: 0.84rem;
+            font-weight: 600;
+        }
+        .asset-section-heading {
+            margin: 1.6rem 0 0.9rem 0;
+        }
+        .asset-section-title {
+            color: var(--asset-text);
+            font-size: 1.26rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.28rem;
+        }
+        .asset-section-copy {
+            color: var(--asset-muted);
+            font-size: 0.94rem;
+            line-height: 1.55;
+        }
+        .asset-metric-card {
+            min-height: 182px;
+            border: 1px solid var(--asset-border);
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.82);
+            padding: 1rem 1.05rem;
+            box-shadow: 0 10px 24px rgba(23, 32, 51, 0.04);
+        }
+        .asset-metric-label {
+            color: var(--asset-muted);
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.10em;
+            text-transform: uppercase;
+            margin-bottom: 0.8rem;
+        }
+        .asset-metric-value {
+            color: var(--asset-text);
+            font-size: 1.48rem;
+            line-height: 1.1;
+            font-weight: 700;
+            letter-spacing: -0.03em;
             margin-bottom: 0.75rem;
         }
-        div[data-testid="stButton"] > button {
-            border-radius: 999px;
-            border: 1px solid #385271;
-            background: #1b2940;
-            color: #ecf1f8;
-            min-height: 3rem;
-            box-shadow: none;
+        .asset-metric-note {
+            color: var(--asset-muted);
+            font-size: 0.88rem;
+            line-height: 1.5;
         }
-        div[data-testid="stButton"] > button[kind="primary"] {
-            background: #2b2f73;
-            color: #6f6bff;
-            border: 1px solid #6f6bff;
+        .asset-metric-note.unavailable {
+            color: #9c3131;
+        }
+        .asset-history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 1rem;
+            margin-bottom: 0.4rem;
+            flex-wrap: wrap;
+        }
+        .asset-history-title {
+            color: var(--asset-text);
+            font-size: 1.02rem;
+            font-weight: 700;
+        }
+        .asset-history-window {
+            color: var(--asset-soft);
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.10em;
+            text-transform: uppercase;
+        }
+        .asset-history-note {
+            color: var(--asset-muted);
+            font-size: 0.88rem;
+            line-height: 1.5;
+            margin-top: 0.35rem;
+        }
+        .asset-filter-title {
+            color: var(--asset-text);
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+        .asset-filter-copy {
+            color: var(--asset-muted);
+            font-size: 0.9rem;
+            margin-bottom: 0.9rem;
+        }
+        section.main [data-testid="stExpander"] {
+            border: 1px solid var(--asset-border) !important;
+            border-radius: 20px !important;
+            background: rgba(255, 255, 255, 0.66) !important;
+        }
+        section.main [data-testid="stDataFrame"] {
+            border-radius: 18px;
+            overflow: hidden;
+        }
+        @media (max-width: 900px) {
+            .asset-page-hero,
+            .asset-summary-card {
+                padding: 1.25rem 1.2rem;
+            }
+            .asset-summary-price {
+                text-align: left;
+            }
         }
         </style>
         """,
@@ -131,46 +386,136 @@ def _reference_note(snapshot: AssetSnapshot, metric_key: str) -> str:
     return f'Periodo: {row["Periodo de referencia"]} | Data-base: {row["Data de referência"]}'
 
 
+def _render_page_intro() -> None:
+    st.markdown(
+        """
+        <div class="asset-page-hero">
+            <div class="asset-page-kicker">ALFA / Equity Research</div>
+            <div class="asset-page-title">Análise de Ativos</div>
+            <div class="asset-page-subtitle">
+                Consulte múltiplos indicadores fundamentalistas e de mercado em uma interface mais leve,
+                limpa e focada na leitura. O objetivo aqui é reduzir ruído visual e deixar o diagnóstico do ativo
+                mais elegante e direto.
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def _detail_value(snapshot: AssetSnapshot, field_name: str) -> str:
+    selected = snapshot.details.loc[snapshot.details["Campo"] == field_name, "Valor"]
+    if selected.empty:
+        return ""
+    value = selected.iloc[0]
+    if value is None or pd.isna(value) or str(value).strip() == "N/A":
+        return ""
+    return str(value)
+
+
+def _format_reference_note(reference_note: str) -> str:
+    if not reference_note:
+        return ""
+    return escape(reference_note).replace("|", " &middot; ")
+
+
+def _render_asset_summary(snapshot: AssetSnapshot) -> None:
+    weekly_change = snapshot.metrics["weekly_price_change_pct"]
+    if weekly_change.is_available:
+        weekly_value = float(weekly_change.value)
+        change_class = "positive" if weekly_value > 0 else "negative" if weekly_value < 0 else "neutral"
+        change_label = f"Variacao semanal {weekly_change.formatted()}"
+    else:
+        change_class = "neutral"
+        change_label = "Variacao semanal indisponivel"
+
+    pills = [snapshot.ticker, _detail_value(snapshot, "Setor"), _detail_value(snapshot, "Indústria"), _detail_value(snapshot, "Bolsa"), _detail_value(snapshot, "País")]
+    pills = [pill for pill in pills if pill]
+    pill_markup = "".join(f'<div class="asset-pill">{escape(pill)}</div>' for pill in pills)
+
+    st.markdown(
+        f"""
+        <div class="asset-summary-card">
+            <div class="asset-summary-kicker">Snapshot</div>
+            <div class="asset-summary-header">
+                <div>
+                    <div class="asset-summary-name">{escape(snapshot.long_name)}</div>
+                    <div class="asset-summary-code">{escape(snapshot.ticker)} · moeda {escape(snapshot.currency)}</div>
+                </div>
+                <div>
+                    <div class="asset-summary-price">{escape(snapshot.metrics["current_price"].formatted())}</div>
+                    <div class="asset-summary-change {change_class}">{escape(change_label)}</div>
+                </div>
+            </div>
+            <div class="asset-pill-row">{pill_markup}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def _render_section_heading(title: str, description: str) -> None:
+    st.markdown(
+        f"""
+        <div class="asset-section-heading">
+            <div class="asset-section-title">{escape(title)}</div>
+            <div class="asset-section-copy">{escape(description)}</div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 def _render_metric_card(column, metric: MetricValue, reference_note: str) -> None:
     with column:
-        with st.container(border=True):
-            st.metric(metric.label, metric.formatted())
-            if not metric.is_available:
-                st.caption(metric.unavailable_reason)
-            if reference_note:
-                st.caption(reference_note)
+        note_markup = f'<div class="asset-metric-note">{_format_reference_note(reference_note)}</div>' if reference_note else ""
+        unavailable_markup = (
+            f'<div class="asset-metric-note unavailable">{escape(metric.unavailable_reason)}</div>'
+            if not metric.is_available
+            else ""
+        )
+        st.markdown(
+            f"""
+            <div class="asset-metric-card">
+                <div class="asset-metric-label">{escape(metric.label)}</div>
+                <div class="asset-metric-value">{escape(metric.formatted())}</div>
+                {unavailable_markup}
+                {note_markup}
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
 
-def _render_section(snapshot: AssetSnapshot, title: str, metric_keys: list[str]) -> None:
-    st.subheader(title)
+def _render_section(snapshot: AssetSnapshot, title: str, description: str, metric_keys: list[str]) -> None:
+    _render_section_heading(title, description)
     columns = st.columns(len(metric_keys))
     for column, metric_key in zip(columns, metric_keys):
         _render_metric_card(column, snapshot.metrics[metric_key], _reference_note(snapshot, metric_key))
 
 
 def _render_details(snapshot: AssetSnapshot) -> None:
-    with st.expander("Detalhes retornados pelo Yahoo Finance"):
+    with st.expander("Detalhes completos retornados pelo Yahoo Finance"):
         st.dataframe(snapshot.details, use_container_width=True, hide_index=True)
 
 
 def _render_history_chart(chart_df: pd.DataFrame, label: str) -> None:
     plot_df = chart_df.reset_index().rename(columns={chart_df.index.name or "index": "Data", label: "Valor"})
-    chart = (
+    area = (
         alt.Chart(plot_df)
         .mark_area(
-            color="#8bc8f5",
-            opacity=0.9,
-            line={"color": "#8bc8f5", "strokeWidth": 2.2},
+            color="#d6e2ec",
+            opacity=0.75,
         )
         .encode(
             x=alt.X(
                 "Data:T",
-                title="Date",
+                title="Data",
                 axis=alt.Axis(
-                    labelColor="#ecf1f8",
-                    titleColor="#ecf1f8",
+                    labelColor="#6c7483",
+                    titleColor="#6c7483",
                     domain=False,
-                    tickColor="#32475f",
+                    tickColor="#d7dde5",
                     grid=False,
                     labelPadding=10,
                     titlePadding=18,
@@ -180,12 +525,12 @@ def _render_history_chart(chart_df: pd.DataFrame, label: str) -> None:
                 "Valor:Q",
                 title=label,
                 axis=alt.Axis(
-                    labelColor="#ecf1f8",
-                    titleColor="#ecf1f8",
+                    labelColor="#6c7483",
+                    titleColor="#6c7483",
                     domain=False,
-                    tickColor="#32475f",
-                    gridColor="#32475f",
-                    gridOpacity=0.9,
+                    tickColor="#d7dde5",
+                    gridColor="#e7ebf0",
+                    gridOpacity=1,
                     labelPadding=12,
                     titlePadding=16,
                 ),
@@ -196,7 +541,23 @@ def _render_history_chart(chart_df: pd.DataFrame, label: str) -> None:
             ],
         )
         .properties(height=255)
-        .configure(background="#1b2940")
+    )
+    line = (
+        alt.Chart(plot_df)
+        .mark_line(color="#2f5a7a", strokeWidth=2.4)
+        .encode(
+            x=alt.X("Data:T", title="Data"),
+            y=alt.Y("Valor:Q", title=label),
+            tooltip=[
+                alt.Tooltip("Data:T", title="Data"),
+                alt.Tooltip("Valor:Q", title=label, format=",.4f"),
+            ],
+        )
+    )
+    chart = (
+        (area + line)
+        .properties(height=255)
+        .configure(background="transparent")
         .configure_view(stroke=None)
     )
     st.altair_chart(chart, use_container_width=True)
@@ -224,13 +585,14 @@ def _filter_history_window(history_df: pd.DataFrame, window_label: str) -> pd.Da
 
 def _render_history_window_selector(ticker: str) -> str:
     state_key = f"asset-history-window-{ticker}"
-    if state_key not in st.session_state:
-        st.session_state[state_key] = "6 Months"
+    if st.session_state.get(state_key) not in HISTORY_WINDOW_OPTIONS:
+        st.session_state[state_key] = "6M"
 
-    st.markdown('<div class="asset-filter-title">Time horizon</div>', unsafe_allow_html=True)
+    st.markdown('<div class="asset-filter-title">Horizonte da serie</div>', unsafe_allow_html=True)
+    st.markdown('<div class="asset-filter-copy">Selecione a janela para limpar a leitura dos graficos e focar no recorte relevante.</div>', unsafe_allow_html=True)
     button_rows = [
-        ["1 Month", "3 Months", "6 Months"],
-        ["1 Year", "5 Years", "10 Years", "20 Years"],
+        ["1M", "3M", "6M", "1A"],
+        ["5A", "10A", "20A"],
     ]
 
     for row in button_rows:
@@ -244,7 +606,10 @@ def _render_history_window_selector(ticker: str) -> str:
 
 
 def _render_metric_history(snapshot: AssetSnapshot) -> None:
-    st.subheader("Histórico dos Indicadores")
+    _render_section_heading(
+        "Historico dos Indicadores",
+        "Visualize a evolucao das metricas com series disponiveis no Yahoo Finance em um layout mais contido e facil de comparar.",
+    )
     reference_df = snapshot.metric_reference.copy()
     history_keys = reference_df.loc[reference_df["Histórico disponível"] == "Sim", "key"].tolist()
 
@@ -271,11 +636,21 @@ def _render_metric_history(snapshot: AssetSnapshot) -> None:
             continue
         with columns[index % 2]:
             with st.container(border=True):
-                st.markdown('<div class="asset-history-card"></div>', unsafe_allow_html=True)
-                st.markdown(f'<div class="asset-history-title">{label}</div>', unsafe_allow_html=True)
+                st.markdown('<div class="asset-history-shell"></div>', unsafe_allow_html=True)
+                st.markdown(
+                    f"""
+                    <div class="asset-history-header">
+                        <div class="asset-history-title">{escape(label)}</div>
+                        <div class="asset-history-window">{escape(HISTORY_WINDOW_OPTIONS[selected_window]["label"])}</div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
                 _render_history_chart(chart_df, label)
-                st.markdown(f'<div class="asset-history-note">Janela exibida: {selected_window}</div>', unsafe_allow_html=True)
-                st.markdown(f'<div class="asset-history-note">{_reference_note(snapshot, metric)}</div>', unsafe_allow_html=True)
+                st.markdown(
+                    f'<div class="asset-history-note">{_format_reference_note(_reference_note(snapshot, metric))}</div>',
+                    unsafe_allow_html=True,
+                )
 
     with st.expander("Tabela histórica dos indicadores"):
         raw_history = snapshot.metric_history[display_metrics].rename(columns=snapshot.metric_labels).copy()
@@ -284,7 +659,10 @@ def _render_metric_history(snapshot: AssetSnapshot) -> None:
 
 
 def _render_metric_reference(snapshot: AssetSnapshot) -> None:
-    st.subheader("Referência dos Indicadores")
+    _render_section_heading(
+        "Referencia dos Indicadores",
+        "Nem toda metrica tem serie historica consistente. Aqui ficam claras as datas-base e a disponibilidade por indicador.",
+    )
     st.caption("Indicadores sem histórico suficiente ficam apenas com o último valor disponível e a respectiva data-base.")
 
     reference_df = snapshot.metric_reference.copy()
@@ -300,23 +678,32 @@ def _render_metric_reference(snapshot: AssetSnapshot) -> None:
 
 def render_asset_analysis_page(default_ticker: str = "") -> None:
     _render_asset_analysis_styles()
-    st.title("Análise de Ativos")
-    st.caption("Consulta de indicadores fundamentalistas e de mercado via Yahoo Finance.")
+    _render_page_intro()
 
     if "asset_analysis_selected_ticker" not in st.session_state:
         st.session_state["asset_analysis_selected_ticker"] = default_ticker.strip()
 
     shell = st.container(border=True)
     with shell:
-        st.markdown('<div class="asset-analysis-shell"></div>', unsafe_allow_html=True)
+        st.markdown('<div class="asset-analysis-search-shell"></div>', unsafe_allow_html=True)
+        st.markdown('<div class="asset-panel-kicker">Consulta</div>', unsafe_allow_html=True)
+        st.markdown('<div class="asset-panel-title">Pesquisar ticker</div>', unsafe_allow_html=True)
+        st.markdown(
+            '<div class="asset-panel-copy">Busque um ativo para abrir o snapshot consolidado, com foco em leitura limpa e navegação objetiva.</div>',
+            unsafe_allow_html=True,
+        )
         with st.form("asset-analysis-form", clear_on_submit=False):
-            ticker = st.text_input(
-                "Ticker",
-                value=st.session_state["asset_analysis_selected_ticker"],
-                placeholder="Ex.: AAPL, MSFT, PETR4.SA, VALE3.SA",
-                key="asset-analysis-input",
-            )
-            submitted = st.form_submit_button("Analisar", use_container_width=True)
+            input_col, action_col = st.columns([4.2, 1.1], gap="medium")
+            with input_col:
+                ticker = st.text_input(
+                    "Ticker",
+                    value=st.session_state["asset_analysis_selected_ticker"],
+                    placeholder="Ex.: AAPL, MSFT, PETR4.SA, VALE3.SA",
+                    key="asset-analysis-input",
+                )
+            with action_col:
+                st.caption("")
+                submitted = st.form_submit_button("Analisar", use_container_width=True, type="primary")
 
     if submitted and ticker.strip():
         st.session_state["asset_analysis_selected_ticker"] = ticker.strip()
@@ -324,7 +711,10 @@ def render_asset_analysis_page(default_ticker: str = "") -> None:
     analyzed_ticker = st.session_state["asset_analysis_selected_ticker"].strip()
 
     if not submitted and not analyzed_ticker:
-        shell.info("Informe um ticker e clique em 'Analisar'.")
+        shell.markdown(
+            '<div class="asset-empty-state">Informe um ticker e clique em <strong>Analisar</strong> para abrir a leitura do ativo.</div>',
+            unsafe_allow_html=True,
+        )
         return
 
     if submitted and not ticker.strip():
@@ -341,22 +731,24 @@ def render_asset_analysis_page(default_ticker: str = "") -> None:
         shell.error(f"Erro inesperado ao montar a análise do ativo: {exc}")
         return
 
-    shell.success(f"{snapshot.long_name} ({snapshot.ticker})")
-    shell.caption(f"Moeda reportada pelo Yahoo Finance: {snapshot.currency}")
+    _render_asset_summary(snapshot)
 
     _render_section(
         snapshot,
         "Preço & Mercado",
+        "Indicadores de precificacao e escala do ativo para leitura rapida da situacao atual.",
         ["current_price", "weekly_price_change_pct", "market_cap", "enterprise_value"],
     )
     _render_section(
         snapshot,
         "Valuation",
+        "Multiplicadores e retorno sobre capital para enquadrar qualidade relativa e nivel de precificacao.",
         ["roic", "pe_ratio", "dividend_yield", "ev_to_ebitda"],
     )
     _render_section(
         snapshot,
         "Qualidade & Risco",
+        "Margens, alavancagem e sensibilidade do papel para completar a leitura fundamentalista.",
         ["ebitda_margin", "financial_leverage", "beta"],
     )
 
