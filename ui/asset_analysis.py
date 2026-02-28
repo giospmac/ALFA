@@ -11,7 +11,7 @@ def _render_asset_analysis_styles() -> None:
         """
         <style>
         .stApp {
-            background: #102170;
+            background: #020838;
         }
         </style>
         """,
