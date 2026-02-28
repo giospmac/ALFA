@@ -94,8 +94,12 @@ def _render_asset_impacts(case: StressScenarioCase) -> None:
         st.info("Não foi possível decompor o impacto por ativo neste cenário.")
         return
 
+    display_df = case.asset_impacts.copy()
+    for column in ["Peso", "Retorno do ativo", "Impacto na carteira"]:
+        display_df[column] = pd.to_numeric(display_df[column], errors="coerce") * 100
+
     st.dataframe(
-        case.asset_impacts,
+        display_df,
         use_container_width=True,
         hide_index=True,
         column_config={
