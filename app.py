@@ -126,8 +126,10 @@ def _render_navigation() -> str:
                 use_container_width=True,
                 type="primary" if is_selected else "secondary",
             ):
+                if current_page == page_key:
+                    continue
                 st.session_state["current_page"] = page_key
-                current_page = page_key
+                st.rerun()
 
     return current_page
 
