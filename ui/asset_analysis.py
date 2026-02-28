@@ -11,7 +11,15 @@ def _render_asset_analysis_styles() -> None:
         """
         <style>
         .stApp {
-            background: #020838;
+            background: #f4f5f0;
+        }
+        [data-testid="stVegaLiteChart"] {
+            background: #f4f5f0;
+            border-radius: 12px;
+            padding: 0.25rem;
+        }
+        [data-testid="stVegaLiteChart"] > div {
+            background: #f4f5f0;
         }
         </style>
         """,
