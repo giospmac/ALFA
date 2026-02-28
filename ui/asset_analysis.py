@@ -67,9 +67,11 @@ def _render_asset_analysis_styles() -> None:
             background: #f4f5f0 !important;
         }
         [data-testid="stVerticalBlockBorderWrapper"]:has(.asset-analysis-shell) {
-            border: 1px solid var(--asset-border) !important;
-            border-radius: var(--asset-radius) !important;
+            border: 1px solid #dddddd !important;
+            border-radius: 20px !important;
             background: #f4f5f0 !important;
+            padding: 0.85rem 0.85rem 0.35rem 0.85rem;
+            box-shadow: none !important;
         }
         [data-testid="stVerticalBlockBorderWrapper"]:has([data-testid="stVegaLiteChart"]) {
             border: 1px solid var(--asset-border) !important;
