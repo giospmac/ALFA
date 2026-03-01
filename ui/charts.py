@@ -15,7 +15,7 @@ from services.portfolio_analytics import (
     rolling_volatility_series,
 )
 
-PALETTE = ["#2563EB", "#16A34A", "#DC2626", "#D97706", "#7C3AED"]
+PALETTE = ["#2563EB", "#16A34A", "#4979f6", "#D97706", "#7C3AED"]
 
 
 def _load_data():

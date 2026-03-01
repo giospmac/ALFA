@@ -71,14 +71,14 @@ def _render_asset_analysis_styles() -> None:
         .stTextInput [data-baseweb="base-input"],
         div[data-testid="stTextInput"] [data-baseweb="base-input"] {
             border-radius: 10px !important;
-            border: 1px solid #E5E7EB !important;
-            background: #FFFFFF !important;
+            border: 1px solid transparent !important;
+            background: #F3F4F6 !important;
             box-shadow: none !important;
             overflow: hidden !important;
         }
         .stTextInput [data-baseweb="base-input"] > div,
         div[data-testid="stTextInput"] [data-baseweb="base-input"] > div {
-            background: #FFFFFF !important;
+            background: #F3F4F6 !important;
             box-shadow: none !important;
         }
         .stTextInput [data-baseweb="base-input"] input,
@@ -87,7 +87,7 @@ def _render_asset_analysis_styles() -> None:
         div[data-testid="stTextInput"] input[type="text"] {
             border-radius: 10px;
             border: none !important;
-            background: #FFFFFF !important;
+            background: transparent !important;
             color: var(--asset-text) !important;
             -webkit-text-fill-color: var(--asset-text) !important;
             caret-color: var(--asset-accent) !important;
@@ -112,7 +112,7 @@ def _render_asset_analysis_styles() -> None:
         div[data-testid="stTextInput"] [data-baseweb="base-input"]:focus-within {
             border-color: #93C5FD !important;
             background: #FFFFFF !important;
-            box-shadow: 0 0 0 3px rgba(59,130,246,0.1) !important;
+            box-shadow: 0 0 0 3px rgba(73,121,246,0.15) !important;
         }
         .stTextInput input::selection,
         div[data-testid="stTextInput"] input::selection {
@@ -383,31 +383,31 @@ def _render_asset_analysis_styles() -> None:
             min-width: 620px;
         }
         .asset-table thead th {
-            background: #f2efe8;
-            color: var(--asset-text);
+            background: #1E3A8A;
+            color: #FFFFFF;
             font-size: 0.82rem;
-            font-weight: 700;
+            font-weight: 600;
             letter-spacing: 0.05em;
             text-transform: uppercase;
             text-align: left;
             padding: 0.9rem 1rem;
-            border-bottom: 1px solid var(--asset-border);
+            border-bottom: none;
             white-space: nowrap;
         }
         .asset-table tbody td {
-            background: rgba(255, 255, 255, 0.98);
+            background: #FFFFFF;
             color: var(--asset-text);
             font-size: 0.94rem;
             line-height: 1.45;
             padding: 0.92rem 1rem;
-            border-bottom: 1px solid rgba(21, 33, 53, 0.06);
+            border-bottom: 1px solid #F1F5F9;
             vertical-align: top;
         }
         .asset-table tbody tr:last-child td {
             border-bottom: none;
         }
         .asset-table tbody tr:nth-child(even) td {
-            background: #fcfbf8;
+            background: #F8FAFC;
         }
         section.main [data-testid="stExpander"] {
             border: 1px solid var(--asset-border) !important;

@@ -110,8 +110,8 @@ def _render_styles() -> None:
             color: #059669;
         }
         .alfa-card-pill.negative {
-            background: #FEF2F2;
-            color: #DC2626;
+            background: #EFF6FF;
+            color: #4979f6;
         }
         </style>
         """,
@@ -161,7 +161,7 @@ def _performance_card(title: str, ticker: str, expected_return: float) -> str:
 
 
 CHART_COLORS_CLEAN = [
-    "#2563EB", "#16A34A", "#DC2626", "#D97706", "#7C3AED",
+    "#2563EB", "#16A34A", "#4979f6", "#D97706", "#7C3AED",
     "#0891B2", "#DB2777", "#65A30D", "#EA580C",
 ]
 

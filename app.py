@@ -48,7 +48,7 @@ def _render_navigation_styles() -> None:
             --alfa-accent:   #4979f6;
             --alfa-accent-2: #2f5adf;
             --alfa-positive: #059669;
-            --alfa-negative: #DC2626;
+            --alfa-negative: #4979f6;
             --alfa-radius:   10px;
             --alfa-shadow:   0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
         }

@@ -98,6 +98,14 @@ def _render_home_styles() -> None:
             letter-spacing: 0.07em;
             margin-bottom: 0.6rem;
         }
+        .alfa-kpi-trend.positive {
+            color: #059669;
+            background: #ECFDF5;
+        }
+        .alfa-kpi-trend.negative {
+            color: #4979f6;
+            background: #EFF6FF;
+        }
         .alfa-kpi-value {
             color: #111827;
             font-size: 1.5rem;
