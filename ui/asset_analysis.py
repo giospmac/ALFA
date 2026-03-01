@@ -63,17 +63,17 @@ def _render_asset_analysis_styles() -> None:
         }
         .stTextInput [data-baseweb="base-input"],
         div[data-testid="stTextInput"] [data-baseweb="base-input"] {
-            border-radius: 24px !important;
-            border: 1px solid var(--asset-border) !important;
-            background: rgba(255, 255, 255, 0.82) !important;
-            box-shadow: 0 10px 24px rgba(23, 32, 51, 0.04) !important;
+            border-radius: 18px !important;
+            border: 1px solid rgba(21, 33, 53, 0.08) !important;
+            background: rgba(255, 255, 255, 0.94) !important;
+            box-shadow: none !important;
             overflow: hidden !important;
         }
         .stTextInput [data-baseweb="base-input"] input,
         .stTextInput input,
         div[data-testid="stTextInput"] input,
         div[data-testid="stTextInput"] input[type="text"] {
-            border-radius: 24px;
+            border-radius: 18px;
             border: none !important;
             background: transparent !important;
             color: var(--asset-primary-blue) !important;
@@ -81,7 +81,7 @@ def _render_asset_analysis_styles() -> None:
             caret-color: var(--asset-primary-blue) !important;
             min-height: 3.2rem;
             box-shadow: none !important;
-            font-weight: 600;
+            font-weight: 500;
         }
         .stTextInput input::placeholder,
         div[data-testid="stTextInput"] input::placeholder {
@@ -89,8 +89,8 @@ def _render_asset_analysis_styles() -> None:
         }
         .stTextInput [data-baseweb="base-input"]:focus-within,
         div[data-testid="stTextInput"] [data-baseweb="base-input"]:focus-within {
-            border-color: rgba(73, 121, 246, 0.32) !important;
-            box-shadow: 0 0 0 1px rgba(73, 121, 246, 0.12) !important;
+            border-color: rgba(73, 121, 246, 0.22) !important;
+            box-shadow: 0 0 0 3px rgba(73, 121, 246, 0.08) !important;
         }
         .stFormSubmitButton > button,
         div[data-testid="stFormSubmitButton"] > button,
