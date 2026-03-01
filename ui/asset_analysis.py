@@ -55,22 +55,24 @@ def _render_asset_analysis_styles() -> None:
         section.main .block-container [data-testid="stMarkdownContainer"] li {
             color: var(--asset-muted);
         }
-        section.main div[data-testid="stTextInput"] label {
+        .stTextInput label,
+        div[data-testid="stTextInput"] label {
             color: var(--asset-muted);
             font-size: 0.92rem;
             font-weight: 600;
         }
-        section.main div[data-testid="stTextInput"] > div {
-            background: transparent !important;
-        }
-        section.main div[data-testid="stTextInput"] > div > div {
+        .stTextInput [data-baseweb="base-input"],
+        div[data-testid="stTextInput"] [data-baseweb="base-input"] {
             border-radius: 24px !important;
             border: 1px solid var(--asset-border) !important;
             background: rgba(255, 255, 255, 0.82) !important;
             box-shadow: 0 10px 24px rgba(23, 32, 51, 0.04) !important;
+            overflow: hidden !important;
         }
-        section.main div[data-testid="stTextInput"] input,
-        section.main div[data-testid="stTextInput"] input[type="text"] {
+        .stTextInput [data-baseweb="base-input"] input,
+        .stTextInput input,
+        div[data-testid="stTextInput"] input,
+        div[data-testid="stTextInput"] input[type="text"] {
             border-radius: 24px;
             border: none !important;
             background: transparent !important;
@@ -81,14 +83,17 @@ def _render_asset_analysis_styles() -> None:
             box-shadow: none !important;
             font-weight: 600;
         }
-        section.main div[data-testid="stTextInput"] input::placeholder {
+        .stTextInput input::placeholder,
+        div[data-testid="stTextInput"] input::placeholder {
             color: #9aa1ad;
         }
-        section.main div[data-testid="stTextInput"] > div > div:focus-within {
+        .stTextInput [data-baseweb="base-input"]:focus-within,
+        div[data-testid="stTextInput"] [data-baseweb="base-input"]:focus-within {
             border-color: rgba(73, 121, 246, 0.32) !important;
             box-shadow: 0 0 0 1px rgba(73, 121, 246, 0.12) !important;
         }
-        section.main div[data-testid="stFormSubmitButton"] > button,
+        .stFormSubmitButton > button,
+        div[data-testid="stFormSubmitButton"] > button,
         section.main div[data-testid="stButton"] > button {
             border-radius: 999px;
             min-height: 3rem;
@@ -98,13 +103,15 @@ def _render_asset_analysis_styles() -> None:
             box-shadow: none;
             transition: all 0.18s ease;
         }
-        section.main div[data-testid="stFormSubmitButton"] > button:hover,
+        .stFormSubmitButton > button:hover,
+        div[data-testid="stFormSubmitButton"] > button:hover,
         section.main div[data-testid="stButton"] > button:hover {
             border-color: rgba(47, 90, 122, 0.24);
             background: rgba(255, 255, 255, 0.92);
             color: var(--asset-text);
         }
-        section.main div[data-testid="stFormSubmitButton"] > button[kind="primary"],
+        .stFormSubmitButton > button[kind="primaryFormSubmit"],
+        div[data-testid="stFormSubmitButton"] > button[kind="primaryFormSubmit"],
         section.main div[data-testid="stButton"] > button[kind="primary"] {
             border-color: rgba(73, 121, 246, 0.30) !important;
             background: var(--asset-primary-blue) !important;
@@ -113,7 +120,8 @@ def _render_asset_analysis_styles() -> None:
             color: #ffffff !important;
             box-shadow: 0 10px 24px rgba(73, 121, 246, 0.20) !important;
         }
-        section.main div[data-testid="stFormSubmitButton"] > button[kind="primary"]:hover,
+        .stFormSubmitButton > button[kind="primaryFormSubmit"]:hover,
+        div[data-testid="stFormSubmitButton"] > button[kind="primaryFormSubmit"]:hover,
         section.main div[data-testid="stButton"] > button[kind="primary"]:hover {
             border-color: rgba(73, 121, 246, 0.34) !important;
             background: #3f6fec !important;
@@ -121,7 +129,8 @@ def _render_asset_analysis_styles() -> None:
             background-image: none !important;
             color: #ffffff !important;
         }
-        section.main div[data-testid="stFormSubmitButton"] > button[kind="primary"] p,
+        .stFormSubmitButton > button[kind="primaryFormSubmit"] *,
+        div[data-testid="stFormSubmitButton"] > button[kind="primaryFormSubmit"] *,
         section.main div[data-testid="stButton"] > button[kind="primary"] p {
             color: #ffffff !important;
         }
@@ -372,16 +381,7 @@ def _render_asset_analysis_styles() -> None:
             border-radius: 20px !important;
             background: rgba(255, 255, 255, 0.74) !important;
         }
-        section.main [data-baseweb="input"] {
-            border-radius: 24px !important;
-            border-color: transparent !important;
-            background: transparent !important;
-            box-shadow: none !important;
-        }
-        section.main [data-baseweb="input"] > div {
-            background: transparent !important;
-        }
-        section.main [data-baseweb="base-input"] {
+        [data-baseweb="base-input"] {
             color: var(--asset-primary-blue) !important;
             -webkit-text-fill-color: var(--asset-primary-blue) !important;
         }
