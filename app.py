@@ -208,19 +208,24 @@ def _render_navigation_styles() -> None:
         section.main div[data-testid="stButton"] > button,
         section.main div[data-testid="stFormSubmitButton"] > button {
             border-radius: var(--alfa-radius);
-            border: 1px solid var(--alfa-border);
-            background: var(--alfa-surface);
-            color: #4979f6;
+            border: 1px solid #102170;
+            background: #102170;
+            color: #97bdff;
             font-size: 0.88rem;
             font-weight: 500;
             min-height: 2.5rem;
-            box-shadow: var(--alfa-shadow);
-            transition: background 0.14s ease, border-color 0.14s ease;
+            box-shadow: 0 2px 4px rgba(16, 33, 112, 0.15);
+            transition: background 0.14s ease, border-color 0.14s ease, transform 0.1s ease;
         }
         section.main div[data-testid="stButton"] > button:hover,
         section.main div[data-testid="stFormSubmitButton"] > button:hover {
-            background: #EFF6FF;
-            border-color: #BFDBFE;
+            background: #152b91;
+            border-color: #152b91;
+            color: #97bdff;
+        }
+        section.main div[data-testid="stButton"] > button p,
+        section.main div[data-testid="stFormSubmitButton"] > button p {
+            color: #97bdff !important;
         }
         section.main div[data-testid="stButton"] > button[kind="primary"],
         section.main div[data-testid="stFormSubmitButton"] > button[kind="primaryFormSubmit"] {
