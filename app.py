@@ -13,8 +13,8 @@ import streamlit as st
 
 
 st.set_page_config(
-    page_title="ALFA | Streamlit",
-    page_icon="📊",
+    page_title="ALFA",
+    page_icon="https://raw.githubusercontent.com/giospmac/ALFA/refs/heads/main/icon.png",
     layout="wide",
 )
 
