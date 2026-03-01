@@ -65,39 +65,44 @@ def _render_asset_analysis_styles() -> None:
             color: var(--asset-muted);
             font-size: 0.92rem;
             font-weight: 600;
-            margin-bottom: 0.55rem;
+            margin-bottom: 0.45rem;
+            line-height: 1.2;
+        }
+        .asset-search-label-ghost {
+            visibility: hidden;
         }
         .stTextInput [data-baseweb="base-input"],
         div[data-testid="stTextInput"] [data-baseweb="base-input"] {
-            border-radius: 18px !important;
-            border: 1px solid rgba(21, 33, 53, 0.08) !important;
-            background: #ffffff !important;
+            border-radius: 14px !important;
+            border: 1px solid rgba(21, 33, 53, 0.06) !important;
+            background: #fcfbf8 !important;
             box-shadow: none !important;
             overflow: hidden !important;
         }
         .stTextInput [data-baseweb="base-input"] > div,
         div[data-testid="stTextInput"] [data-baseweb="base-input"] > div {
-            background: #ffffff !important;
+            background: #fcfbf8 !important;
             box-shadow: none !important;
         }
         .stTextInput [data-baseweb="base-input"] input,
         .stTextInput input,
         div[data-testid="stTextInput"] input,
         div[data-testid="stTextInput"] input[type="text"] {
-            border-radius: 18px;
+            border-radius: 14px;
             border: none !important;
-            background: #ffffff !important;
+            background: #fcfbf8 !important;
             color: var(--asset-primary-blue) !important;
             -webkit-text-fill-color: var(--asset-primary-blue) !important;
             caret-color: var(--asset-primary-blue) !important;
-            min-height: 3.2rem;
+            min-height: 2.95rem;
             box-shadow: none !important;
             font-weight: 500;
+            font-size: 1rem !important;
             outline: none !important;
         }
         .stTextInput input::placeholder,
         div[data-testid="stTextInput"] input::placeholder {
-            color: #9aa1ad;
+            color: #abb1bc;
         }
         .stTextInput input:focus,
         .stTextInput input:focus-visible,
@@ -108,8 +113,9 @@ def _render_asset_analysis_styles() -> None:
         }
         .stTextInput [data-baseweb="base-input"]:focus-within,
         div[data-testid="stTextInput"] [data-baseweb="base-input"]:focus-within {
-            border-color: rgba(73, 121, 246, 0.22) !important;
-            box-shadow: 0 0 0 3px rgba(73, 121, 246, 0.08) !important;
+            border-color: rgba(73, 121, 246, 0.14) !important;
+            background: #ffffff !important;
+            box-shadow: 0 0 0 2px rgba(73, 121, 246, 0.05) !important;
         }
         .stTextInput input::selection,
         div[data-testid="stTextInput"] input::selection {
@@ -129,13 +135,14 @@ def _render_asset_analysis_styles() -> None:
         .stFormSubmitButton > button,
         div[data-testid="stFormSubmitButton"] > button,
         section.main div[data-testid="stButton"] > button {
-            border-radius: 999px;
-            min-height: 3.2rem;
+            border-radius: 14px;
+            min-height: 2.95rem;
             border: 1px solid var(--asset-border);
             background: rgba(255, 255, 255, 0.68);
             color: var(--asset-text);
             box-shadow: none;
             transition: all 0.18s ease;
+            font-weight: 600;
         }
         .stFormSubmitButton > button:hover,
         div[data-testid="stFormSubmitButton"] > button:hover,
@@ -152,14 +159,14 @@ def _render_asset_analysis_styles() -> None:
             background-color: var(--asset-primary-blue) !important;
             background-image: none !important;
             color: #ffffff !important;
-            box-shadow: 0 10px 24px rgba(73, 121, 246, 0.20) !important;
+            box-shadow: 0 6px 16px rgba(73, 121, 246, 0.12) !important;
         }
         .stFormSubmitButton > button[kind="primaryFormSubmit"]:hover,
         div[data-testid="stFormSubmitButton"] > button[kind="primaryFormSubmit"]:hover,
         section.main div[data-testid="stButton"] > button[kind="primary"]:hover {
             border-color: rgba(73, 121, 246, 0.34) !important;
-            background: #3f6fec !important;
-            background-color: #3f6fec !important;
+            background: #416ff0 !important;
+            background-color: #416ff0 !important;
             background-image: none !important;
             color: #ffffff !important;
         }
@@ -619,9 +626,9 @@ def render_asset_analysis_page(default_ticker: str = "") -> None:
             unsafe_allow_html=True,
         )
         with st.form("asset-analysis-form", clear_on_submit=False):
-            st.markdown('<div class="asset-search-label">Ticker</div>', unsafe_allow_html=True)
             input_col, action_col = st.columns([4.2, 1.1], gap="medium")
             with input_col:
+                st.markdown('<div class="asset-search-label">Ticker</div>', unsafe_allow_html=True)
                 ticker = st.text_input(
                     "Ticker",
                     value=st.session_state["asset_analysis_selected_ticker"],
@@ -630,6 +637,7 @@ def render_asset_analysis_page(default_ticker: str = "") -> None:
                     label_visibility="collapsed",
                 )
             with action_col:
+                st.markdown('<div class="asset-search-label asset-search-label-ghost">Ticker</div>', unsafe_allow_html=True)
                 submitted = st.form_submit_button("Analisar", use_container_width=True, type="primary")
 
     if submitted and ticker.strip():
