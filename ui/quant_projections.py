@@ -77,41 +77,41 @@ def _render_styles() -> None:
         """
         <style>
         .alfa-card {
-            background: linear-gradient(180deg, #182940 0%, #142235 100%);
-            border: 1px solid rgba(142, 182, 255, 0.18);
-            border-radius: 18px;
-            padding: 1.25rem 1.25rem 1rem 1.25rem;
-            min-height: 210px;
+            background: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 10px;
+            padding: 1.1rem 1.2rem;
         }
         .alfa-card-label {
-            color: #B8C7E0;
-            font-size: 1rem;
-            margin-bottom: 0.75rem;
+            color: #6B7280;
+            font-size: 0.73rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            margin-bottom: 0.55rem;
         }
         .alfa-card-ticker {
-            color: #EAF1FF;
-            font-size: 2.2rem;
-            line-height: 1;
-            margin-bottom: 0.9rem;
+            color: #111827;
+            font-size: 1.7rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 0.65rem;
+            letter-spacing: -0.02em;
         }
         .alfa-card-pill {
             display: inline-block;
-            border-radius: 999px;
-            padding: 0.25rem 0.7rem;
-            font-size: 0.95rem;
+            border-radius: 6px;
+            padding: 0.2rem 0.55rem;
+            font-size: 0.85rem;
             font-weight: 600;
         }
         .alfa-card-pill.positive {
-            background: rgba(56, 221, 126, 0.15);
-            color: #5FE58F;
+            background: #ECFDF5;
+            color: #059669;
         }
         .alfa-card-pill.negative {
-            background: rgba(255, 91, 91, 0.16);
-            color: #FF8E8E;
-        }
-        div[data-testid="stButton"] > button {
-            border-radius: 999px;
-            min-height: 2.75rem;
+            background: #FEF2F2;
+            color: #DC2626;
         }
         </style>
         """,
@@ -160,42 +160,53 @@ def _performance_card(title: str, ticker: str, expected_return: float) -> str:
     )
 
 
-def _plot_projection(history: pd.DataFrame, projected: pd.DataFrame) -> None:
-    fig, ax = plt.subplots(figsize=(12, 6))
-    fig.patch.set_facecolor("#15263D")
-    ax.set_facecolor("#15263D")
+CHART_COLORS_CLEAN = [
+    "#2563EB", "#16A34A", "#DC2626", "#D97706", "#7C3AED",
+    "#0891B2", "#DB2777", "#65A30D", "#EA580C",
+]
 
-    for index, column in enumerate(history.columns):
-        color = CHART_COLORS[index % len(CHART_COLORS)]
-        ax.plot(history.index, history[column], linewidth=2.2, color=color, label=column)
-        if column in projected.columns:
-            ax.plot(projected.index, projected[column], linewidth=2.2, color=color, linestyle="--")
 
-    if not history.empty:
-        cutoff = history.index.max()
-        ax.axvline(cutoff, color="#D8E3F5", linestyle=":", linewidth=1.2, alpha=0.8)
-
-    ax.set_ylabel("Normalized price", color="#D8E3F5", fontsize=12)
-    ax.set_xlabel("Date", color="#D8E3F5", fontsize=12, labelpad=14)
-    ax.grid(True, axis="y", color="#314760", alpha=0.75, linewidth=0.8)
+def _apply_clean_chart_style(ax, fig) -> None:
+    fig.patch.set_facecolor("#FFFFFF")
+    ax.set_facecolor("#FFFFFF")
+    ax.grid(True, axis="y", color="#F3F4F6", linewidth=0.9, linestyle="-")
     ax.grid(False, axis="x")
-    ax.tick_params(axis="x", colors="#D8E3F5", labelrotation=0)
-    ax.tick_params(axis="y", colors="#D8E3F5")
+    ax.tick_params(axis="both", colors="#6B7280", labelsize=9)
     for spine in ax.spines.values():
         spine.set_visible(False)
 
+
+def _plot_projection(history: pd.DataFrame, projected: pd.DataFrame) -> None:
+    fig, ax = plt.subplots(figsize=(12, 5))
+    _apply_clean_chart_style(ax, fig)
+
+    for index, column in enumerate(history.columns):
+        color = CHART_COLORS_CLEAN[index % len(CHART_COLORS_CLEAN)]
+        ax.plot(history.index, history[column], linewidth=2, color=color, label=column)
+        if column in projected.columns:
+            ax.plot(projected.index, projected[column], linewidth=2, color=color, linestyle="--")
+
+    if not history.empty:
+        cutoff = history.index.max()
+        ax.axvline(cutoff, color="#D1D5DB", linestyle=":", linewidth=1.2, alpha=0.9)
+
+    ax.set_ylabel("Preço normalizado", color="#6B7280", fontsize=10)
+    ax.set_xlabel("Data", color="#6B7280", fontsize=10)
+
     legend = ax.legend(
-        title="Stock",
+        title="Ticker",
         loc="upper left",
         bbox_to_anchor=(1.01, 1.0),
         frameon=False,
-        labelcolor="#EAF1FF",
+        labelcolor="#374151",
         borderaxespad=0,
         handlelength=0.8,
         handletextpad=0.5,
+        fontsize=9,
     )
     if legend is not None:
-        legend.get_title().set_color("#EAF1FF")
+        legend.get_title().set_color("#6B7280")
+        legend.get_title().set_fontsize(9)
 
     fig.tight_layout()
     st.pyplot(fig, use_container_width=True)
