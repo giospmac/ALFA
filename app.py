@@ -34,70 +34,225 @@ PAGE_CONFIG = {
 def _render_navigation_styles() -> None:
     st.markdown(
         """
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
         <style>
+        /* ── Global tokens ─────────────────────────────── */
+        :root {
+            --alfa-bg:       #F8F9FA;
+            --alfa-surface:  #FFFFFF;
+            --alfa-border:   #E5E7EB;
+            --alfa-text:     #111827;
+            --alfa-muted:    #6B7280;
+            --alfa-soft:     #9CA3AF;
+            --alfa-accent:   #2563EB;
+            --alfa-accent-2: #1D4ED8;
+            --alfa-positive: #059669;
+            --alfa-negative: #DC2626;
+            --alfa-radius:   10px;
+            --alfa-shadow:   0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+        }
+
+        /* ── Base font ─────────────────────────────────── */
+        html, body, [class*="css"], .stApp {
+            font-family: 'Inter', sans-serif !important;
+        }
+
+        /* ── App background ────────────────────────────── */
+        .stApp {
+            background: var(--alfa-bg) !important;
+        }
+
+        /* ── Sidebar ───────────────────────────────────── */
         [data-testid="stSidebar"] {
-            background:
-                radial-gradient(circle at top left, rgba(79, 113, 255, 0.18), transparent 32%),
-                linear-gradient(180deg, #F7F9FC 0%, #EEF2F8 100%);
-            border-right: 1px solid rgba(15, 23, 42, 0.08);
+            background: var(--alfa-surface) !important;
+            border-right: 1px solid var(--alfa-border) !important;
         }
         [data-testid="stSidebar"] .block-container {
-            padding-top: 1.4rem;
-            padding-bottom: 1rem;
+            padding-top: 1.5rem;
+            padding-bottom: 1.5rem;
         }
+
+        /* Brand block */
         .alfa-nav-brand {
-            background: rgba(255, 255, 255, 0.72);
-            border: 1px solid rgba(148, 163, 184, 0.20);
-            border-radius: 18px;
-            padding: 1rem 1rem 0.85rem 1rem;
-            margin-bottom: 1rem;
-            backdrop-filter: blur(10px);
+            padding: 0 0 1.25rem 0;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid var(--alfa-border);
         }
-        .alfa-nav-title {
-            color: #0F172A;
-            font-size: 1.25rem;
+        .alfa-nav-logo {
+            font-size: 1.1rem;
             font-weight: 700;
-            letter-spacing: 0.08em;
+            letter-spacing: 0.12em;
+            color: var(--alfa-text);
             text-transform: uppercase;
-            margin-bottom: 0.15rem;
         }
         .alfa-nav-subtitle {
-            color: #64748B;
-            font-size: 0.86rem;
-            line-height: 1.4;
+            color: var(--alfa-soft);
+            font-size: 0.78rem;
+            line-height: 1.5;
+            margin-top: 0.2rem;
         }
+
+        /* Section label */
+        .alfa-nav-section {
+            color: var(--alfa-soft);
+            font-size: 0.68rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin: 1rem 0 0.4rem 0;
+        }
+
+        /* Nav buttons */
         [data-testid="stSidebar"] div[data-testid="stButton"] > button {
             justify-content: flex-start;
-            border-radius: 14px;
-            border: 1px solid rgba(148, 163, 184, 0.18);
-            background: rgba(255, 255, 255, 0.55);
-            color: #0F172A;
-            min-height: 2.85rem;
+            border-radius: var(--alfa-radius);
+            border: 1px solid transparent;
+            background: transparent;
+            color: var(--alfa-muted);
+            min-height: 2.6rem;
             font-weight: 500;
+            font-size: 0.9rem;
             box-shadow: none;
-            transition: all 0.18s ease;
+            transition: background 0.14s ease, color 0.14s ease, border-color 0.14s ease;
         }
         [data-testid="stSidebar"] div[data-testid="stButton"] > button:hover {
-            border-color: rgba(79, 113, 255, 0.28);
-            background: rgba(255, 255, 255, 0.88);
-            color: #0F172A;
+            background: var(--alfa-bg);
+            border-color: var(--alfa-border);
+            color: var(--alfa-text);
         }
         [data-testid="stSidebar"] div[data-testid="stButton"] > button[kind="primary"] {
-            background: linear-gradient(135deg, #172554 0%, #2F5BFF 100%);
-            color: #F8FAFC;
-            border: 1px solid rgba(47, 91, 255, 0.38);
-            box-shadow: 0 10px 24px rgba(47, 91, 255, 0.18);
+            background: #EFF6FF;
+            color: var(--alfa-accent);
+            border-color: #BFDBFE;
+            font-weight: 600;
+            box-shadow: none;
         }
         [data-testid="stSidebar"] div[data-testid="stButton"] > button p {
-            font-size: 0.96rem;
+            font-size: 0.9rem;
         }
-        .alfa-nav-section {
-            color: #94A3B8;
-            font-size: 0.72rem;
+
+        /* ── Main content headings ─────────────────────── */
+        section.main .block-container h1 {
+            font-size: 1.65rem;
             font-weight: 700;
-            letter-spacing: 0.14em;
+            color: var(--alfa-text);
+            letter-spacing: -0.02em;
+            margin-bottom: 0.15rem;
+        }
+        section.main .block-container h2 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--alfa-text);
+            letter-spacing: -0.01em;
+        }
+        section.main .block-container h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--alfa-text);
+        }
+        section.main .block-container [data-testid="stCaptionContainer"] p,
+        section.main .block-container .stCaption {
+            color: var(--alfa-muted);
+            font-size: 0.85rem;
+        }
+
+        /* ── Subheader spacing fix ─────────────────────── */
+        section.main .block-container [data-testid="StyledFullScreenFrame"] {
+            border-radius: var(--alfa-radius);
+        }
+
+        /* ── Dataframe / tables ─────────────────────────── */
+        [data-testid="stDataFrame"] {
+            border: 1px solid var(--alfa-border) !important;
+            border-radius: var(--alfa-radius) !important;
+            overflow: hidden;
+        }
+
+        /* ── Expander ────────────────────────────────────── */
+        section.main [data-testid="stExpander"] {
+            border: 1px solid var(--alfa-border) !important;
+            border-radius: var(--alfa-radius) !important;
+            background: var(--alfa-surface) !important;
+            box-shadow: none !important;
+        }
+
+        /* ── Tabs ────────────────────────────────────────── */
+        button[data-baseweb="tab"] {
+            font-size: 0.88rem !important;
+            font-weight: 500 !important;
+        }
+
+        /* ── Metric widgets ──────────────────────────────── */
+        [data-testid="stMetric"] {
+            background: var(--alfa-surface);
+            border: 1px solid var(--alfa-border);
+            border-radius: var(--alfa-radius);
+            padding: 0.9rem 1rem;
+            box-shadow: var(--alfa-shadow);
+        }
+        [data-testid="stMetricLabel"] p {
+            color: var(--alfa-muted) !important;
+            font-size: 0.8rem !important;
+            font-weight: 600 !important;
             text-transform: uppercase;
-            margin: 0.4rem 0 0.6rem 0.1rem;
+            letter-spacing: 0.06em;
+        }
+        [data-testid="stMetricValue"] {
+            color: var(--alfa-text) !important;
+            font-size: 1.45rem !important;
+            font-weight: 700 !important;
+        }
+
+        /* ── Generic buttons (main area) ─────────────────── */
+        section.main div[data-testid="stButton"] > button,
+        section.main div[data-testid="stFormSubmitButton"] > button {
+            border-radius: var(--alfa-radius);
+            border: 1px solid var(--alfa-border);
+            background: var(--alfa-surface);
+            color: var(--alfa-text);
+            font-size: 0.88rem;
+            font-weight: 500;
+            min-height: 2.5rem;
+            box-shadow: var(--alfa-shadow);
+            transition: background 0.14s ease, border-color 0.14s ease;
+        }
+        section.main div[data-testid="stButton"] > button:hover,
+        section.main div[data-testid="stFormSubmitButton"] > button:hover {
+            background: var(--alfa-bg);
+            border-color: #D1D5DB;
+        }
+        section.main div[data-testid="stButton"] > button[kind="primary"],
+        section.main div[data-testid="stFormSubmitButton"] > button[kind="primaryFormSubmit"] {
+            background: var(--alfa-accent) !important;
+            border-color: var(--alfa-accent) !important;
+            color: #fff !important;
+            box-shadow: 0 1px 4px rgba(37,99,235,0.25) !important;
+        }
+        section.main div[data-testid="stButton"] > button[kind="primary"]:hover,
+        section.main div[data-testid="stFormSubmitButton"] > button[kind="primaryFormSubmit"]:hover {
+            background: var(--alfa-accent-2) !important;
+            border-color: var(--alfa-accent-2) !important;
+        }
+        section.main div[data-testid="stButton"] > button[kind="primary"] p,
+        section.main div[data-testid="stFormSubmitButton"] > button[kind="primaryFormSubmit"] p {
+            color: #fff !important;
+        }
+
+        /* ── Inputs & Selects ────────────────────────────── */
+        [data-baseweb="base-input"] {
+            border-radius: var(--alfa-radius) !important;
+            border: 1px solid var(--alfa-border) !important;
+            background: var(--alfa-surface) !important;
+            box-shadow: none !important;
+        }
+        [data-baseweb="base-input"]:focus-within {
+            border-color: #93C5FD !important;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.1) !important;
+        }
+        input, select, textarea {
+            font-family: 'Inter', sans-serif !important;
         }
         </style>
         """,
@@ -114,10 +269,10 @@ def _render_navigation() -> str:
         st.markdown(
             """
             <div class="alfa-nav-brand">
-                <div class="alfa-nav-title">ALFA</div>
-                <div class="alfa-nav-subtitle">Analytics workspace para portfolio, risco e comparação de ativos.</div>
+                <div class="alfa-nav-logo">ALFA</div>
+                <div class="alfa-nav-subtitle">Portfolio, risco e análise de ativos.</div>
             </div>
-            <div class="alfa-nav-section">Navigation</div>
+            <div class="alfa-nav-section">Navegação</div>
             """,
             unsafe_allow_html=True,
         )
