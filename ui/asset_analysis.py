@@ -61,13 +61,24 @@ def _render_asset_analysis_styles() -> None:
             font-size: 0.92rem;
             font-weight: 600;
         }
+        .asset-search-label {
+            color: var(--asset-muted);
+            font-size: 0.92rem;
+            font-weight: 600;
+            margin-bottom: 0.55rem;
+        }
         .stTextInput [data-baseweb="base-input"],
         div[data-testid="stTextInput"] [data-baseweb="base-input"] {
             border-radius: 18px !important;
             border: 1px solid rgba(21, 33, 53, 0.08) !important;
-            background: rgba(255, 255, 255, 0.94) !important;
+            background: #ffffff !important;
             box-shadow: none !important;
             overflow: hidden !important;
+        }
+        .stTextInput [data-baseweb="base-input"] > div,
+        div[data-testid="stTextInput"] [data-baseweb="base-input"] > div {
+            background: #ffffff !important;
+            box-shadow: none !important;
         }
         .stTextInput [data-baseweb="base-input"] input,
         .stTextInput input,
@@ -75,28 +86,51 @@ def _render_asset_analysis_styles() -> None:
         div[data-testid="stTextInput"] input[type="text"] {
             border-radius: 18px;
             border: none !important;
-            background: transparent !important;
+            background: #ffffff !important;
             color: var(--asset-primary-blue) !important;
             -webkit-text-fill-color: var(--asset-primary-blue) !important;
             caret-color: var(--asset-primary-blue) !important;
             min-height: 3.2rem;
             box-shadow: none !important;
             font-weight: 500;
+            outline: none !important;
         }
         .stTextInput input::placeholder,
         div[data-testid="stTextInput"] input::placeholder {
             color: #9aa1ad;
+        }
+        .stTextInput input:focus,
+        .stTextInput input:focus-visible,
+        div[data-testid="stTextInput"] input:focus,
+        div[data-testid="stTextInput"] input:focus-visible {
+            outline: none !important;
+            box-shadow: none !important;
         }
         .stTextInput [data-baseweb="base-input"]:focus-within,
         div[data-testid="stTextInput"] [data-baseweb="base-input"]:focus-within {
             border-color: rgba(73, 121, 246, 0.22) !important;
             box-shadow: 0 0 0 3px rgba(73, 121, 246, 0.08) !important;
         }
+        .stTextInput input::selection,
+        div[data-testid="stTextInput"] input::selection {
+            background: rgba(73, 121, 246, 0.16);
+            color: var(--asset-primary-blue);
+        }
+        .stTextInput input:-webkit-autofill,
+        .stTextInput input:-webkit-autofill:hover,
+        .stTextInput input:-webkit-autofill:focus,
+        div[data-testid="stTextInput"] input:-webkit-autofill,
+        div[data-testid="stTextInput"] input:-webkit-autofill:hover,
+        div[data-testid="stTextInput"] input:-webkit-autofill:focus {
+            -webkit-text-fill-color: var(--asset-primary-blue) !important;
+            box-shadow: 0 0 0 1000px #ffffff inset !important;
+            transition: background-color 9999s ease-in-out 0s;
+        }
         .stFormSubmitButton > button,
         div[data-testid="stFormSubmitButton"] > button,
         section.main div[data-testid="stButton"] > button {
             border-radius: 999px;
-            min-height: 3rem;
+            min-height: 3.2rem;
             border: 1px solid var(--asset-border);
             background: rgba(255, 255, 255, 0.68);
             color: var(--asset-text);
@@ -585,6 +619,7 @@ def render_asset_analysis_page(default_ticker: str = "") -> None:
             unsafe_allow_html=True,
         )
         with st.form("asset-analysis-form", clear_on_submit=False):
+            st.markdown('<div class="asset-search-label">Ticker</div>', unsafe_allow_html=True)
             input_col, action_col = st.columns([4.2, 1.1], gap="medium")
             with input_col:
                 ticker = st.text_input(
@@ -592,9 +627,9 @@ def render_asset_analysis_page(default_ticker: str = "") -> None:
                     value=st.session_state["asset_analysis_selected_ticker"],
                     placeholder="Ex.: AAPL, MSFT, PETR4.SA, VALE3.SA",
                     key="asset-analysis-input",
+                    label_visibility="collapsed",
                 )
             with action_col:
-                st.caption("")
                 submitted = st.form_submit_button("Analisar", use_container_width=True, type="primary")
 
     if submitted and ticker.strip():
