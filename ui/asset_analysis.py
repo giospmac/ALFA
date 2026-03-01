@@ -60,20 +60,33 @@ def _render_asset_analysis_styles() -> None:
             font-size: 0.92rem;
             font-weight: 600;
         }
-        section.main div[data-testid="stTextInput"] input {
+        section.main div[data-testid="stTextInput"] > div {
+            background: transparent !important;
+        }
+        section.main div[data-testid="stTextInput"] > div > div {
+            border-radius: 24px !important;
+            border: 1px solid var(--asset-border) !important;
+            background: rgba(255, 255, 255, 0.82) !important;
+            box-shadow: 0 10px 24px rgba(23, 32, 51, 0.04) !important;
+        }
+        section.main div[data-testid="stTextInput"] input,
+        section.main div[data-testid="stTextInput"] input[type="text"] {
             border-radius: 24px;
-            border: 1px solid var(--asset-border);
-            background: rgba(255, 255, 255, 0.82);
+            border: none !important;
+            background: transparent !important;
             color: var(--asset-primary-blue) !important;
+            -webkit-text-fill-color: var(--asset-primary-blue) !important;
+            caret-color: var(--asset-primary-blue) !important;
             min-height: 3.2rem;
-            box-shadow: 0 10px 24px rgba(23, 32, 51, 0.04);
+            box-shadow: none !important;
+            font-weight: 600;
         }
         section.main div[data-testid="stTextInput"] input::placeholder {
             color: #9aa1ad;
         }
-        section.main div[data-testid="stTextInput"] input:focus {
-            border-color: rgba(73, 121, 246, 0.32);
-            box-shadow: 0 0 0 1px rgba(73, 121, 246, 0.12);
+        section.main div[data-testid="stTextInput"] > div > div:focus-within {
+            border-color: rgba(73, 121, 246, 0.32) !important;
+            box-shadow: 0 0 0 1px rgba(73, 121, 246, 0.12) !important;
         }
         section.main div[data-testid="stFormSubmitButton"] > button,
         section.main div[data-testid="stButton"] > button {
@@ -93,14 +106,23 @@ def _render_asset_analysis_styles() -> None:
         }
         section.main div[data-testid="stFormSubmitButton"] > button[kind="primary"],
         section.main div[data-testid="stButton"] > button[kind="primary"] {
-            border-color: rgba(73, 121, 246, 0.30);
-            background: var(--asset-primary-blue);
+            border-color: rgba(73, 121, 246, 0.30) !important;
+            background: var(--asset-primary-blue) !important;
+            background-color: var(--asset-primary-blue) !important;
+            background-image: none !important;
             color: #ffffff !important;
+            box-shadow: 0 10px 24px rgba(73, 121, 246, 0.20) !important;
         }
         section.main div[data-testid="stFormSubmitButton"] > button[kind="primary"]:hover,
         section.main div[data-testid="stButton"] > button[kind="primary"]:hover {
-            border-color: rgba(73, 121, 246, 0.34);
-            background: #3f6fec;
+            border-color: rgba(73, 121, 246, 0.34) !important;
+            background: #3f6fec !important;
+            background-color: #3f6fec !important;
+            background-image: none !important;
+            color: #ffffff !important;
+        }
+        section.main div[data-testid="stFormSubmitButton"] > button[kind="primary"] p,
+        section.main div[data-testid="stButton"] > button[kind="primary"] p {
             color: #ffffff !important;
         }
         [data-testid="stVerticalBlockBorderWrapper"]:has(.asset-analysis-search-shell) {
@@ -352,9 +374,9 @@ def _render_asset_analysis_styles() -> None:
         }
         section.main [data-baseweb="input"] {
             border-radius: 24px !important;
-            border-color: var(--asset-border) !important;
-            background: rgba(255, 255, 255, 0.82) !important;
-            box-shadow: 0 10px 24px rgba(23, 32, 51, 0.04);
+            border-color: transparent !important;
+            background: transparent !important;
+            box-shadow: none !important;
         }
         section.main [data-baseweb="input"] > div {
             background: transparent !important;
