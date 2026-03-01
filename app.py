@@ -45,8 +45,8 @@ def _render_navigation_styles() -> None:
             --alfa-text:     #111827;
             --alfa-muted:    #6B7280;
             --alfa-soft:     #9CA3AF;
-            --alfa-accent:   #2563EB;
-            --alfa-accent-2: #1D4ED8;
+            --alfa-accent:   #4979f6;
+            --alfa-accent-2: #2f5adf;
             --alfa-positive: #059669;
             --alfa-negative: #DC2626;
             --alfa-radius:   10px;
@@ -210,7 +210,7 @@ def _render_navigation_styles() -> None:
             border-radius: var(--alfa-radius);
             border: 1px solid var(--alfa-border);
             background: var(--alfa-surface);
-            color: var(--alfa-text);
+            color: #4979f6;
             font-size: 0.88rem;
             font-weight: 500;
             min-height: 2.5rem;
@@ -219,8 +219,8 @@ def _render_navigation_styles() -> None:
         }
         section.main div[data-testid="stButton"] > button:hover,
         section.main div[data-testid="stFormSubmitButton"] > button:hover {
-            background: var(--alfa-bg);
-            border-color: #D1D5DB;
+            background: #EFF6FF;
+            border-color: #BFDBFE;
         }
         section.main div[data-testid="stButton"] > button[kind="primary"],
         section.main div[data-testid="stFormSubmitButton"] > button[kind="primaryFormSubmit"] {
