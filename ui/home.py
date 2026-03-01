@@ -83,41 +83,41 @@ def _render_home_styles() -> None:
     st.markdown(
         """
         <style>
-        .alfa-section-title {
-            color: #102170;
-            font-size: 1.02rem;
-            font-weight: 700;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            margin: 0.3rem 0 0.85rem 0.1rem;
-        }
         .alfa-kpi-card {
-            background: #ffffff;
-            border: 1px solid rgba(73, 121, 246, 0.14);
-            border-radius: 20px;
-            padding: 1rem 1.05rem;
-            box-shadow: 0 12px 30px rgba(16, 33, 112, 0.06);
-            min-height: 118px;
+            background: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            border-radius: 10px;
+            padding: 1rem 1.1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
         }
         .alfa-kpi-label {
-            color: #6e7ba8;
-            font-size: 0.84rem;
+            color: #6B7280;
+            font-size: 0.75rem;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
-            font-weight: 700;
-            margin-bottom: 0.75rem;
+            letter-spacing: 0.07em;
+            margin-bottom: 0.6rem;
         }
         .alfa-kpi-value {
-            color: #102170;
-            font-size: 1.55rem;
+            color: #111827;
+            font-size: 1.5rem;
             font-weight: 700;
-            line-height: 1.1;
-            margin-bottom: 0.45rem;
+            line-height: 1.15;
+            margin-bottom: 0.3rem;
+            letter-spacing: -0.02em;
         }
         .alfa-kpi-note {
-            color: #4979f6;
-            font-size: 0.9rem;
-            font-weight: 600;
+            color: #2563EB;
+            font-size: 0.82rem;
+            font-weight: 500;
+        }
+        .alfa-section-title {
+            color: #374151;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin: 0.25rem 0 0.75rem 0;
         }
         </style>
         """,
