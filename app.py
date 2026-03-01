@@ -34,11 +34,10 @@ PAGE_CONFIG = {
 def _render_navigation_styles() -> None:
     st.markdown(
         """
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
         <style>
-        /* ── Global tokens ─────────────────────────────── */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        /* Global tokens */
         :root {
             --alfa-bg:       #F8F9FA;
             --alfa-surface:  #FFFFFF;
@@ -54,17 +53,17 @@ def _render_navigation_styles() -> None:
             --alfa-shadow:   0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
         }
 
-        /* ── Base font ─────────────────────────────────── */
+        /* Base font */
         html, body, [class*="css"], .stApp {
             font-family: 'Inter', sans-serif !important;
         }
 
-        /* ── App background ────────────────────────────── */
+        /* App background */
         .stApp {
             background: var(--alfa-bg) !important;
         }
 
-        /* ── Sidebar ───────────────────────────────────── */
+        /* Sidebar */
         [data-testid="stSidebar"] {
             background: var(--alfa-surface) !important;
             border-right: 1px solid var(--alfa-border) !important;
@@ -133,7 +132,7 @@ def _render_navigation_styles() -> None:
             font-size: 0.9rem;
         }
 
-        /* ── Main content headings ─────────────────────── */
+        /* Headings */
         section.main .block-container h1 {
             font-size: 1.65rem;
             font-weight: 700;
@@ -158,19 +157,19 @@ def _render_navigation_styles() -> None:
             font-size: 0.85rem;
         }
 
-        /* ── Subheader spacing fix ─────────────────────── */
+        /* Subheader */
         section.main .block-container [data-testid="StyledFullScreenFrame"] {
             border-radius: var(--alfa-radius);
         }
 
-        /* ── Dataframe / tables ─────────────────────────── */
+        /* Tables */
         [data-testid="stDataFrame"] {
             border: 1px solid var(--alfa-border) !important;
             border-radius: var(--alfa-radius) !important;
             overflow: hidden;
         }
 
-        /* ── Expander ────────────────────────────────────── */
+        /* Expander */
         section.main [data-testid="stExpander"] {
             border: 1px solid var(--alfa-border) !important;
             border-radius: var(--alfa-radius) !important;
@@ -178,13 +177,13 @@ def _render_navigation_styles() -> None:
             box-shadow: none !important;
         }
 
-        /* ── Tabs ────────────────────────────────────────── */
+        /* Tabs */
         button[data-baseweb="tab"] {
             font-size: 0.88rem !important;
             font-weight: 500 !important;
         }
 
-        /* ── Metric widgets ──────────────────────────────── */
+        /* Metrics */
         [data-testid="stMetric"] {
             background: var(--alfa-surface);
             border: 1px solid var(--alfa-border);
@@ -205,7 +204,7 @@ def _render_navigation_styles() -> None:
             font-weight: 700 !important;
         }
 
-        /* ── Generic buttons (main area) ─────────────────── */
+        /* Generic buttons */
         section.main div[data-testid="stButton"] > button,
         section.main div[data-testid="stFormSubmitButton"] > button {
             border-radius: var(--alfa-radius);
@@ -240,7 +239,7 @@ def _render_navigation_styles() -> None:
             color: #fff !important;
         }
 
-        /* ── Inputs & Selects ────────────────────────────── */
+        /* Inputs */
         [data-baseweb="base-input"] {
             border-radius: var(--alfa-radius) !important;
             border: 1px solid var(--alfa-border) !important;
