@@ -61,19 +61,20 @@ def _plot_case(case: StressScenarioCase, title: str) -> None:
         st.info("Não há trajetória suficiente para exibir gráfico neste cenário.")
         return
 
-    fig, ax = plt.subplots(figsize=(10, 4.8))
+    fig, ax = plt.subplots(figsize=(10, 4))
     fig.patch.set_facecolor("#FFFFFF")
     ax.set_facecolor("#FFFFFF")
 
-    ax.plot(case.path.index, case.path.values, color="#4979f6", linewidth=2.4)
-    ax.fill_between(case.path.index, case.path.values, case.path.min(), color="#97bdff", alpha=0.25)
-    ax.grid(True, axis="y", linestyle="--", alpha=0.25)
+    ax.plot(case.path.index, case.path.values, color="#2563EB", linewidth=2)
+    ax.fill_between(case.path.index, case.path.values, case.path.min(), color="#BFDBFE", alpha=0.35)
+    ax.grid(True, axis="y", color="#F3F4F6", linewidth=0.9)
     ax.grid(False, axis="x")
-    ax.set_title(title)
-    ax.set_ylabel("Base 100")
-    ax.set_xlabel("Data")
+    ax.set_title(title, color="#111827", fontsize=11, fontweight="600")
+    ax.set_ylabel("Base 100", color="#6B7280", fontsize=9)
+    ax.set_xlabel("Data", color="#6B7280", fontsize=9)
+    ax.tick_params(colors="#6B7280", labelsize=9)
     for spine in ax.spines.values():
-        spine.set_color("#dddddd")
+        spine.set_visible(False)
 
     fig.tight_layout()
     st.pyplot(fig, use_container_width=True)

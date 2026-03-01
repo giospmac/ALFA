@@ -30,16 +30,13 @@ def _render_asset_analysis_styles() -> None:
             --asset-shadow: 0 18px 38px rgba(23, 32, 51, 0.06);
         }
         .stApp {
-            background:
-                radial-gradient(circle at top left, rgba(210, 220, 228, 0.55), transparent 28%),
-                radial-gradient(circle at top right, rgba(235, 230, 220, 0.8), transparent 34%),
-                linear-gradient(180deg, #faf8f4 0%, var(--asset-page-bg) 42%, #f3f0e8 100%);
+            background: #F8F9FA;
             color: var(--asset-text);
         }
         section.main [data-testid="block-container"] {
             max-width: 1220px;
-            padding-top: 2.3rem;
-            padding-bottom: 3.5rem;
+            padding-top: 2rem;
+            padding-bottom: 3rem;
         }
         section.main .block-container h1,
         section.main .block-container h2,
@@ -73,31 +70,31 @@ def _render_asset_analysis_styles() -> None:
         }
         .stTextInput [data-baseweb="base-input"],
         div[data-testid="stTextInput"] [data-baseweb="base-input"] {
-            border-radius: 14px !important;
-            border: 1px solid rgba(21, 33, 53, 0.06) !important;
-            background: #fcfbf8 !important;
+            border-radius: 10px !important;
+            border: 1px solid #E5E7EB !important;
+            background: #FFFFFF !important;
             box-shadow: none !important;
             overflow: hidden !important;
         }
         .stTextInput [data-baseweb="base-input"] > div,
         div[data-testid="stTextInput"] [data-baseweb="base-input"] > div {
-            background: #fcfbf8 !important;
+            background: #FFFFFF !important;
             box-shadow: none !important;
         }
         .stTextInput [data-baseweb="base-input"] input,
         .stTextInput input,
         div[data-testid="stTextInput"] input,
         div[data-testid="stTextInput"] input[type="text"] {
-            border-radius: 14px;
+            border-radius: 10px;
             border: none !important;
-            background: #fcfbf8 !important;
-            color: var(--asset-primary-blue) !important;
-            -webkit-text-fill-color: var(--asset-primary-blue) !important;
-            caret-color: var(--asset-primary-blue) !important;
-            min-height: 2.95rem;
+            background: #FFFFFF !important;
+            color: var(--asset-text) !important;
+            -webkit-text-fill-color: var(--asset-text) !important;
+            caret-color: var(--asset-accent) !important;
+            min-height: 2.5rem;
             box-shadow: none !important;
             font-weight: 500;
-            font-size: 1rem !important;
+            font-size: 0.95rem !important;
             outline: none !important;
         }
         .stTextInput input::placeholder,
@@ -113,9 +110,9 @@ def _render_asset_analysis_styles() -> None:
         }
         .stTextInput [data-baseweb="base-input"]:focus-within,
         div[data-testid="stTextInput"] [data-baseweb="base-input"]:focus-within {
-            border-color: rgba(73, 121, 246, 0.14) !important;
-            background: #ffffff !important;
-            box-shadow: 0 0 0 2px rgba(73, 121, 246, 0.05) !important;
+            border-color: #93C5FD !important;
+            background: #FFFFFF !important;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.1) !important;
         }
         .stTextInput input::selection,
         div[data-testid="stTextInput"] input::selection {
@@ -154,19 +151,18 @@ def _render_asset_analysis_styles() -> None:
         .stFormSubmitButton > button[kind="primaryFormSubmit"],
         div[data-testid="stFormSubmitButton"] > button[kind="primaryFormSubmit"],
         section.main div[data-testid="stButton"] > button[kind="primary"] {
-            border-color: rgba(73, 121, 246, 0.30) !important;
-            background: var(--asset-primary-blue) !important;
-            background-color: var(--asset-primary-blue) !important;
+            border-color: rgba(37, 99, 235, 0.30) !important;
+            background: #2563EB !important;
+            background-color: #2563EB !important;
             background-image: none !important;
             color: #ffffff !important;
-            box-shadow: 0 6px 16px rgba(73, 121, 246, 0.12) !important;
+            box-shadow: 0 1px 4px rgba(37,99,235,0.20) !important;
         }
         .stFormSubmitButton > button[kind="primaryFormSubmit"]:hover,
         div[data-testid="stFormSubmitButton"] > button[kind="primaryFormSubmit"]:hover,
         section.main div[data-testid="stButton"] > button[kind="primary"]:hover {
-            border-color: rgba(73, 121, 246, 0.34) !important;
-            background: #416ff0 !important;
-            background-color: #416ff0 !important;
+            background: #1D4ED8 !important;
+            background-color: #1D4ED8 !important;
             background-image: none !important;
             color: #ffffff !important;
         }
@@ -186,15 +182,12 @@ def _render_asset_analysis_styles() -> None:
         .asset-page-hero {
             position: relative;
             overflow: hidden;
-            border-radius: 30px;
+            border-radius: 12px;
             border: 1px solid var(--asset-border);
-            background:
-                linear-gradient(135deg, rgba(255, 255, 255, 0.70), rgba(255, 255, 255, 0.38)),
-                radial-gradient(circle at top right, rgba(47, 90, 122, 0.10), transparent 35%);
-            padding: 1.7rem 1.75rem;
+            background: #FFFFFF;
+            padding: 1.5rem 1.6rem;
             margin-bottom: 1.2rem;
-            box-shadow: var(--asset-shadow);
-            backdrop-filter: blur(12px);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
         }
         .asset-page-kicker {
             color: var(--asset-soft);
@@ -247,11 +240,11 @@ def _render_asset_analysis_styles() -> None:
         }
         .asset-summary-card {
             border: 1px solid var(--asset-border);
-            border-radius: 30px;
-            background: var(--asset-surface-strong);
-            padding: 1.5rem 1.55rem;
-            margin: 1.15rem 0 1.2rem 0;
-            box-shadow: var(--asset-shadow);
+            border-radius: 12px;
+            background: #FFFFFF;
+            padding: 1.25rem 1.3rem;
+            margin: 1rem 0 1.1rem 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
         }
         .asset-summary-kicker {
             color: var(--asset-soft);
@@ -346,12 +339,11 @@ def _render_asset_analysis_styles() -> None:
             line-height: 1.55;
         }
         .asset-metric-card {
-            min-height: 182px;
             border: 1px solid var(--asset-border);
-            border-radius: 24px;
-            background: rgba(255, 255, 255, 0.82);
+            border-radius: 10px;
+            background: #FFFFFF;
             padding: 1rem 1.05rem;
-            box-shadow: 0 10px 24px rgba(23, 32, 51, 0.04);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
         .asset-metric-label {
             color: var(--asset-muted);
@@ -380,10 +372,10 @@ def _render_asset_analysis_styles() -> None:
         .asset-table-wrap {
             margin-top: 0.75rem;
             border: 1px solid var(--asset-border);
-            border-radius: 20px;
+            border-radius: 10px;
             overflow: auto;
-            background: rgba(255, 255, 255, 0.92);
-            box-shadow: 0 10px 24px rgba(23, 32, 51, 0.04);
+            background: #FFFFFF;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         }
         .asset-table {
             width: 100%;
