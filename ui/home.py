@@ -81,6 +81,13 @@ def _format_currency(value: float) -> str:
     br_format = us_format.replace(",", "X").replace(".", ",").replace("X", ".")
     return f"R$ {br_format}"
 
+def _format_br_number(value: float, is_currency: bool = False) -> str:
+    if pd.isna(value):
+        return ""
+    us_format = f"{value:,.2f}"
+    br_format = us_format.replace(",", "X").replace(".", ",").replace("X", ".")
+    return f"R$ {br_format}" if is_currency else br_format
+
 
 def _render_home_styles() -> None:
     st.markdown(
@@ -129,26 +136,6 @@ def _render_home_styles() -> None:
             letter-spacing: 0.08em;
             text-transform: uppercase;
             margin: 0.25rem 0 0.75rem 0;
-        }
-
-        /* Target exact buttons using hidden markers */
-        div.element-container:has(.home-action-btn) + div.element-container [data-testid="stButton"] > button {
-            background: #4979f6 !important;
-            border-color: #4979f6 !important;
-            color: #f4f5f0 !important;
-            font-size: 0.85rem !important;
-            min-height: 2.2rem !important;
-            box-shadow: 0 1px 2px rgba(73, 121, 246, 0.15) !important;
-            transition: background 0.14s ease, border-color 0.14s ease, transform 0.1s ease !important;
-        }
-        div.element-container:has(.home-action-btn) + div.element-container [data-testid="stButton"] > button:hover {
-            background: #3b66d8 !important;
-            border-color: #3b66d8 !important;
-            color: #f4f5f0 !important;
-        }
-        div.element-container:has(.home-action-btn) + div.element-container [data-testid="stButton"] > button p {
-            color: #f4f5f0 !important;
-            font-size: 0.85rem !important;
         }
 
         /* Fix vertical alignment for 'Remover selecionado' button */
@@ -251,12 +238,10 @@ def render_home_page() -> None:
     # Agrupando os botões na esquerda e deixando espaço vazio na direita para equilibrar
     toolbar_col_1, toolbar_col_2, _ = st.columns([2.2, 2.2, 5.6])
     with toolbar_col_1:
-        st.markdown('<div class="home-action-btn" style="display: none;"></div>', unsafe_allow_html=True)
-        if st.button("Atualizar histórico / benchmarks", use_container_width=True):
+        if st.button("Atualizar histórico / benchmarks", type="primary", use_container_width=True):
             _refresh_history()
     with toolbar_col_2:
-        st.markdown('<div class="home-action-btn" style="display: none;"></div>', unsafe_allow_html=True)
-        if st.button("Recalcular quantidades", use_container_width=True):
+        if st.button("Recalcular quantidades", type="primary", use_container_width=True):
             st.session_state["portfolio_df"] = recalculate_portfolio(st.session_state["portfolio_df"], total_pl)
             _save_portfolio()
             st.session_state["portfolio_notice"] = "Quantidades recalculadas com base no PL atual."
@@ -336,18 +321,20 @@ def render_home_page() -> None:
     if portfolio_df.empty:
         st.info("Adicione pelo menos um ativo para montar o portfolio.")
     else:
+        # Formatar colunas para o padrão BR antes de exibir
+        display_df = _portfolio_table_view(portfolio_df, total_pl)
+        if not display_df.empty:
+            for col in ["Preco/Titulo", "Valor Real (R$)"]:
+                if col in display_df.columns:
+                    display_df[col] = display_df[col].apply(lambda x: _format_br_number(x, True))
+            for col in ["Taxa (%)", "Peso Desejado (%)", "Peso Real (%)", "Quantidade"]:
+                if col in display_df.columns:
+                    display_df[col] = display_df[col].apply(lambda x: _format_br_number(x, False))
+
         st.dataframe(
-            _portfolio_table_view(portfolio_df, total_pl),
+            display_df,
             use_container_width=True,
             hide_index=True,
-            column_config={
-                "Preco/Titulo": st.column_config.NumberColumn(format="R$ %.2f"),
-                "Taxa (%)": st.column_config.NumberColumn(format="%.2f"),
-                "Peso Desejado (%)": st.column_config.NumberColumn(format="%.2f"),
-                "Peso Real (%)": st.column_config.NumberColumn(format="%.2f"),
-                "Quantidade": st.column_config.NumberColumn(format="%.2f"),
-                "Valor Real (R$)": st.column_config.NumberColumn(format="R$ %.2f"),
-            },
         )
 
         remove_col_1, remove_col_2 = st.columns([3, 1])

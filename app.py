@@ -231,7 +231,7 @@ def _render_navigation_styles() -> None:
         section.main div[data-testid="stFormSubmitButton"] > button[kind="primaryFormSubmit"] {
             background: var(--alfa-accent) !important;
             border-color: var(--alfa-accent) !important;
-            color: #fff !important;
+            color: #f4f5f0 !important;
             box-shadow: 0 1px 4px rgba(37,99,235,0.25) !important;
         }
         section.main div[data-testid="stButton"] > button[kind="primary"]:hover,
@@ -241,7 +241,7 @@ def _render_navigation_styles() -> None:
         }
         section.main div[data-testid="stButton"] > button[kind="primary"] p,
         section.main div[data-testid="stFormSubmitButton"] > button[kind="primaryFormSubmit"] p {
-            color: #fff !important;
+            color: #f4f5f0 !important;
         }
 
         /* Inputs */
