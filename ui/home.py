@@ -76,7 +76,10 @@ def _sync_total_pl(total_pl: float) -> None:
 
 
 def _format_currency(value: float) -> str:
-    return f"R$ {value:,.2f}"
+    # Formata no padrão US (1,000.00) e inverte os separadores para o padrão BR (1.000,00)
+    us_format = f"{value:,.2f}"
+    br_format = us_format.replace(",", "X").replace(".", ",").replace("X", ".")
+    return f"R$ {br_format}"
 
 
 def _render_home_styles() -> None:
@@ -126,6 +129,31 @@ def _render_home_styles() -> None:
             letter-spacing: 0.08em;
             text-transform: uppercase;
             margin: 0.25rem 0 0.75rem 0;
+        }
+
+        /* Target exact buttons using hidden markers */
+        div.element-container:has(.home-action-btn) + div.element-container [data-testid="stButton"] > button {
+            background: #4979f6 !important;
+            border-color: #4979f6 !important;
+            color: #f4f5f0 !important;
+            font-size: 0.85rem !important;
+            min-height: 2.2rem !important;
+            box-shadow: 0 1px 2px rgba(73, 121, 246, 0.15) !important;
+            transition: background 0.14s ease, border-color 0.14s ease, transform 0.1s ease !important;
+        }
+        div.element-container:has(.home-action-btn) + div.element-container [data-testid="stButton"] > button:hover {
+            background: #3b66d8 !important;
+            border-color: #3b66d8 !important;
+            color: #f4f5f0 !important;
+        }
+        div.element-container:has(.home-action-btn) + div.element-container [data-testid="stButton"] > button p {
+            color: #f4f5f0 !important;
+            font-size: 0.85rem !important;
+        }
+
+        /* Fix vertical alignment for 'Remover selecionado' button */
+        div.element-container:has(.align-remove-btn) + div.element-container {
+            margin-top: 28px;
         }
         </style>
         """,
@@ -220,17 +248,21 @@ def render_home_page() -> None:
 
     _sync_total_pl(total_pl)
 
-    controls_col_1, controls_col_2 = st.columns([1, 1])
-    with controls_col_1:
-        if st.button("Atualizar historico e benchmarks", use_container_width=True):
+    # Agrupando os botões na esquerda e deixando espaço vazio na direita para equilibrar
+    toolbar_col_1, toolbar_col_2, _ = st.columns([2.2, 2.2, 5.6])
+    with toolbar_col_1:
+        st.markdown('<div class="home-action-btn" style="display: none;"></div>', unsafe_allow_html=True)
+        if st.button("Atualizar histórico / benchmarks", use_container_width=True):
             _refresh_history()
-    with controls_col_2:
+    with toolbar_col_2:
+        st.markdown('<div class="home-action-btn" style="display: none;"></div>', unsafe_allow_html=True)
         if st.button("Recalcular quantidades", use_container_width=True):
             st.session_state["portfolio_df"] = recalculate_portfolio(st.session_state["portfolio_df"], total_pl)
             _save_portfolio()
             st.session_state["portfolio_notice"] = "Quantidades recalculadas com base no PL atual."
             st.rerun()
 
+    st.markdown("<br>", unsafe_allow_html=True)
     add_tab_equity, add_tab_treasury = st.tabs(["Bolsa de Valores", "Titulos Publicos"])
 
     with add_tab_equity:
@@ -320,12 +352,14 @@ def render_home_page() -> None:
 
         remove_col_1, remove_col_2 = st.columns([3, 1])
         selected_ticker = remove_col_1.selectbox("Remover ativo", portfolio_df["ticker"].astype(str).tolist())
-        if remove_col_2.button("Remover selecionado", use_container_width=True):
-            st.session_state["portfolio_df"] = remove_position(portfolio_df, selected_ticker, total_pl)
-            _save_portfolio()
-            _refresh_history(show_success=False)
-            st.session_state["portfolio_notice"] = f"{selected_ticker} removido do portfolio."
-            st.rerun()
+        with remove_col_2:
+            st.markdown('<div class="align-remove-btn" style="display: none;"></div>', unsafe_allow_html=True)
+            if st.button("Remover selecionado", use_container_width=True):
+                st.session_state["portfolio_df"] = remove_position(portfolio_df, selected_ticker, total_pl)
+                _save_portfolio()
+                _refresh_history(show_success=False)
+                st.session_state["portfolio_notice"] = f"{selected_ticker} removido do portfolio."
+                st.rerun()
 
     st.subheader("Evolucao normalizada")
     normalized_df = normalized_history_with_portfolio(portfolio_df, historical_df)
