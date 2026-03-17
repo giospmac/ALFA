@@ -88,7 +88,10 @@ def render_risk_analysis_page() -> None:
                 "custom_blues", ["#97bdff", "#4979f6", "#102170"]
             )
             st.dataframe(
-                returns_df.style.format("{:.2f}%", na_rep="-").background_gradient(
+                returns_df.style
+                .format("{:.2f}%", na_rep="-", subset=MONTH_LABELS + ["Acumulado (Ano)"])
+                .format("{:.0f}", na_rep="-", subset=["Ano"])
+                .background_gradient(
                     subset=MONTH_LABELS + ["Acumulado (Ano)"], cmap=custom_cmap
                 ),
                 use_container_width=True,
