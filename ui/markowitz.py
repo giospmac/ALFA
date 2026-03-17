@@ -2,9 +2,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import matplotlib.pyplot as plt
-from matplotlib.colors import LinearSegmentedColormap
 import pandas as pd
+import plotly.graph_objects as go
 import streamlit as st
 
 from core.portfolio_repository import PortfolioRepository
@@ -35,67 +34,93 @@ def render_markowitz_page() -> None:
         st.info("São necessários pelo menos dois ativos válidos e cerca de 21 observações para a simulação.")
         return
 
-    blue_map = LinearSegmentedColormap.from_list(
-        "alfa_blues",
-        ["#BFDBFE", "#3B82F6", "#1D4ED8", "#1E3A8A"],
+    custom_blues = [[0.0, "#BFDBFE"], [0.33, "#3B82F6"], [0.66, "#1D4ED8"], [1.0, "#1E3A8A"]]
+
+    fig = go.Figure()
+
+    fig.add_trace(go.Scatter(
+        x=result.portfolios["volatilidade"],
+        y=result.portfolios["retorno"],
+        mode="markers",
+        marker=dict(
+            size=5,
+            color=result.portfolios["sharpe"],
+            colorscale=custom_blues,
+            showscale=True,
+            colorbar=dict(title="Índice de Sharpe", titleside="right", thickness=15),
+            opacity=0.5
+        ),
+        name="Portfólios simulados",
+        hovertemplate="Volatilidade: %{x:.2%}<br>Retorno: %{y:.2%}<br>Sharpe: %{marker.color:.2f}<extra></extra>"
+    ))
+
+    fig.add_trace(go.Scatter(
+        x=result.frontier["volatilidade"],
+        y=result.frontier["retorno"],
+        mode="lines",
+        line=dict(color="#6B7280", width=1.8, dash="dash"),
+        name="Fronteira eficiente",
+        hoverinfo="skip"
+    ))
+
+    fig.add_trace(go.Scatter(
+        x=[result.max_sharpe_volatility],
+        y=[result.max_sharpe_return],
+        mode="markers",
+        marker=dict(size=14, symbol="star", color="#4979f6", line=dict(color="#2f5adf", width=1)),
+        name="Máximo Sharpe",
+        hovertemplate="Volatilidade: %{x:.2%}<br>Retorno: %{y:.2%}<extra></extra>"
+    ))
+
+    fig.add_trace(go.Scatter(
+        x=[result.min_vol_volatility],
+        y=[result.min_vol_return],
+        mode="markers",
+        marker=dict(size=10, symbol="diamond", color="#059669", line=dict(color="#047857", width=1)),
+        name="Mínima volatilidade",
+        hovertemplate="Volatilidade: %{x:.2%}<br>Retorno: %{y:.2%}<extra></extra>"
+    ))
+
+    fig.update_layout(
+        title=dict(
+            text="Fronteira Eficiente de Markowitz",
+            font=dict(color="#111827", size=14, family="Inter"),
+            pad=dict(b=10)
+        ),
+        paper_bgcolor="#FFFFFF",
+        plot_bgcolor="#FFFFFF",
+        font=dict(color="#6B7280", size=11, family="Inter"),
+        margin=dict(l=40, r=20, t=60, b=40),
+        hovermode="closest",
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="right",
+            x=1,
+            title=""
+        )
+    )
+    fig.update_xaxes(
+        title_text="Volatilidade anualizada",
+        showgrid=True,
+        gridcolor="#E5E7EB",
+        gridwidth=1,
+        zeroline=False,
+        showline=True,
+        linecolor="#E5E7EB",
+        linewidth=1
+    )
+    fig.update_yaxes(
+        title_text="Retorno anualizado esperado",
+        showgrid=True,
+        gridcolor="#E5E7EB",
+        gridwidth=1,
+        zeroline=False,
+        showline=False
     )
 
-    fig, ax = plt.subplots(figsize=(10, 5))
-    fig.patch.set_facecolor("#FFFFFF")
-    ax.set_facecolor("#FFFFFF")
-
-    scatter = ax.scatter(
-        result.portfolios["volatilidade"],
-        result.portfolios["retorno"],
-        c=result.portfolios["sharpe"],
-        cmap=blue_map,
-        s=8,
-        alpha=0.5,
-    )
-    ax.scatter(
-        result.max_sharpe_volatility,
-        result.max_sharpe_return,
-        s=140,
-        marker="*",
-        color="#4979f6",
-        edgecolors="#2f5adf",
-        linewidths=0.8,
-        zorder=5,
-        label="Máximo Sharpe",
-    )
-    ax.scatter(
-        result.min_vol_volatility,
-        result.min_vol_return,
-        s=80,
-        marker="D",
-        color="#059669",
-        edgecolors="#047857",
-        linewidths=0.8,
-        zorder=5,
-        label="Mínima volatilidade",
-    )
-    ax.plot(
-        result.frontier["volatilidade"],
-        result.frontier["retorno"],
-        linestyle="--",
-        linewidth=1.8,
-        color="#6B7280",
-        label="Fronteira eficiente",
-    )
-    ax.set_xlabel("Volatilidade anualizada", color="#6B7280", fontsize=10)
-    ax.set_ylabel("Retorno anualizado esperado", color="#6B7280", fontsize=10)
-    ax.set_title("Fronteira Eficiente de Markowitz", color="#111827", fontsize=12, fontweight="600")
-    ax.grid(True, axis="both", color="#F3F4F6", linewidth=0.9)
-    ax.tick_params(colors="#6B7280", labelsize=9)
-    for spine in ax.spines.values():
-        spine.set_visible(False)
-    ax.legend(loc="upper left", frameon=False, labelcolor="#374151", fontsize=9)
-    cbar = fig.colorbar(scatter, ax=ax)
-    cbar.set_label("Índice de Sharpe", color="#6B7280", fontsize=9)
-    cbar.ax.tick_params(colors="#6B7280", labelsize=8)
-    fig.tight_layout()
-    st.pyplot(fig, use_container_width=True)
-    plt.close(fig)
+    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
     st.subheader("Carteiras otimizadas via simulação")
     weights_df = pd.DataFrame(
