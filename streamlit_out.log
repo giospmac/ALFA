@@ -24,3 +24,4 @@ Traceback (most recent call last):
     submitted = st.form_submit_button("Analisar", , type="primary")
                                                   ^
 SyntaxError: invalid syntax
+  Stopping...
