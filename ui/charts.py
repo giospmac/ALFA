@@ -15,9 +15,9 @@ from services.portfolio_analytics import (
 )
 
 PALETTE_PRIMARY = "#4979f6"
-PALETTE_SECONDARY = "#059669"
-PALETTE_NEGATIVE = "#EF4444"
-PALETTE_WARNING = "#D97706"
+PALETTE_SECONDARY = "#1e379b"
+PALETTE_NEGATIVE = "#102170"
+PALETTE_WARNING = "#102170"
 
 
 def _load_data():
