@@ -94,22 +94,25 @@ def render_charts_page() -> None:
         return
 
     st.subheader("Retorno acumulado · Portfolio vs Ibovespa")
-    ibov_col_1, ibov_col_2, ibov_col_3 = st.columns(3)
-    with ibov_col_1:
-        _plot_return_comparison(None, 1, "1 mês", "IBOVESPA")
-    with ibov_col_2:
-        _plot_return_comparison(1, None, "1 ano", "IBOVESPA")
-    with ibov_col_3:
-        _plot_return_comparison(5, None, "5 anos", "IBOVESPA")
+    period_options = {
+        "1 mês": (None, 1),
+        "3 meses": (None, 3),
+        "6 meses": (None, 6),
+        "1 ano": (1, None),
+        "2 anos": (2, None),
+        "5 anos": (5, None),
+    }
+    
+    val_ibov = st.pills("Período (Ibovespa)", options=list(period_options.keys()), default="5 anos", key="period_ibov", label_visibility="collapsed")
+    if val_ibov:
+        y_ibov, m_ibov = period_options[val_ibov]
+        _plot_return_comparison(y_ibov, m_ibov, "IBOVESPA", "IBOVESPA")
 
     st.subheader("Retorno acumulado · Portfolio vs CDI")
-    cdi_col_1, cdi_col_2, cdi_col_3 = st.columns(3)
-    with cdi_col_1:
-        _plot_return_comparison(None, 1, "1 mês", "CDI")
-    with cdi_col_2:
-        _plot_return_comparison(1, None, "1 ano", "CDI")
-    with cdi_col_3:
-        _plot_return_comparison(5, None, "5 anos", "CDI")
+    val_cdi = st.pills("Período (CDI)", options=list(period_options.keys()), default="5 anos", key="period_cdi", label_visibility="collapsed")
+    if val_cdi:
+        y_cdi, m_cdi = period_options[val_cdi]
+        _plot_return_comparison(y_cdi, m_cdi, "CDI", "CDI")
 
     st.subheader("Contribuição de retorno por ativo")
     contribution_df = contribution_by_asset(portfolio_df, historical_df)
