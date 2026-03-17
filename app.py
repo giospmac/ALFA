@@ -48,7 +48,9 @@ def _render_navigation_styles() -> None:
             --alfa-accent:   #4979f6;
             --alfa-accent-2: #2f5adf;
             --alfa-positive: #059669;
-            --alfa-negative: #4979f6;
+            --alfa-bg-positive: #ECFDF5;
+            --alfa-negative: #EF4444;
+            --alfa-bg-negative: #FEF2F2;
             --alfa-radius:   10px;
             --alfa-shadow:   0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
         }
@@ -257,6 +259,57 @@ def _render_navigation_styles() -> None:
         }
         input, select, textarea {
             font-family: 'Inter', sans-serif !important;
+        }
+
+        /* KPI Cards (Global) */
+        .alfa-kpi-card {
+            background: var(--alfa-surface);
+            border: 1px solid var(--alfa-border);
+            border-radius: var(--alfa-radius);
+            padding: 1rem 1.1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }
+        .alfa-kpi-label {
+            color: var(--alfa-muted);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            margin-bottom: 0.6rem;
+        }
+        .alfa-kpi-trend.positive {
+            color: var(--alfa-positive);
+            background: var(--alfa-bg-positive);
+        }
+        .alfa-kpi-trend.negative {
+            color: var(--alfa-negative);
+            background: var(--alfa-bg-negative);
+        }
+        .alfa-kpi-value {
+            color: var(--alfa-text);
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1.15;
+            margin-bottom: 0.3rem;
+            letter-spacing: -0.02em;
+        }
+        .alfa-kpi-note {
+            color: var(--alfa-accent);
+            font-size: 0.82rem;
+            font-weight: 500;
+        }
+        .alfa-section-title {
+            color: #374151;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin: 0.25rem 0 0.75rem 0;
+        }
+
+        /* Fix vertical alignment for 'Remover selecionado' button */
+        div.element-container:has(.align-remove-btn) + div.element-container {
+            margin-top: 28px;
         }
         </style>
         """,

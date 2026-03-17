@@ -89,65 +89,6 @@ def _format_br_number(value: float, is_currency: bool = False) -> str:
     return f"R$ {br_format}" if is_currency else br_format
 
 
-def _render_home_styles() -> None:
-    st.markdown(
-        """
-        <style>
-        .alfa-kpi-card {
-            background: #FFFFFF;
-            border: 1px solid #E5E7EB;
-            border-radius: 10px;
-            padding: 1rem 1.1rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-        }
-        .alfa-kpi-label {
-            color: #6B7280;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.07em;
-            margin-bottom: 0.6rem;
-        }
-        .alfa-kpi-trend.positive {
-            color: #059669;
-            background: #ECFDF5;
-        }
-        .alfa-kpi-trend.negative {
-            color: #4979f6;
-            background: #EFF6FF;
-        }
-        .alfa-kpi-value {
-            color: #111827;
-            font-size: 1.5rem;
-            font-weight: 700;
-            line-height: 1.15;
-            margin-bottom: 0.3rem;
-            letter-spacing: -0.02em;
-        }
-        .alfa-kpi-note {
-            color: #2563EB;
-            font-size: 0.82rem;
-            font-weight: 500;
-        }
-        .alfa-section-title {
-            color: #374151;
-            font-size: 0.72rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            margin: 0.25rem 0 0.75rem 0;
-        }
-
-        /* Fix vertical alignment for 'Remover selecionado' button */
-        div.element-container:has(.align-remove-btn) + div.element-container {
-            margin-top: 28px;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
-
-
 def _render_section_title(title: str) -> None:
     st.markdown(f'<div class="alfa-section-title">{title}</div>', unsafe_allow_html=True)
 
@@ -217,7 +158,6 @@ def _portfolio_table_view(portfolio_df: pd.DataFrame, total_pl: float) -> pd.Dat
 
 def render_home_page() -> None:
     _bootstrap_state()
-    _render_home_styles()
     st.title("Portfólio")
     st.caption("Monte a carteira com acoes e titulos publicos, gere o historico consolidado e compare com benchmark.")
 
