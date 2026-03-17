@@ -78,8 +78,8 @@ def _plot_return_comparison(years: int | None, months: int | None, title: str, b
     fig.add_trace(go.Scatter(x=chart_df.index, y=chart_df["Portfolio"], mode="lines", name="Portfolio", line=dict(color=PALETTE_PRIMARY, width=2)))
     fig.add_trace(go.Scatter(x=chart_df.index, y=chart_df[benchmark], mode="lines", name=benchmark, line=dict(color=PALETTE_SECONDARY, width=2)))
     
-    _apply_alfa_style(fig, title=title)
-    fig.update_yaxes(title_text="Retorno acumulado (%)")
+    _apply_alfa_style(fig)
+    fig.update_yaxes(title_text="")
     st.plotly_chart(fig, config={'displayModeBar': False})
 
 
