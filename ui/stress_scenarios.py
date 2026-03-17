@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import matplotlib.pyplot as plt
 import pandas as pd
+import plotly.graph_objects as go
 import streamlit as st
 
 from core.portfolio_repository import PortfolioRepository
@@ -56,29 +56,70 @@ def _summary_table(cases: list[StressScenarioCase]) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def _apply_alfa_style(fig: go.Figure, title: str = "") -> go.Figure:
+    fig.update_layout(
+        title=dict(
+            text=title,
+            font=dict(color="#111827", size=14, family="Inter"),
+            pad=dict(b=10)
+        ),
+        paper_bgcolor="#FFFFFF",
+        plot_bgcolor="#FFFFFF",
+        font=dict(color="#6B7280", size=11, family="Inter"),
+        margin=dict(l=40, r=20, t=60, b=40),
+        hovermode="x unified",
+        showlegend=False
+    )
+    fig.update_xaxes(
+        showgrid=False,
+        zeroline=False,
+        showline=True,
+        linecolor="#E5E7EB",
+        linewidth=1
+    )
+    fig.update_yaxes(
+        showgrid=True,
+        gridcolor="#E5E7EB",
+        gridwidth=1,
+        zeroline=False,
+        showline=False
+    )
+    return fig
+
+
 def _plot_case(case: StressScenarioCase, title: str) -> None:
     if case.path.empty:
         st.info("Não há trajetória suficiente para exibir gráfico neste cenário.")
         return
 
-    fig, ax = plt.subplots(figsize=(10, 4))
-    fig.patch.set_facecolor("#FFFFFF")
-    ax.set_facecolor("#FFFFFF")
+    fig = go.Figure()
+    min_val = case.path.min()
+    
+    fig.add_trace(go.Scatter(
+        x=case.path.index,
+        y=[min_val] * len(case.path),
+        mode="lines",
+        line=dict(color="rgba(0,0,0,0)"),
+        showlegend=False,
+        hoverinfo="skip"
+    ))
+    
+    fig.add_trace(go.Scatter(
+        x=case.path.index,
+        y=case.path.values,
+        fill="tonexty",
+        fillcolor="rgba(73, 121, 246, 0.15)",
+        mode="lines",
+        line=dict(color="#4979f6", width=2),
+        name="Base 100",
+        showlegend=False
+    ))
 
-    ax.plot(case.path.index, case.path.values, color="#2563EB", linewidth=2)
-    ax.fill_between(case.path.index, case.path.values, case.path.min(), color="#BFDBFE", alpha=0.35)
-    ax.grid(True, axis="y", color="#F3F4F6", linewidth=0.9)
-    ax.grid(False, axis="x")
-    ax.set_title(title, color="#111827", fontsize=11, fontweight="600")
-    ax.set_ylabel("Base 100", color="#6B7280", fontsize=9)
-    ax.set_xlabel("Data", color="#6B7280", fontsize=9)
-    ax.tick_params(colors="#6B7280", labelsize=9)
-    for spine in ax.spines.values():
-        spine.set_visible(False)
+    _apply_alfa_style(fig, title=title)
+    fig.update_yaxes(title_text="Base 100")
+    fig.update_xaxes(title_text="Data")
 
-    fig.tight_layout()
-    st.pyplot(fig, use_container_width=True)
-    plt.close(fig)
+    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
 
 def _render_case_metrics(case: StressScenarioCase) -> None:

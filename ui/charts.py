@@ -2,8 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import matplotlib.pyplot as plt
-from matplotlib.ticker import PercentFormatter
+import plotly.graph_objects as go
 import streamlit as st
 
 from core.portfolio_repository import PortfolioRepository
@@ -15,7 +14,10 @@ from services.portfolio_analytics import (
     rolling_volatility_series,
 )
 
-PALETTE = ["#2563EB", "#16A34A", "#4979f6", "#D97706", "#7C3AED"]
+PALETTE_PRIMARY = "#4979f6"
+PALETTE_SECONDARY = "#059669"
+PALETTE_NEGATIVE = "#EF4444"
+PALETTE_WARNING = "#D97706"
 
 
 def _load_data():
@@ -27,18 +29,42 @@ def _load_data():
     return snapshot.portfolio, snapshot.historical
 
 
-def _clean_ax(ax, fig) -> None:
-    """Apply a consistent clean style to a matplotlib axes."""
-    fig.patch.set_facecolor("#FFFFFF")
-    ax.set_facecolor("#FFFFFF")
-    ax.grid(True, axis="y", color="#F3F4F6", linewidth=0.9, linestyle="-")
-    ax.grid(False, axis="x")
-    ax.tick_params(axis="both", colors="#6B7280", labelsize=9)
-    ax.title.set_color("#111827")
-    ax.title.set_fontsize(11)
-    ax.title.set_fontweight("600")
-    for spine in ax.spines.values():
-        spine.set_visible(False)
+def _apply_alfa_style(fig: go.Figure, title: str = "") -> go.Figure:
+    fig.update_layout(
+        title=dict(
+            text=title,
+            font=dict(color="#111827", size=14, family="Inter"),
+            pad=dict(b=10)
+        ),
+        paper_bgcolor="#FFFFFF",
+        plot_bgcolor="#FFFFFF",
+        font=dict(color="#6B7280", size=11, family="Inter"),
+        margin=dict(l=40, r=20, t=60, b=40),
+        hovermode="x unified",
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="right",
+            x=1,
+            title=""
+        )
+    )
+    fig.update_xaxes(
+        showgrid=False,
+        zeroline=False,
+        showline=True,
+        linecolor="#E5E7EB",
+        linewidth=1
+    )
+    fig.update_yaxes(
+        showgrid=True,
+        gridcolor="#E5E7EB",
+        gridwidth=1,
+        zeroline=False,
+        showline=False
+    )
+    return fig
 
 
 def _plot_return_comparison(years: int | None, months: int | None, title: str, benchmark: str):
@@ -48,16 +74,13 @@ def _plot_return_comparison(years: int | None, months: int | None, title: str, b
         st.info(f"Dados insuficientes para {title}.")
         return
 
-    fig, ax = plt.subplots(figsize=(6.4, 3.2))
-    ax.plot(chart_df.index, chart_df["Portfolio"], label="Portfolio", linewidth=2, color=PALETTE[0])
-    ax.plot(chart_df.index, chart_df[benchmark], label=benchmark, linewidth=2, color=PALETTE[1])
-    ax.set_title(title)
-    ax.set_ylabel("Retorno acumulado (%)", color="#6B7280", fontsize=9)
-    ax.legend(fontsize=8, frameon=False, labelcolor="#374151")
-    _clean_ax(ax, fig)
-    fig.tight_layout()
-    st.pyplot(fig, use_container_width=True)
-    plt.close(fig)
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=chart_df.index, y=chart_df["Portfolio"], mode="lines", name="Portfolio", line=dict(color=PALETTE_PRIMARY, width=2)))
+    fig.add_trace(go.Scatter(x=chart_df.index, y=chart_df[benchmark], mode="lines", name=benchmark, line=dict(color=PALETTE_SECONDARY, width=2)))
+    
+    _apply_alfa_style(fig, title=title)
+    fig.update_yaxes(title_text="Retorno acumulado (%)")
+    st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
 
 
 def render_charts_page() -> None:
@@ -93,29 +116,36 @@ def render_charts_page() -> None:
     if contribution_df.empty:
         st.info("Dados insuficientes para calcular a contribuição de retorno dos ativos.")
     else:
-        fig, ax = plt.subplots(figsize=(10, 4))
-        ax.bar(contribution_df["ticker"], contribution_df["contribuicao"] * 100, color=PALETTE[0], width=0.55)
-        ax.set_ylabel("Contribuição (%)", color="#6B7280", fontsize=9)
-        ax.set_title("Contribuição de cada ativo no último ano")
-        _clean_ax(ax, fig)
-        fig.tight_layout()
-        st.pyplot(fig, use_container_width=True)
-        plt.close(fig)
+        fig = go.Figure(data=[
+            go.Bar(
+                x=contribution_df["ticker"], 
+                y=contribution_df["contribuicao"] * 100,
+                marker_color=PALETTE_PRIMARY,
+                width=0.4
+            )
+        ])
+        _apply_alfa_style(fig, title="Contribuição de cada ativo no último ano")
+        fig.update_yaxes(title_text="Contribuição (%)")
+        st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
 
     st.subheader("Drawdown histórico")
     drawdown = drawdown_series(portfolio_df, historical_df)
     if drawdown.empty:
         st.info("Dados insuficientes para calcular o drawdown do portfolio.")
     else:
-        fig, ax = plt.subplots(figsize=(10, 4))
-        ax.fill_between(drawdown.index, drawdown.values, 0, alpha=0.12, color=PALETTE[2])
-        ax.plot(drawdown.index, drawdown.values, linewidth=1.5, color=PALETTE[2])
-        ax.set_ylabel("Drawdown (%)", color="#6B7280", fontsize=9)
-        ax.set_title("Histórico de drawdown do portfolio")
-        _clean_ax(ax, fig)
-        fig.tight_layout()
-        st.pyplot(fig, use_container_width=True)
-        plt.close(fig)
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(
+            x=drawdown.index, 
+            y=drawdown.values, 
+            fill='tozeroy', 
+            mode='lines',
+            line=dict(color=PALETTE_PRIMARY, width=1.5),
+            fillcolor='rgba(73, 121, 246, 0.15)',
+            name="Drawdown"
+        ))
+        _apply_alfa_style(fig, title="Histórico de drawdown do portfolio")
+        fig.update_yaxes(title_text="Drawdown (%)")
+        st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
 
     st.subheader("Simulação de Monte Carlo")
     monte_carlo = monte_carlo_simulation(portfolio_df, historical_df)
@@ -126,29 +156,32 @@ def render_charts_page() -> None:
         metric_col_1.metric("VaR 5%", f"{monte_carlo.var_5:.2f}%")
         metric_col_2.metric("CVaR 5%", f"{monte_carlo.cvar_5:.2f}%")
 
-        fig, ax = plt.subplots(figsize=(10, 4))
-        ax.hist(monte_carlo.simulated_returns * 100, bins=50, density=True, alpha=0.75, color=PALETTE[0])
-        ax.axvline(monte_carlo.var_5, linestyle="--", linewidth=1.8, color=PALETTE[2], label=f"VaR 5%: {monte_carlo.var_5:.2f}%")
-        ax.axvline(monte_carlo.cvar_5, linestyle="--", linewidth=1.8, color=PALETTE[3], label=f"CVaR 5%: {monte_carlo.cvar_5:.2f}%")
-        ax.set_title("Distribuição dos retornos simulados em 4 semanas")
-        ax.set_xlabel("Retorno (%)", color="#6B7280", fontsize=9)
-        ax.legend(fontsize=8, frameon=False, labelcolor="#374151")
-        _clean_ax(ax, fig)
-        fig.tight_layout()
-        st.pyplot(fig, use_container_width=True)
-        plt.close(fig)
+        fig = go.Figure()
+        fig.add_trace(go.Histogram(
+            x=monte_carlo.simulated_returns * 100, 
+            nbinsx=50, 
+            histnorm='probability density',
+            marker_color=PALETTE_PRIMARY,
+            opacity=0.75,
+            name="Retornos"
+        ))
+        
+        # Add vertical lines via shapes and annotations for Plotly
+        fig.add_vline(x=monte_carlo.var_5, line_dash="dash", line_color=PALETTE_NEGATIVE, annotation_text=f"VaR 5%: {monte_carlo.var_5:.2f}%", annotation_position="top left")
+        fig.add_vline(x=monte_carlo.cvar_5, line_dash="dash", line_color=PALETTE_WARNING, annotation_text=f"CVaR 5%: {monte_carlo.cvar_5:.2f}%", annotation_position="top right")
+        
+        _apply_alfa_style(fig, title="Distribuição dos retornos simulados em 4 semanas")
+        fig.update_xaxes(title_text="Retorno (%)")
+        st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
 
     st.subheader("Volatilidade anualizada rolling")
     rolling_vol = rolling_volatility_series(portfolio_df, historical_df)
     if rolling_vol.empty:
         st.info("Dados insuficientes para calcular a volatilidade rolling de 21 dias.")
     else:
-        fig, ax = plt.subplots(figsize=(10, 4))
-        ax.plot(rolling_vol.index, rolling_vol.values, linewidth=2, color=PALETTE[0])
-        ax.yaxis.set_major_formatter(PercentFormatter(1.0))
-        ax.set_ylabel("Volatilidade", color="#6B7280", fontsize=9)
-        ax.set_title("Volatilidade anualizada · janela de 21 dias úteis")
-        _clean_ax(ax, fig)
-        fig.tight_layout()
-        st.pyplot(fig, use_container_width=True)
-        plt.close(fig)
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=rolling_vol.index, y=rolling_vol.values, mode='lines', line=dict(color=PALETTE_PRIMARY, width=2), name="Volatilidade"))
+        
+        _apply_alfa_style(fig, title="Volatilidade anualizada · janela de 21 dias úteis")
+        fig.update_yaxes(title_text="Volatilidade", tickformat=".0%")
+        st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
