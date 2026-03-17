@@ -9,8 +9,10 @@ from ui.risk_analysis import render_risk_analysis_page
 from ui.stock_comparison import render_stock_comparison_page
 from ui.stress_scenarios import render_stress_scenarios_page
 
-import streamlit as st
+import base64
+from pathlib import Path
 
+import streamlit as st
 
 st.set_page_config(
     page_title="ALFA",
@@ -29,6 +31,17 @@ PAGE_CONFIG = {
     "comparison": {"label": "Comparador", "render": render_stock_comparison_page},
     "quant": {"label": "Projeções Quant", "render": render_quant_projections_page},
 }
+
+
+def _get_base64_image(image_path: str) -> str:
+    path = Path(image_path)
+    if not path.is_file():
+        return ""
+    with open(path, "rb") as f:
+        data = f.read()
+    b64 = base64.b64encode(data).decode('utf-8')
+    ext = path.suffix.lower().lstrip('.')
+    return f"data:image/{ext};base64,{b64}"
 
 
 def _render_navigation_styles() -> None:
@@ -343,11 +356,15 @@ def _render_navigation() -> str:
         st.session_state["current_page"] = "portfolio"
 
     current_page = st.session_state["current_page"]
+    
+    logo_path = Path(__file__).parent / "alfa_logo_blue.png"
+    logo_base64 = _get_base64_image(str(logo_path))
+    
     with st.sidebar:
         st.markdown(
-            """
+            f"""
             <div class="alfa-nav-brand" style="text-align: center;">
-                <img src="https://raw.githubusercontent.com/giospmac/ALFA/refs/heads/main/icon.png" alt="ALFA Logo" style="max-width: 120px; object-fit: contain;">
+                <img src="{logo_base64}" alt="ALFA Logo" style="max-width: 120px; object-fit: contain;">
             </div>
             <div class="alfa-nav-section">Navegação</div>
             """,
