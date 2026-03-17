@@ -175,13 +175,13 @@ def render_home_page() -> None:
 
     _sync_total_pl(total_pl)
 
-    # Agrupando os botões na esquerda e deixando espaço vazio na direita para equilibrar
-    toolbar_col_1, toolbar_col_2, _ = st.columns([2.2, 2.2, 5.6])
+    st.markdown('<div class="alfa-section-title" style="margin-top: 1rem;">Ações Rápidas</div>', unsafe_allow_html=True)
+    toolbar_col_1, toolbar_col_2, toolbar_col_3 = st.columns([2, 2, 6])
     with toolbar_col_1:
-        if st.button("Atualizar histórico / benchmarks", type="primary", use_container_width=True):
+        if st.button("🔄 Atualizar Histórico", type="primary", use_container_width=True):
             _refresh_history()
     with toolbar_col_2:
-        if st.button("Recalcular quantidades", type="primary", use_container_width=True):
+        if st.button("🧮 Recalcular Quantidades", use_container_width=True):
             st.session_state["portfolio_df"] = recalculate_portfolio(st.session_state["portfolio_df"], total_pl)
             _save_portfolio()
             st.session_state["portfolio_notice"] = "Quantidades recalculadas com base no PL atual."
@@ -195,7 +195,7 @@ def render_home_page() -> None:
             equity_col_1, equity_col_2 = st.columns([2, 1])
             ticker_input = equity_col_1.text_input("Ticker", placeholder="Ex.: PETR4, PETR4.SA, AAPL, MSFT")
             target_weight = equity_col_2.number_input("Peso (%)", min_value=0.0, max_value=100.0, step=0.5, format="%.2f")
-            add_equity = st.form_submit_button("Adicionar ativo", use_container_width=True)
+            add_equity = st.form_submit_button("➕ Adicionar ativo", use_container_width=True)
 
         if add_equity:
             try:
@@ -218,7 +218,7 @@ def render_home_page() -> None:
             treasury_col_1, treasury_col_2 = st.columns([2, 1])
             selected_year = treasury_col_1.selectbox("Ano de vencimento", available_years or [default_year])
             treasury_weight = treasury_col_2.number_input("Peso (%)", min_value=0.0, max_value=100.0, step=0.5, format="%.2f", key="treasury-weight")
-            add_treasury = st.form_submit_button("Adicionar titulo", use_container_width=True)
+            add_treasury = st.form_submit_button("➕ Adicionar titulo", use_container_width=True)
 
         if add_treasury:
             try:
