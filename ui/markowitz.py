@@ -67,7 +67,7 @@ def render_markowitz_page() -> None:
         x=[result.max_sharpe_volatility],
         y=[result.max_sharpe_return],
         mode="markers",
-        marker=dict(size=14, symbol="star", color="#4979f6", line=dict(color="#2f5adf", width=1)),
+        marker=dict(size=14, symbol="star", color="#4979f6", line=dict(color="#1e379b", width=1)),
         name="Máximo Sharpe",
         hovertemplate="Volatilidade: %{x:.2%}<br>Retorno: %{y:.2%}<extra></extra>"
     ))
@@ -76,7 +76,7 @@ def render_markowitz_page() -> None:
         x=[result.min_vol_volatility],
         y=[result.min_vol_return],
         mode="markers",
-        marker=dict(size=10, symbol="diamond", color="#059669", line=dict(color="#047857", width=1)),
+        marker=dict(size=10, symbol="diamond", color="#1e379b", line=dict(color="#102170", width=1)),
         name="Mínima volatilidade",
         hovertemplate="Volatilidade: %{x:.2%}<br>Retorno: %{y:.2%}<extra></extra>"
     ))
