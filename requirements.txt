@@ -6,4 +6,5 @@ requests>=2.32
 statsmodels>=0.14
 scipy>=1.13
 plotly>=5.24
+matplotlib>=3.8
 python-bcb>=0.3
