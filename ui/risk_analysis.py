@@ -91,6 +91,7 @@ def render_risk_analysis_page() -> None:
                 returns_df.style
                 .format("{:.2f}%", na_rep="-", subset=MONTH_LABELS + ["Acumulado (Ano)"])
                 .format("{:.0f}", na_rep="-", subset=["Ano"])
+                .highlight_null(color="rgba(0,0,0,0)")
                 .background_gradient(
                     subset=MONTH_LABELS + ["Acumulado (Ano)"], cmap=custom_cmap
                 ),
