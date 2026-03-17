@@ -5,6 +5,7 @@ from pathlib import Path
 
 import pandas as pd
 import streamlit as st
+import matplotlib.colors as mcolors
 
 from core.portfolio_repository import PortfolioRepository
 from services.portfolio_analytics import (
@@ -83,8 +84,13 @@ def render_risk_analysis_page() -> None:
         st.subheader("Rentabilidade acumulada")
         returns_df = _returns_table_to_frame(monthly_table, yearly_table)
         if not returns_df.empty:
+            custom_cmap = mcolors.LinearSegmentedColormap.from_list(
+                "custom_blues", ["#97bdff", "#4979f6", "#102170"]
+            )
             st.dataframe(
-                returns_df.style.format("{:.2f}%", na_rep="-").background_gradient(subset=MONTH_LABELS + ["Acumulado (Ano)"], cmap="RdYlGn"),
+                returns_df.style.format("{:.2f}%", na_rep="-").background_gradient(
+                    subset=MONTH_LABELS + ["Acumulado (Ano)"], cmap=custom_cmap
+                ),
                 use_container_width=True,
                 hide_index=True,
             )
