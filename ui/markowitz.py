@@ -34,7 +34,7 @@ def render_markowitz_page() -> None:
         st.info("São necessários pelo menos dois ativos válidos e cerca de 21 observações para a simulação.")
         return
 
-    custom_blues = [[0.0, "#BFDBFE"], [0.33, "#3B82F6"], [0.66, "#1D4ED8"], [1.0, "#1E3A8A"]]
+    custom_blues = [[0.0, "#4979f6"], [0.5, "#1e379b"], [1.0, "#102170"]]
 
     fig = go.Figure()
 
