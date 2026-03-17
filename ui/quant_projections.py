@@ -21,8 +21,7 @@ HORIZON_OPTIONS = {
 }
 MODEL_OPTIONS = ["Drift Exponencial", "Holt-Winters", "ARIMA"]
 CHART_COLORS_CLEAN = [
-    "#2563EB", "#16A34A", "#4979f6", "#D97706", "#7C3AED",
-    "#0891B2", "#DB2777", "#65A30D", "#EA580C",
+    "#4979f6", "#1e379b", "#102170"
 ]
 
 
