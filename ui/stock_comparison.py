@@ -249,7 +249,8 @@ def render_stock_comparison_page() -> None:
 
     try:
         with st.spinner("Consultando séries históricas..."):
-            result = fetch_ticker_comparison(tuple(selected_tickers), HORIZON_OPTIONS[horizon_label])
+            historical_df = st.session_state.get("historical_df")
+            result = fetch_ticker_comparison(tuple(selected_tickers), HORIZON_OPTIONS[horizon_label], historical_df=historical_df)
     except MarketDataError as exc:
         st.error(str(exc))
         return

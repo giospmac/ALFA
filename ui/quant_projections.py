@@ -277,7 +277,8 @@ def render_quant_projections_page() -> None:
 
     try:
         with st.spinner(f"Calculando projeções via {model_name}..."):
-            result = fetch_ticker_quant_projection(tuple(selected_tickers), HORIZON_OPTIONS[horizon_label], model_name)
+            historical_df = st.session_state.get("historical_df")
+            result = fetch_ticker_quant_projection(tuple(selected_tickers), HORIZON_OPTIONS[horizon_label], model_name, historical_df=historical_df)
     except MarketDataError as exc:
         st.error(str(exc))
         return

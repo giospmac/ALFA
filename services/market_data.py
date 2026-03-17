@@ -597,7 +597,51 @@ def _build_metric_reference(
 
 
 @st.cache_data(ttl=900, show_spinner=False)
-def fetch_ticker_comparison(tickers: tuple[str, ...], period: str) -> TickerComparisonResult:
+def _download_market_data(tickers: tuple[str, ...], period: str) -> pd.DataFrame:
+    if not tickers:
+        return pd.DataFrame()
+    download_target = tickers[0] if len(tickers) == 1 else list(tickers)
+    try:
+        raw_history = yf.download(
+            download_target,
+            period=period,
+            auto_adjust=True,
+            progress=False,
+            threads=False,
+        )
+        return _extract_download_close_history(raw_history, list(tickers))
+    except Exception:
+        return pd.DataFrame()
+
+
+def _get_centralized_history(tickers: list[str], period: str, local_history: pd.DataFrame | None) -> pd.DataFrame:
+    history = pd.DataFrame()
+    horizon_days = _business_horizon_days(period)
+    
+    if local_history is not None and not local_history.empty:
+        cutoff = local_history.index.max()
+        if pd.isna(cutoff):
+            cutoff = pd.Timestamp.today()
+        start = cutoff - pd.offsets.BDay(horizon_days + 10)
+        history = local_history.loc[start:cutoff].copy()
+
+    missing_tickers = [t for t in tickers if t not in history.columns or history[t].dropna().empty]
+    
+    if missing_tickers:
+        downloaded = _download_market_data(tuple(missing_tickers), period)
+        if not downloaded.empty:
+            if history.empty:
+                history = downloaded
+            else:
+                history = history.join(downloaded, how="outer")
+                
+    history = history.apply(pd.to_numeric, errors="coerce")
+    history.index = _normalize_datetime_index(history.index)
+    history = history.loc[:, ~history.columns.duplicated()].sort_index()
+    return history
+
+
+def fetch_ticker_comparison(tickers: tuple[str, ...], period: str, historical_df: pd.DataFrame | None = None) -> TickerComparisonResult:
     normalized_tickers: list[str] = []
     seen: set[str] = set()
     for ticker in tickers:
@@ -610,21 +654,7 @@ def fetch_ticker_comparison(tickers: tuple[str, ...], period: str) -> TickerComp
     if not normalized_tickers:
         raise MarketDataError("Selecione pelo menos um ticker para comparar.")
 
-    download_target: str | list[str]
-    download_target = normalized_tickers[0] if len(normalized_tickers) == 1 else normalized_tickers
-
-    try:
-        raw_history = yf.download(
-            download_target,
-            period=period,
-            auto_adjust=True,
-            progress=False,
-            threads=False,
-        )
-    except Exception as exc:
-        raise MarketDataError("Falha ao consultar as series historicas no Yahoo Finance.") from exc
-
-    close_history = _extract_download_close_history(raw_history, normalized_tickers)
+    close_history = _get_centralized_history(normalized_tickers, period, historical_df)
     if close_history.empty:
         raise MarketDataError("Nao foi possivel montar o historico dos tickers selecionados.")
 
@@ -666,8 +696,7 @@ def fetch_ticker_comparison(tickers: tuple[str, ...], period: str) -> TickerComp
     )
 
 
-@st.cache_data(ttl=900, show_spinner=False)
-def fetch_ticker_quant_projection(tickers: tuple[str, ...], period: str, model_name: str = "Drift Exponencial") -> QuantProjectionResult:
+def fetch_ticker_quant_projection(tickers: tuple[str, ...], period: str, model_name: str = "Drift Exponencial", historical_df: pd.DataFrame | None = None) -> QuantProjectionResult:
     normalized_tickers: list[str] = []
     seen: set[str] = set()
     for ticker in tickers:
@@ -680,21 +709,9 @@ def fetch_ticker_quant_projection(tickers: tuple[str, ...], period: str, model_n
     if not normalized_tickers:
         raise MarketDataError("Selecione pelo menos um ticker para projetar.")
 
-    download_target: str | list[str] = normalized_tickers[0] if len(normalized_tickers) == 1 else normalized_tickers
     lookback_period = "10y" if period in {"5y", "10y", "20y"} else "5y"
+    close_history = _get_centralized_history(normalized_tickers, lookback_period, historical_df)
 
-    try:
-        raw_history = yf.download(
-            download_target,
-            period=lookback_period,
-            auto_adjust=True,
-            progress=False,
-            threads=False,
-        )
-    except Exception as exc:
-        raise MarketDataError("Falha ao consultar as séries históricas para projeção.") from exc
-
-    close_history = _extract_download_close_history(raw_history, normalized_tickers)
     if close_history.empty:
         raise MarketDataError("Não foi possível montar o histórico dos tickers selecionados.")
 
