@@ -87,8 +87,8 @@ def render_markowitz_page() -> None:
             font=dict(color="#111827", size=14, family="Inter"),
             pad=dict(b=10)
         ),
-        paper_bgcolor="#FFFFFF",
-        plot_bgcolor="#FFFFFF",
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
         font=dict(color="#6B7280", size=11, family="Inter"),
         margin=dict(l=40, r=20, t=60, b=40),
         hovermode="closest",
