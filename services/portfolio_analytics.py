@@ -1303,7 +1303,7 @@ def accumulated_returns_table(
         monthly_table.setdefault(date.year, {})[date.month] = float(value_)
 
     yearly_table = {date.year: float(value_) for date, value_ in yearly_returns.items()}
-    return monthly_table, yearly_table, period_return, start_period, end_date
+    return monthly_table, yearly_table, period_return, start_date, end_date
 
 
 def markowitz_frontier(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame) -> MarkowitzResult | None:

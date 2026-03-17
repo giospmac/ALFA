@@ -204,7 +204,7 @@ def _plot_history(history: pd.DataFrame) -> None:
     fig.update_yaxes(title_text="Base 1.0 (Normalizado)")
     fig.update_xaxes(title_text="")
     
-    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+    st.plotly_chart(fig, config={"displayModeBar": False})
 
 
 def render_stock_comparison_page() -> None:

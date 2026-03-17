@@ -119,7 +119,7 @@ def _plot_case(case: StressScenarioCase, title: str) -> None:
     fig.update_yaxes(title_text="Base 100")
     fig.update_xaxes(title_text="Data")
 
-    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+    st.plotly_chart(fig, config={"displayModeBar": False})
 
 
 def _render_case_metrics(case: StressScenarioCase) -> None:

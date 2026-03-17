@@ -80,7 +80,7 @@ def _plot_return_comparison(years: int | None, months: int | None, title: str, b
     
     _apply_alfa_style(fig, title=title)
     fig.update_yaxes(title_text="Retorno acumulado (%)")
-    st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+    st.plotly_chart(fig, config={'displayModeBar': False})
 
 
 def render_charts_page() -> None:
@@ -126,7 +126,7 @@ def render_charts_page() -> None:
         ])
         _apply_alfa_style(fig, title="Contribuição de cada ativo no último ano")
         fig.update_yaxes(title_text="Contribuição (%)")
-        st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+        st.plotly_chart(fig, config={'displayModeBar': False})
 
     st.subheader("Drawdown histórico")
     drawdown = drawdown_series(portfolio_df, historical_df)
@@ -145,7 +145,7 @@ def render_charts_page() -> None:
         ))
         _apply_alfa_style(fig, title="Histórico de drawdown do portfolio")
         fig.update_yaxes(title_text="Drawdown (%)")
-        st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+        st.plotly_chart(fig, config={'displayModeBar': False})
 
     st.subheader("Simulação de Monte Carlo")
     monte_carlo = monte_carlo_simulation(portfolio_df, historical_df)
@@ -172,7 +172,7 @@ def render_charts_page() -> None:
         
         _apply_alfa_style(fig, title="Distribuição dos retornos simulados em 4 semanas")
         fig.update_xaxes(title_text="Retorno (%)")
-        st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+        st.plotly_chart(fig, config={'displayModeBar': False})
 
     st.subheader("Volatilidade anualizada rolling")
     rolling_vol = rolling_volatility_series(portfolio_df, historical_df)
@@ -184,4 +184,4 @@ def render_charts_page() -> None:
         
         _apply_alfa_style(fig, title="Volatilidade anualizada · janela de 21 dias úteis")
         fig.update_yaxes(title_text="Volatilidade", tickformat=".0%")
-        st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+        st.plotly_chart(fig, config={'displayModeBar': False})

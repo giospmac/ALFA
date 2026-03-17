@@ -222,7 +222,7 @@ def _plot_projection(history: pd.DataFrame, projected: pd.DataFrame) -> None:
     fig.update_yaxes(title_text="Base 1.0 (Normalizado)")
     fig.update_xaxes(title_text="")
 
-    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+    st.plotly_chart(fig, config={"displayModeBar": False})
 
 
 def render_quant_projections_page() -> None:

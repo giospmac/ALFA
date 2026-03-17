@@ -120,7 +120,7 @@ def render_markowitz_page() -> None:
         showline=False
     )
 
-    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+    st.plotly_chart(fig, config={"displayModeBar": False})
 
     st.subheader("Carteiras otimizadas via simulação")
     weights_df = pd.DataFrame(
