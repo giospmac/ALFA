@@ -8,6 +8,8 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 import yfinance as yf
+from statsmodels.tsa.arima.model import ARIMA
+from statsmodels.tsa.holtwinters import ExponentialSmoothing
 
 
 class MarketDataError(Exception):
@@ -352,6 +354,40 @@ def _simple_projection_path(price_series: pd.Series, horizon_days: int) -> pd.Se
     return pd.Series(projected_values, index=future_index, name=clean_prices.name)
 
 
+def _holt_winters_projection(price_series: pd.Series, horizon_days: int) -> pd.Series:
+    clean_prices = pd.to_numeric(price_series, errors="coerce").dropna()
+    if len(clean_prices) < 60:
+        return pd.Series(dtype=float)
+    
+    try:
+        model = ExponentialSmoothing(clean_prices.values, trend='add', seasonal=None, initialization_method="estimated")
+        fit_model = model.fit()
+        forecast = fit_model.forecast(horizon_days)
+        future_index = pd.bdate_range(start=clean_prices.index[-1] + pd.offsets.BDay(1), periods=horizon_days)
+        projected = pd.Series(forecast, index=future_index, name=clean_prices.name)
+        projected = np.clip(projected, a_min=clean_prices.iloc[-1] * 0.1, a_max=None)
+        return projected
+    except Exception:
+        return pd.Series(dtype=float)
+
+
+def _arima_projection(price_series: pd.Series, horizon_days: int) -> pd.Series:
+    clean_prices = pd.to_numeric(price_series, errors="coerce").dropna()
+    if len(clean_prices) < 60:
+        return pd.Series(dtype=float)
+    
+    try:
+        model = ARIMA(clean_prices.values, order=(1, 1, 0))
+        fit_model = model.fit()
+        forecast = fit_model.forecast(steps=horizon_days)
+        future_index = pd.bdate_range(start=clean_prices.index[-1] + pd.offsets.BDay(1), periods=horizon_days)
+        projected = pd.Series(forecast, index=future_index, name=clean_prices.name)
+        projected = np.clip(projected, a_min=clean_prices.iloc[-1] * 0.1, a_max=None)
+        return projected
+    except Exception:
+        return pd.Series(dtype=float)
+
+
 def _extract_history_prices(history: pd.DataFrame) -> tuple[float | None, float | None]:
     close_series = _extract_single_close_series(history, "Close")
     if close_series.empty:
@@ -631,7 +667,7 @@ def fetch_ticker_comparison(tickers: tuple[str, ...], period: str) -> TickerComp
 
 
 @st.cache_data(ttl=900, show_spinner=False)
-def fetch_ticker_quant_projection(tickers: tuple[str, ...], period: str) -> QuantProjectionResult:
+def fetch_ticker_quant_projection(tickers: tuple[str, ...], period: str, model_name: str = "Drift Exponencial") -> QuantProjectionResult:
     normalized_tickers: list[str] = []
     seen: set[str] = set()
     for ticker in tickers:
@@ -687,7 +723,13 @@ def fetch_ticker_quant_projection(tickers: tuple[str, ...], period: str) -> Quan
             invalid_tickers.append(ticker)
             continue
 
-        projected_path = _simple_projection_path(series, horizon_days)
+        if model_name == "Holt-Winters":
+            projected_path = _holt_winters_projection(series, horizon_days)
+        elif model_name == "ARIMA":
+            projected_path = _arima_projection(series, horizon_days)
+        else:
+            projected_path = _simple_projection_path(series, horizon_days)
+
         if projected_path.empty:
             invalid_tickers.append(ticker)
             continue

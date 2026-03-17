@@ -1100,12 +1100,10 @@ def rolling_volatility_series(portfolio_df: pd.DataFrame, historical_df: pd.Data
     return rolling_vol.dropna()
 
 
-def individual_metrics(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame, value: float, unit: str) -> dict[str, dict[str, float]] | None:
+def individual_metrics(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame, start_date: pd.Timestamp, end_date: pd.Timestamp) -> dict[str, dict[str, float]] | None:
     if historical_df.empty:
         return None
 
-    end_date = historical_df.index.max()
-    start_date = _analysis_start(end_date, value, unit)
     period_df = historical_df.loc[start_date:end_date].ffill().bfill()
     if period_df.empty:
         return None
@@ -1142,11 +1140,11 @@ def var_cvar_metrics(
     portfolio_df: pd.DataFrame,
     historical_df: pd.DataFrame,
     total_pl: float,
-    value: float,
-    unit: str,
+    start_date: pd.Timestamp,
+    end_date: pd.Timestamp,
     confidence: float,
 ) -> dict[str, dict[str, float]] | None:
-    metrics = individual_metrics(portfolio_df, historical_df, value, unit)
+    metrics = individual_metrics(portfolio_df, historical_df, start_date, end_date)
     if not metrics:
         return None
 
@@ -1166,14 +1164,12 @@ def var_cvar_metrics(
 def capm_alpha_beta_correlation(
     portfolio_df: pd.DataFrame,
     historical_df: pd.DataFrame,
-    value: float,
-    unit: str,
+    start_date: pd.Timestamp,
+    end_date: pd.Timestamp,
 ) -> dict[str, float] | None:
     if historical_df.empty or "IBOVESPA" not in historical_df.columns:
         return None
 
-    end_date = historical_df.index.max()
-    start_date = _analysis_start(end_date, value, unit)
     period_df = historical_df.loc[start_date:end_date].ffill().bfill()
     if period_df.empty:
         return None
@@ -1208,14 +1204,12 @@ def capm_alpha_beta_correlation(
 def performance_indices(
     portfolio_df: pd.DataFrame,
     historical_df: pd.DataFrame,
-    value: float,
-    unit: str,
+    start_date: pd.Timestamp,
+    end_date: pd.Timestamp,
 ) -> dict[str, dict[str, float]] | None:
     if historical_df.empty or "IBOVESPA" not in historical_df.columns:
         return None
 
-    end_date = historical_df.index.max()
-    start_date = _analysis_start(end_date, value, unit)
     period_df = historical_df.loc[start_date:end_date].ffill().bfill()
     if period_df.empty:
         return None
@@ -1263,12 +1257,10 @@ def performance_indices(
     }
 
 
-def correlation_matrix(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame, value: float, unit: str) -> tuple[pd.DataFrame, list[str]] | None:
+def correlation_matrix(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame, start_date: pd.Timestamp, end_date: pd.Timestamp) -> tuple[pd.DataFrame, list[str]] | None:
     if historical_df.empty:
         return None
 
-    end_date = historical_df.index.max()
-    start_date = _analysis_start(end_date, value, unit)
     period_df = historical_df.loc[start_date:end_date].ffill().bfill()
     log_returns = np.log(period_df / period_df.shift(1)).dropna(how="all")
     if log_returns.empty:
@@ -1284,14 +1276,12 @@ def correlation_matrix(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame, 
 def accumulated_returns_table(
     portfolio_df: pd.DataFrame,
     historical_df: pd.DataFrame,
-    value: float,
-    unit: str,
+    start_date: pd.Timestamp,
+    end_date: pd.Timestamp,
 ) -> tuple[dict[int, dict[int, float]], dict[int, float], float, pd.Timestamp, pd.Timestamp] | None:
     if historical_df.empty:
         return None
 
-    end_date = historical_df.index.max()
-    start_period = _analysis_start(end_date, value, unit)
     start_table = end_date - timedelta(days=5 * 365)
     period_df = historical_df.loc[start_table:end_date].ffill().bfill()
     if period_df.empty:
@@ -1303,7 +1293,10 @@ def accumulated_returns_table(
 
     monthly_returns = portfolio_returns.resample("ME").apply(lambda values: np.exp(values.sum()) - 1)
     yearly_returns = portfolio_returns.resample("YE").apply(lambda values: np.exp(values.sum()) - 1)
-    period_return = float(np.exp(portfolio_returns.loc[start_period:end_date].sum()) - 1)
+    
+    period_return = 0.0
+    if start_date in portfolio_returns.index or start_date <= portfolio_returns.index.max():
+        period_return = float(np.exp(portfolio_returns.loc[start_date:end_date].sum()) - 1)
 
     monthly_table: dict[int, dict[int, float]] = {}
     for date, value_ in monthly_returns.items():

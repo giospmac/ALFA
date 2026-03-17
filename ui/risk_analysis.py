@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import datetime, timedelta
 from pathlib import Path
 
 import pandas as pd
@@ -49,73 +50,94 @@ def render_risk_analysis_page() -> None:
     portfolio_df, historical_df, total_pl = _load_data()
 
     st.title("Indicadores de Risco")
-    st.caption("Tabelas de rentabilidade, VaR, CVaR, CAPM, performance ajustada ao benchmark e correlacao.")
+    st.caption("Tabelas de rentabilidade, VaR, CVaR, CAPM, performance ajustada ao benchmark e correlação.")
 
     if portfolio_df.empty or historical_df.empty:
         st.info("Monte o portfolio e atualize o historico na pagina principal antes de abrir esta analise.")
         return
 
-    control_col_1, control_col_2 = st.columns([1, 1])
-    unit = control_col_1.selectbox("Unidade do periodo", ["Ano", "Mês"], index=0)
-    value = control_col_2.number_input("Quantidade", min_value=1.0, step=1.0, value=1.0, format="%.0f")
+    min_date = historical_df.index.min().date() if not historical_df.empty else datetime.today().date()
+    max_date = historical_df.index.max().date() if not historical_df.empty else datetime.today().date()
+    
+    # Date picker logic handling edge cases with minimal dates
+    default_start = max_date - timedelta(days=365)
+    if default_start < min_date:
+        default_start = min_date
 
-    returns_result = accumulated_returns_table(portfolio_df, historical_df, value, unit)
+    control_col_1, control_col_2, _ = st.columns([1.5, 1.5, 1])
+    start_date_val = control_col_1.date_input("Data Inicial", value=default_start, min_value=min_date, max_value=max_date)
+    end_date_val = control_col_2.date_input("Data Final", value=max_date, min_value=min_date, max_value=max_date)
+    
+    start_ts = pd.Timestamp(start_date_val)
+    end_ts = pd.Timestamp(end_date_val)
+    
+    if start_ts > end_ts:
+        st.error("A Data Inicial não pode ser maior do que a Data Final.")
+        return
+
+    st.markdown("---")
+
+    returns_result = accumulated_returns_table(portfolio_df, historical_df, start_ts, end_ts)
     if returns_result is not None:
         monthly_table, yearly_table, period_return, start_date, end_date = returns_result
         st.subheader("Rentabilidade acumulada")
         returns_df = _returns_table_to_frame(monthly_table, yearly_table)
         if not returns_df.empty:
             st.dataframe(
-                returns_df,
+                returns_df.style.format("{:.2f}%", na_rep="-").background_gradient(subset=MONTH_LABELS + ["Acumulado (Ano)"], cmap="RdYlGn"),
                 use_container_width=True,
                 hide_index=True,
-                column_config={label: st.column_config.NumberColumn(format="%.2f%%") for label in MONTH_LABELS + ["Acumulado (Ano)"]},
             )
         st.caption(
-            f"Rentabilidade acumulada no periodo analisado ({start_date.strftime('%d/%m/%Y')} a {end_date.strftime('%d/%m/%Y')}): "
+            f"Rentabilidade acumulada no período analisado ({start_date.strftime('%d/%m/%Y')} a {end_date.strftime('%d/%m/%Y')}): "
             f"{period_return:.2%}"
         )
 
-    st.subheader("Analise individual dos investimentos")
-    metrics = individual_metrics(portfolio_df, historical_df, value, unit)
+    st.subheader("Análise individual dos investimentos")
+    metrics = individual_metrics(portfolio_df, historical_df, start_ts, end_ts)
     if metrics is None:
         st.info("Dados insuficientes para a analise individual.")
     else:
-        metrics_df = pd.DataFrame(metrics).rename(index={"media": "Media", "variancia": "Variancia", "volatilidade": "Volatilidade"})
-        st.dataframe(metrics_df, use_container_width=True)
+        metrics_df = pd.DataFrame(metrics).rename(index={"media": "Média D.", "variancia": "Variância D.", "volatilidade": "Volatilidade D."})
+        st.dataframe(
+            metrics_df.style.format("{:.4f}").background_gradient(cmap="Blues", axis=1), 
+            use_container_width=True
+        )
 
-    st.subheader("VaR e CVaR")
-    var_95 = var_cvar_metrics(portfolio_df, historical_df, total_pl, value, unit, 0.95)
-    var_99 = var_cvar_metrics(portfolio_df, historical_df, total_pl, value, unit, 0.99)
+    st.subheader("VaR e CVaR (Valor em Risco)")
+    var_95 = var_cvar_metrics(portfolio_df, historical_df, total_pl, start_ts, end_ts, 0.95)
+    var_99 = var_cvar_metrics(portfolio_df, historical_df, total_pl, start_ts, end_ts, 0.99)
     var_col_1, var_col_2 = st.columns(2)
     with var_col_1:
         if var_95 is None:
-            st.info("Nao foi possivel calcular o VaR/CVaR com 95%.")
+            st.info("Não foi possível calcular o VaR/CVaR a 95%.")
         else:
-            st.write("Nivel de confianca 95%")
-            st.dataframe(pd.DataFrame(var_95).rename(index={"var": "VaR", "cvar": "CVaR"}), use_container_width=True)
+            st.write("Nível de confiança 95%")
+            var_95_df = pd.DataFrame(var_95).rename(index={"var": "VaR (R$)", "cvar": "CVaR (R$)"})
+            st.dataframe(var_95_df.style.format("R$ {:,.2f}").background_gradient(cmap="Reds", axis=0), use_container_width=True)
     with var_col_2:
         if var_99 is None:
-            st.info("Nao foi possivel calcular o VaR/CVaR com 99%.")
+            st.info("Não foi possível calcular o VaR/CVaR a 99%.")
         else:
-            st.write("Nivel de confianca 99%")
-            st.dataframe(pd.DataFrame(var_99).rename(index={"var": "VaR", "cvar": "CVaR"}), use_container_width=True)
+            st.write("Nível de confiança 99%")
+            var_99_df = pd.DataFrame(var_99).rename(index={"var": "VaR (R$)", "cvar": "CVaR (R$)"})
+            st.dataframe(var_99_df.style.format("R$ {:,.2f}").background_gradient(cmap="Reds", axis=0), use_container_width=True)
 
-    st.subheader("Avaliacao de rendimento e risco")
-    capm_metrics = capm_alpha_beta_correlation(portfolio_df, historical_df, value, unit)
+    st.subheader("Avaliação de rendimento e risco (CAPM)")
+    capm_metrics = capm_alpha_beta_correlation(portfolio_df, historical_df, start_ts, end_ts)
     if capm_metrics is None:
-        st.info("Dados insuficientes para CAPM, alfa, beta e correlacao.")
+        st.info("Dados insuficientes para CAPM, alfa, beta e correlação.")
     else:
         metric_col_1, metric_col_2, metric_col_3, metric_col_4 = st.columns(4)
         metric_col_1.metric("CAPM", f"{capm_metrics['capm']:.2%}")
-        metric_col_2.metric("Alfa", f"{capm_metrics['alfa']:.4f}")
+        metric_col_2.metric("Alfa de Jensen", f"{capm_metrics['alfa']:.4f}")
         metric_col_3.metric("Beta", f"{capm_metrics['beta']:.4f}")
-        metric_col_4.metric("Correlacao", f"{capm_metrics['correlacao']:.4f}")
+        metric_col_4.metric("Correlação (IBOV)", f"{capm_metrics['correlacao']:.4f}")
 
-    st.subheader("Indices de desempenho ajustados ao benchmark")
-    indices = performance_indices(portfolio_df, historical_df, value, unit)
+    st.subheader("Índices de desempenho ajustados ao benchmark")
+    indices = performance_indices(portfolio_df, historical_df, start_ts, end_ts)
     if indices is None:
-        st.info("Dados insuficientes para os indices de desempenho.")
+        st.info("Dados insuficientes para os índices de desempenho.")
     else:
         indices_df = pd.DataFrame(indices).T.rename(
             columns={
@@ -125,12 +147,19 @@ def render_risk_analysis_page() -> None:
                 "tracking_error": "Tracking Error",
             }
         )
-        st.dataframe(indices_df, use_container_width=True)
+        st.dataframe(
+            indices_df.style.format("{:.4f}").background_gradient(cmap="Blues", axis=0), 
+            use_container_width=True
+        )
 
-    st.subheader("Correlacao entre os ativos")
-    correlation_result = correlation_matrix(portfolio_df, historical_df, value, unit)
+    st.subheader("Matriz de Correlação Diária")
+    correlation_result = correlation_matrix(portfolio_df, historical_df, start_ts, end_ts)
     if correlation_result is None:
-        st.info("Sao necessarios pelo menos dois ativos com historico valido para a matriz de correlacao.")
+        st.info("São necessários pelo menos dois ativos com histórico válido para a matriz de correlação.")
     else:
         matrix, _ = correlation_result
-        st.dataframe(matrix.style.format("{:.4f}").background_gradient(cmap="Blues"), use_container_width=True)
+        # The correlation is usually formatted from -1 to 1 (RdBu cmap is better for correlations!)
+        st.dataframe(
+            matrix.style.format("{:.4f}").background_gradient(cmap="RdBu", vmin=-1, vmax=1), 
+            use_container_width=True
+        )
