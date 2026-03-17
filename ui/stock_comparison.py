@@ -160,7 +160,7 @@ def _apply_alfa_style(fig: go.Figure) -> go.Figure:
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         font=dict(color="#6B7280", size=11, family="Inter"),
-        margin=dict(l=40, r=20, t=10, b=40),
+        margin=dict(l=0, r=20, t=10, b=40),
         hovermode="x unified",
         legend=dict(
             orientation="h",
@@ -203,7 +203,7 @@ def _plot_history(history: pd.DataFrame) -> None:
     fig.update_yaxes(title_text="Base 1.0 (Normalizado)")
     fig.update_xaxes(title_text="")
     
-    st.plotly_chart(fig, config={"displayModeBar": False})
+    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
 
 def render_stock_comparison_page() -> None:

@@ -66,7 +66,7 @@ def _apply_alfa_style(fig: go.Figure, title: str = "") -> go.Figure:
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         font=dict(color="#6B7280", size=11, family="Inter"),
-        margin=dict(l=40, r=20, t=60, b=40),
+        margin=dict(l=0, r=20, t=60, b=40),
         hovermode="x unified",
         showlegend=False
     )
@@ -119,7 +119,7 @@ def _plot_case(case: StressScenarioCase, title: str) -> None:
     fig.update_yaxes(title_text="Base 100")
     fig.update_xaxes(title_text="Data")
 
-    st.plotly_chart(fig, config={"displayModeBar": False})
+    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
 
 def _render_case_metrics(case: StressScenarioCase) -> None:

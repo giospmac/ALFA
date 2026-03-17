@@ -90,7 +90,7 @@ def render_markowitz_page() -> None:
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
         font=dict(color="#6B7280", size=11, family="Inter"),
-        margin=dict(l=40, r=20, t=60, b=40),
+        margin=dict(l=0, r=20, t=60, b=40),
         hovermode="closest",
         legend=dict(
             orientation="h",
@@ -120,7 +120,7 @@ def render_markowitz_page() -> None:
         showline=False
     )
 
-    st.plotly_chart(fig, config={"displayModeBar": False})
+    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
     st.subheader("Carteiras otimizadas via simulação")
     weights_df = pd.DataFrame(
