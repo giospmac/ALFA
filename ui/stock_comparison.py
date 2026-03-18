@@ -11,7 +11,11 @@ from core.portfolio_repository import PortfolioRepository
 from services.market_data import MarketDataError, fetch_ticker_comparison, compute_comparison_metrics
 
 
-DEFAULT_TICKERS = ["AAPL", "MSFT", "GOOGL", "NVDA", "AMZN", "TSLA", "META"]
+DEFAULT_TICKERS = [
+    "ITUB4.SA", "BBAS3.SA", "BPAC11.SA", "RDOR3.SA", "WEGE3.SA", "ENGI11.SA",
+    "PRIO3.SA", "SUZB3.SA", "MRFG3.SA", "MULT3.SA", "TEND3.SA", "RENT3.SA",
+    "CURY3.SA", "RAIL3.SA", "MSFT", "NVDA", "GOOGL",
+]
 HORIZON_OPTIONS = {
     "1 Mês": "1mo",
     "3 Meses": "3mo",
