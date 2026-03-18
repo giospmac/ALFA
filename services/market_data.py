@@ -66,6 +66,19 @@ class TickerComparisonResult:
     normalized_history: pd.DataFrame
     total_returns: dict[str, float]
     invalid_tickers: list[str]
+    close_history: pd.DataFrame = None  # raw close prices for metrics
+
+
+@dataclass(frozen=True)
+class TickerComparisonMetrics:
+    ticker: str
+    total_return: float
+    annualized_volatility: float
+    sharpe_ratio: float | None
+    sortino_ratio: float | None
+    max_drawdown: float
+    beta: float | None
+    avg_daily_return: float
 
 
 @dataclass(frozen=True)
@@ -693,7 +706,88 @@ def fetch_ticker_comparison(tickers: tuple[str, ...], period: str, historical_df
         normalized_history=normalized_history,
         total_returns=total_returns,
         invalid_tickers=invalid_tickers,
+        close_history=comparison_history,
     )
+
+
+def compute_comparison_metrics(
+    close_history: pd.DataFrame,
+    benchmark_ticker: str = "^BVSP",
+    risk_free_rate: float = 0.0,
+) -> list[TickerComparisonMetrics]:
+    """Compute market indicators for each ticker from a close price DataFrame."""
+    if close_history is None or close_history.empty or len(close_history) < 2:
+        return []
+
+    daily_returns = close_history.pct_change().dropna(how="all")
+    if daily_returns.empty:
+        return []
+
+    trading_days = 252
+
+    # Try to fetch benchmark returns for beta calculation
+    benchmark_returns: pd.Series | None = None
+    try:
+        bench = yf.download(benchmark_ticker, period="max", progress=False, auto_adjust=True)
+        if bench is not None and not bench.empty:
+            if isinstance(bench.columns, pd.MultiIndex):
+                bench.columns = bench.columns.get_level_values(0)
+            bench_close = bench["Close"].dropna()
+            bench_close = bench_close.reindex(daily_returns.index)
+            benchmark_returns = bench_close.pct_change().dropna()
+    except Exception:
+        benchmark_returns = None
+
+    results: list[TickerComparisonMetrics] = []
+    for ticker in close_history.columns:
+        returns = daily_returns[ticker].dropna()
+        if len(returns) < 2:
+            continue
+
+        total_return = float((close_history[ticker].dropna().iloc[-1] / close_history[ticker].dropna().iloc[0]) - 1)
+        avg_daily = float(returns.mean())
+        vol = float(returns.std() * np.sqrt(trading_days))
+
+        # Sharpe
+        excess = avg_daily - risk_free_rate / trading_days
+        sharpe = float(excess / returns.std() * np.sqrt(trading_days)) if returns.std() > 0 else None
+
+        # Sortino
+        downside = returns[returns < 0]
+        downside_std = float(downside.std()) if len(downside) > 1 else None
+        sortino = float(excess / downside_std * np.sqrt(trading_days)) if downside_std and downside_std > 0 else None
+
+        # Max Drawdown
+        cumulative = (1 + returns).cumprod()
+        running_max = cumulative.cummax()
+        drawdown_series = (cumulative - running_max) / running_max
+        max_dd = float(drawdown_series.min())
+
+        # Beta
+        beta: float | None = None
+        if benchmark_returns is not None:
+            common_idx = returns.index.intersection(benchmark_returns.index)
+            if len(common_idx) > 10:
+                asset_r = returns.reindex(common_idx).dropna()
+                bench_r = benchmark_returns.reindex(common_idx).dropna()
+                common = asset_r.index.intersection(bench_r.index)
+                if len(common) > 10:
+                    cov = np.cov(asset_r.loc[common].values, bench_r.loc[common].values)
+                    if cov[1, 1] > 0:
+                        beta = float(cov[0, 1] / cov[1, 1])
+
+        results.append(TickerComparisonMetrics(
+            ticker=ticker,
+            total_return=total_return,
+            annualized_volatility=vol,
+            sharpe_ratio=sharpe,
+            sortino_ratio=sortino,
+            max_drawdown=max_dd,
+            beta=beta,
+            avg_daily_return=avg_daily,
+        ))
+
+    return results
 
 
 def fetch_ticker_quant_projection(tickers: tuple[str, ...], period: str, model_name: str = "Drift Exponencial", historical_df: pd.DataFrame | None = None) -> QuantProjectionResult:
