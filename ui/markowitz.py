@@ -47,7 +47,7 @@ def render_markowitz_page() -> None:
             color=result.portfolios["sharpe"],
             colorscale=custom_blues,
             showscale=True,
-            colorbar=dict(title="Índice de Sharpe", titleside="right", thickness=15),
+            colorbar=dict(title="Índice de Sharpe", title_side="right", thickness=15),
             opacity=0.5
         ),
         name="Portfólios simulados",

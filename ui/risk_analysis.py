@@ -94,7 +94,8 @@ def render_risk_analysis_page() -> None:
                 .highlight_null(color="rgba(0,0,0,0)")
                 .background_gradient(
                     subset=MONTH_LABELS + ["Acumulado (Ano)"], cmap=custom_cmap
-                ),
+                )
+                .set_properties(**{"text-align": "center"}),
                 use_container_width=True,
                 hide_index=True,
             )
