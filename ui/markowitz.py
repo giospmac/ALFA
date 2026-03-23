@@ -60,7 +60,7 @@ def render_markowitz_page() -> None:
         x=frontier_sorted["volatilidade"],
         y=frontier_sorted["retorno"],
         mode="lines",
-        line=dict(color="#1e379b", width=2, shape="spline"),
+        line=dict(color="#1e379b", width=1.8, dash="dash", shape="spline"),
         name="Fronteira eficiente",
         hoverinfo="skip"
     ))

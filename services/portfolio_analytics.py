@@ -1340,13 +1340,28 @@ def markowitz_frontier(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame) 
     max_sharpe_row = portfolios.loc[portfolios["sharpe"].idxmax()]
     min_vol_row = portfolios.loc[portfolios["volatilidade"].idxmin()]
 
-    frontier_returns = np.linspace(portfolios["retorno"].min(), portfolios["retorno"].max(), 50)
-    frontier_vols = []
-    for target_return in frontier_returns:
-        subset = portfolios[portfolios["retorno"] >= target_return]
-        frontier_vols.append(subset["volatilidade"].min() if not subset.empty else np.nan)
+    # Bin portfolios into narrow return ranges and find the minimum
+    # volatility in each bin to trace the left boundary of the bullet.
+    n_bins = 80
+    ret_min, ret_max = portfolios["retorno"].min(), portfolios["retorno"].max()
+    bin_edges = np.linspace(ret_min, ret_max, n_bins + 1)
+    frontier_points = []
+    for i in range(n_bins):
+        mask = (portfolios["retorno"] >= bin_edges[i]) & (portfolios["retorno"] < bin_edges[i + 1])
+        subset = portfolios[mask]
+        if subset.empty:
+            continue
+        best = subset.loc[subset["volatilidade"].idxmin()]
+        frontier_points.append({"volatilidade": best["volatilidade"], "retorno": best["retorno"]})
 
-    frontier = pd.DataFrame({"volatilidade": frontier_vols, "retorno": frontier_returns})
+    if not frontier_points:
+        frontier = pd.DataFrame(columns=["volatilidade", "retorno"])
+    else:
+        frontier = pd.DataFrame(frontier_points)
+        # Keep only the efficient (upper) portion: from min-vol point upward
+        min_vol_idx = frontier["volatilidade"].idxmin()
+        frontier = frontier.loc[min_vol_idx:].reset_index(drop=True)
+        frontier = frontier.sort_values("volatilidade")
     return MarkowitzResult(
         portfolios=portfolios,
         frontier=frontier.dropna(),
