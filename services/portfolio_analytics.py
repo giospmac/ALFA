@@ -1375,16 +1375,21 @@ def markowitz_frontier(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame) 
     portfolios = pd.DataFrame(sim_data, columns=["retorno", "volatilidade", "sharpe", *columns])
 
     # ── Efficient frontier via optimizer (warm-started) ───────────
-    # Go from min-vol return up to the cloud's max return
-    cloud_max_ret = float(portfolios["retorno"].max())
-    n_frontier = 60
-    target_returns = np.linspace(min_vol_ret, cloud_max_ret, n_frontier)
+    # Trace the full left boundary of the bullet (upper + lower)
+    cloud_min_ret = float(portfolios["retorno"].quantile(0.02))
+    cloud_max_ret = float(portfolios["retorno"].quantile(0.98))
+    n_frontier = 80
+    target_returns = np.linspace(cloud_min_ret, cloud_max_ret, n_frontier)
 
     frontier_vols: list[float] = []
     frontier_rets: list[float] = []
-    prev_w = min_vol_w.copy()  # warm-start from min-vol solution
 
-    for target in target_returns:
+    # Find the index closest to min_vol_ret to split warm-start direction
+    mid_idx = int(np.argmin(np.abs(target_returns - min_vol_ret)))
+
+    # Upper portion: from min_vol upward, warm-start from min-vol solution
+    prev_w = min_vol_w.copy()
+    for target in target_returns[mid_idx:]:
         ret_eq = {"type": "eq", "fun": lambda w, t=target: float(w @ annual_mean) - t}
         res = minimize(
             portfolio_vol, prev_w, method="SLSQP",
@@ -1393,12 +1398,34 @@ def markowitz_frontier(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame) 
             options={"ftol": 1e-12, "maxiter": 1000},
         )
         if res.success:
-            vol = portfolio_vol(res.x)
-            frontier_vols.append(vol)
+            frontier_vols.append(portfolio_vol(res.x))
             frontier_rets.append(target)
-            prev_w = res.x.copy()  # warm-start next from this solution
+            prev_w = res.x.copy()
 
-    frontier = pd.DataFrame({"volatilidade": frontier_vols, "retorno": frontier_rets})
+    # Lower portion: from min_vol downward, warm-start from min-vol solution
+    lower_vols: list[float] = []
+    lower_rets: list[float] = []
+    prev_w = min_vol_w.copy()
+    for target in reversed(target_returns[:mid_idx]):
+        ret_eq = {"type": "eq", "fun": lambda w, t=target: float(w @ annual_mean) - t}
+        res = minimize(
+            portfolio_vol, prev_w, method="SLSQP",
+            bounds=bounds,
+            constraints=[weight_sum_eq, ret_eq],
+            options={"ftol": 1e-12, "maxiter": 1000},
+        )
+        if res.success:
+            lower_vols.append(portfolio_vol(res.x))
+            lower_rets.append(target)
+            prev_w = res.x.copy()
+
+    # Combine: lower (reversed to go bottom-up) + upper
+    lower_vols.reverse()
+    lower_rets.reverse()
+    all_vols = lower_vols + frontier_vols
+    all_rets = lower_rets + frontier_rets
+
+    frontier = pd.DataFrame({"volatilidade": all_vols, "retorno": all_rets})
 
     return MarkowitzResult(
         portfolios=portfolios,
