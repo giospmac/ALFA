@@ -315,7 +315,7 @@ def render_home_page() -> None:
                 showlegend=False,
             )
             fig_portfolio.update_xaxes(showgrid=False, zeroline=False, showline=True, linecolor="#E5E7EB", linewidth=1)
-            fig_portfolio.update_yaxes(showgrid=True, gridcolor="#E5E7EB", gridwidth=1, zeroline=False, showline=False, title_text="Base 100")
+            fig_portfolio.update_yaxes(showgrid=True, gridcolor="#E5E7EB", gridwidth=1, zeroline=False, showline=False, title_text="")
             st.plotly_chart(fig_portfolio, use_container_width=True, config={"displayModeBar": False})
 
         # --- Chart 2: Individual assets line chart ---
@@ -347,7 +347,7 @@ def render_home_page() -> None:
                 legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, title=""),
             )
             fig_assets.update_xaxes(showgrid=False, zeroline=False, showline=True, linecolor="#E5E7EB", linewidth=1)
-            fig_assets.update_yaxes(showgrid=True, gridcolor="#E5E7EB", gridwidth=1, zeroline=False, showline=False, title_text="Base 100")
+            fig_assets.update_yaxes(showgrid=True, gridcolor="#E5E7EB", gridwidth=1, zeroline=False, showline=False, title_text="")
             st.plotly_chart(fig_assets, use_container_width=True, config={"displayModeBar": False})
 
     with st.expander("Historico bruto consolidado"):
