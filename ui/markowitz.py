@@ -103,6 +103,8 @@ def render_markowitz_page() -> None:
             title=""
         )
     )
+    pad_x = (result.portfolios["volatilidade"].max() - result.portfolios["volatilidade"].min()) * 0.08
+    pad_y = (result.portfolios["retorno"].max() - result.portfolios["retorno"].min()) * 0.08
     fig.update_xaxes(
         title_text="Volatilidade anualizada",
         showgrid=True,
@@ -111,7 +113,11 @@ def render_markowitz_page() -> None:
         zeroline=False,
         showline=True,
         linecolor="#E5E7EB",
-        linewidth=1
+        linewidth=1,
+        range=[
+            result.portfolios["volatilidade"].min() - pad_x,
+            result.portfolios["volatilidade"].max() + pad_x,
+        ],
     )
     fig.update_yaxes(
         title_text="Retorno anualizado esperado",
@@ -119,7 +125,11 @@ def render_markowitz_page() -> None:
         gridcolor="#E5E7EB",
         gridwidth=1,
         zeroline=False,
-        showline=False
+        showline=False,
+        range=[
+            result.portfolios["retorno"].min() - pad_y,
+            result.portfolios["retorno"].max() + pad_y,
+        ],
     )
 
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
