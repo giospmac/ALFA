@@ -4,6 +4,7 @@ from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
+import plotly.graph_objects as go
 import streamlit as st
 
 from core.portfolio_repository import PortfolioRepository
@@ -288,12 +289,66 @@ def render_home_page() -> None:
                 st.session_state["portfolio_notice"] = f"{selected_ticker} removido do portfolio."
                 st.rerun()
 
-    st.subheader("Evolucao normalizada")
+    st.subheader("Evolução do Portfólio")
     normalized_df = normalized_history_with_portfolio(portfolio_df, historical_df)
     if normalized_df.empty:
         st.info("Atualize o historico para visualizar a evolucao consolidada da carteira.")
     else:
-        st.line_chart(normalized_df, use_container_width=True)
+        # --- Chart 1: Portfolio area chart ---
+        if "Portfolio" in normalized_df.columns:
+            fig_portfolio = go.Figure()
+            fig_portfolio.add_trace(go.Scatter(
+                x=normalized_df.index,
+                y=normalized_df["Portfolio"],
+                mode="lines",
+                name="Portfólio",
+                line=dict(color="#4979f6", width=2.5),
+                fill="tozeroy",
+                fillcolor="rgba(73, 121, 246, 0.12)",
+            ))
+            fig_portfolio.update_layout(
+                paper_bgcolor="rgba(0,0,0,0)",
+                plot_bgcolor="rgba(0,0,0,0)",
+                font=dict(color="#6B7280", size=11, family="Inter"),
+                margin=dict(l=0, r=20, t=30, b=40),
+                hovermode="x unified",
+                showlegend=False,
+            )
+            fig_portfolio.update_xaxes(showgrid=False, zeroline=False, showline=True, linecolor="#E5E7EB", linewidth=1)
+            fig_portfolio.update_yaxes(showgrid=True, gridcolor="#E5E7EB", gridwidth=1, zeroline=False, showline=False, title_text="Base 100")
+            st.plotly_chart(fig_portfolio, use_container_width=True, config={"displayModeBar": False})
+
+        # --- Chart 2: Individual assets line chart ---
+        asset_columns = [col for col in normalized_df.columns if col != "Portfolio"]
+        if asset_columns:
+            st.subheader("Evolução por Ativo")
+            _ASSET_COLORS = [
+                "#4979f6", "#1e379b", "#6366f1", "#8b5cf6", "#a78bfa",
+                "#3b82f6", "#0ea5e9", "#06b6d4", "#14b8a6", "#10b981",
+                "#22c55e", "#84cc16", "#eab308", "#f59e0b", "#f97316",
+                "#ef4444", "#ec4899", "#d946ef",
+            ]
+            fig_assets = go.Figure()
+            for i, col in enumerate(asset_columns):
+                color = _ASSET_COLORS[i % len(_ASSET_COLORS)]
+                fig_assets.add_trace(go.Scatter(
+                    x=normalized_df.index,
+                    y=normalized_df[col],
+                    mode="lines",
+                    name=col.replace(".SA", ""),
+                    line=dict(color=color, width=1.8),
+                ))
+            fig_assets.update_layout(
+                paper_bgcolor="rgba(0,0,0,0)",
+                plot_bgcolor="rgba(0,0,0,0)",
+                font=dict(color="#6B7280", size=11, family="Inter"),
+                margin=dict(l=0, r=20, t=30, b=40),
+                hovermode="x unified",
+                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, title=""),
+            )
+            fig_assets.update_xaxes(showgrid=False, zeroline=False, showline=True, linecolor="#E5E7EB", linewidth=1)
+            fig_assets.update_yaxes(showgrid=True, gridcolor="#E5E7EB", gridwidth=1, zeroline=False, showline=False, title_text="Base 100")
+            st.plotly_chart(fig_assets, use_container_width=True, config={"displayModeBar": False})
 
     with st.expander("Historico bruto consolidado"):
         if historical_df.empty:
