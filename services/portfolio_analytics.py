@@ -1307,6 +1307,8 @@ def accumulated_returns_table(
 
 
 def markowitz_frontier(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame) -> MarkowitzResult | None:
+    from scipy.optimize import minimize
+
     columns = _available_asset_columns(portfolio_df, historical_df)
     if len(columns) < 2:
         return None
@@ -1316,59 +1318,99 @@ def markowitz_frontier(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame) 
     if len(returns) < 21:
         return None
 
-    mean_returns = returns.mean()
-    covariance = returns.cov()
-    eigenvalues = np.linalg.eigvals(covariance.values)
+    n_assets = len(columns)
+    mean_returns = returns.mean().values
+    cov_matrix = returns.cov().values
+    eigenvalues = np.linalg.eigvals(cov_matrix)
     if np.any(eigenvalues <= 0):
-        covariance = covariance + np.eye(len(columns)) * 1e-8
+        cov_matrix = cov_matrix + np.eye(n_assets) * 1e-8
 
+    annual_mean = mean_returns * TRADING_DAYS_PER_YEAR
+    annual_cov = cov_matrix * TRADING_DAYS_PER_YEAR
+
+    bounds = tuple((0.0, 1.0) for _ in range(n_assets))
+    weight_sum_constraint = {"type": "eq", "fun": lambda w: np.sum(w) - 1.0}
+
+    def portfolio_volatility(w: np.ndarray) -> float:
+        return float(np.sqrt(w @ annual_cov @ w))
+
+    def neg_sharpe(w: np.ndarray) -> float:
+        ret = float(w @ annual_mean)
+        vol = portfolio_volatility(w)
+        return -(ret / vol) if vol > 0 else 0.0
+
+    init_weights = np.ones(n_assets) / n_assets
+
+    # --- Min volatility portfolio ---
+    min_vol_result = minimize(
+        portfolio_volatility, init_weights, method="SLSQP",
+        bounds=bounds, constraints=[weight_sum_constraint],
+        options={"ftol": 1e-12, "maxiter": 1000},
+    )
+    min_vol_w = min_vol_result.x
+    min_vol_ret = float(min_vol_w @ annual_mean)
+    min_vol_vol = portfolio_volatility(min_vol_w)
+
+    # --- Max Sharpe portfolio ---
+    max_sharpe_result = minimize(
+        neg_sharpe, init_weights, method="SLSQP",
+        bounds=bounds, constraints=[weight_sum_constraint],
+        options={"ftol": 1e-12, "maxiter": 1000},
+    )
+    max_sharpe_w = max_sharpe_result.x
+    max_sharpe_ret = float(max_sharpe_w @ annual_mean)
+    max_sharpe_vol = portfolio_volatility(max_sharpe_w)
+
+    # --- Efficient frontier via optimizer ---
+    # Find the maximum achievable return (100% in the best asset)
+    max_ret = float(np.max(annual_mean))
+    target_returns = np.linspace(min_vol_ret, max_ret, 50)
+
+    frontier_vols: list[float] = []
+    frontier_rets: list[float] = []
+    for target in target_returns:
+        return_constraint = {"type": "eq", "fun": lambda w, t=target: float(w @ annual_mean) - t}
+        result = minimize(
+            portfolio_volatility, init_weights, method="SLSQP",
+            bounds=bounds,
+            constraints=[weight_sum_constraint, return_constraint],
+            options={"ftol": 1e-12, "maxiter": 1000},
+        )
+        if result.success:
+            frontier_vols.append(portfolio_volatility(result.x))
+            frontier_rets.append(target)
+
+    frontier = pd.DataFrame({"volatilidade": frontier_vols, "retorno": frontier_rets})
+
+    # --- Monte Carlo scatter (for visualization only) ---
     rng = np.random.default_rng(42)
-    results = np.zeros((3 + len(columns), 10000))
+    n_simulations = 10000
+    sim_results = np.zeros((3 + n_assets, n_simulations))
 
-    for index in range(10000):
-        weights = rng.random(len(columns))
+    for index in range(n_simulations):
+        weights = rng.random(n_assets)
         weights = weights / weights.sum()
-        annual_return = float(np.dot(weights, mean_returns) * TRADING_DAYS_PER_YEAR)
-        annual_volatility = float(np.sqrt(np.dot(weights.T, np.dot(covariance, weights))) * np.sqrt(TRADING_DAYS_PER_YEAR))
+        annual_return = float(weights @ annual_mean)
+        annual_volatility = portfolio_volatility(weights)
         sharpe = annual_return / annual_volatility if annual_volatility > 0 else 0.0
-        results[0, index] = annual_return
-        results[1, index] = annual_volatility
-        results[2, index] = sharpe
-        results[3 :, index] = weights
+        sim_results[0, index] = annual_return
+        sim_results[1, index] = annual_volatility
+        sim_results[2, index] = sharpe
+        sim_results[3:, index] = weights
 
-    portfolios = pd.DataFrame(results.T, columns=["retorno", "volatilidade", "sharpe", *columns])
-    max_sharpe_row = portfolios.loc[portfolios["sharpe"].idxmax()]
-    min_vol_row = portfolios.loc[portfolios["volatilidade"].idxmin()]
+    portfolios = pd.DataFrame(sim_results.T, columns=["retorno", "volatilidade", "sharpe", *columns])
 
-    # Bin portfolios into narrow return ranges and find the minimum
-    # volatility in each bin to trace the left boundary of the bullet.
-    n_bins = 80
-    ret_min, ret_max = portfolios["retorno"].min(), portfolios["retorno"].max()
-    bin_edges = np.linspace(ret_min, ret_max, n_bins + 1)
-    frontier_points = []
-    for i in range(n_bins):
-        mask = (portfolios["retorno"] >= bin_edges[i]) & (portfolios["retorno"] < bin_edges[i + 1])
-        subset = portfolios[mask]
-        if subset.empty:
-            continue
-        best = subset.loc[subset["volatilidade"].idxmin()]
-        frontier_points.append({"volatilidade": best["volatilidade"], "retorno": best["retorno"]})
+    min_vol_weights_series = pd.Series(min_vol_w, index=columns)
+    max_sharpe_weights_series = pd.Series(max_sharpe_w, index=columns)
 
-    if not frontier_points:
-        frontier = pd.DataFrame(columns=["volatilidade", "retorno"])
-    else:
-        frontier = pd.DataFrame(frontier_points)
-        # Keep only the efficient (upper) portion: from min-vol point upward
-        min_vol_idx = frontier["volatilidade"].idxmin()
-        frontier = frontier.loc[min_vol_idx:].reset_index(drop=True)
-        frontier = frontier.sort_values("volatilidade")
     return MarkowitzResult(
         portfolios=portfolios,
         frontier=frontier.dropna(),
-        max_sharpe_weights=max_sharpe_row[columns],
-        min_vol_weights=min_vol_row[columns],
-        max_sharpe_return=float(max_sharpe_row["retorno"]),
-        max_sharpe_volatility=float(max_sharpe_row["volatilidade"]),
-        min_vol_return=float(min_vol_row["retorno"]),
-        min_vol_volatility=float(min_vol_row["volatilidade"]),
+        max_sharpe_weights=max_sharpe_weights_series,
+        min_vol_weights=min_vol_weights_series,
+        max_sharpe_return=max_sharpe_ret,
+        max_sharpe_volatility=max_sharpe_vol,
+        min_vol_return=min_vol_ret,
+        min_vol_volatility=min_vol_vol,
     )
+
