@@ -1321,6 +1321,8 @@ def markowitz_frontier(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame) 
     n_assets = len(columns)
     mean_returns = returns.mean().values
     cov_matrix = returns.cov().values
+
+    # Ensure positive-definite covariance
     eigenvalues = np.linalg.eigvals(cov_matrix)
     if np.any(eigenvalues <= 0):
         cov_matrix = cov_matrix + np.eye(n_assets) * 1e-8
@@ -1329,88 +1331,84 @@ def markowitz_frontier(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame) 
     annual_cov = cov_matrix * TRADING_DAYS_PER_YEAR
 
     bounds = tuple((0.0, 1.0) for _ in range(n_assets))
-    weight_sum_constraint = {"type": "eq", "fun": lambda w: np.sum(w) - 1.0}
+    weight_sum_eq = {"type": "eq", "fun": lambda w: np.sum(w) - 1.0}
 
-    def portfolio_volatility(w: np.ndarray) -> float:
+    def portfolio_vol(w: np.ndarray) -> float:
         return float(np.sqrt(w @ annual_cov @ w))
 
     def neg_sharpe(w: np.ndarray) -> float:
         ret = float(w @ annual_mean)
-        vol = portfolio_volatility(w)
-        return -(ret / vol) if vol > 0 else 0.0
+        vol = portfolio_vol(w)
+        return -(ret / vol) if vol > 1e-12 else 0.0
 
-    init_weights = np.ones(n_assets) / n_assets
+    equal_w = np.ones(n_assets) / n_assets
 
-    # --- Min volatility portfolio ---
-    min_vol_result = minimize(
-        portfolio_volatility, init_weights, method="SLSQP",
-        bounds=bounds, constraints=[weight_sum_constraint],
+    # ── Optimized portfolios ──────────────────────────────────────
+    min_vol_res = minimize(
+        portfolio_vol, equal_w, method="SLSQP",
+        bounds=bounds, constraints=[weight_sum_eq],
         options={"ftol": 1e-12, "maxiter": 1000},
     )
-    min_vol_w = min_vol_result.x
+    min_vol_w = min_vol_res.x
     min_vol_ret = float(min_vol_w @ annual_mean)
-    min_vol_vol = portfolio_volatility(min_vol_w)
+    min_vol_vol = portfolio_vol(min_vol_w)
 
-    # --- Max Sharpe portfolio ---
-    max_sharpe_result = minimize(
-        neg_sharpe, init_weights, method="SLSQP",
-        bounds=bounds, constraints=[weight_sum_constraint],
+    max_sharpe_res = minimize(
+        neg_sharpe, equal_w, method="SLSQP",
+        bounds=bounds, constraints=[weight_sum_eq],
         options={"ftol": 1e-12, "maxiter": 1000},
     )
-    max_sharpe_w = max_sharpe_result.x
+    max_sharpe_w = max_sharpe_res.x
     max_sharpe_ret = float(max_sharpe_w @ annual_mean)
-    max_sharpe_vol = portfolio_volatility(max_sharpe_w)
+    max_sharpe_vol = portfolio_vol(max_sharpe_w)
 
-    # --- Monte Carlo scatter (for visualization only) ---
+    # ── Monte Carlo cloud (Dirichlet sampling for full spread) ────
     rng = np.random.default_rng(42)
-    n_simulations = 10000
-    sim_results = np.zeros((3 + n_assets, n_simulations))
+    n_sims = 10000
+    # alpha < 1 concentrates weights → wider bullet spread
+    sim_weights = rng.dirichlet(np.ones(n_assets) * 0.5, size=n_sims)
+    sim_returns = sim_weights @ annual_mean
+    sim_vols = np.array([portfolio_vol(w) for w in sim_weights])
+    sim_sharpe = np.where(sim_vols > 1e-12, sim_returns / sim_vols, 0.0)
 
-    for index in range(n_simulations):
-        weights = rng.random(n_assets)
-        weights = weights / weights.sum()
-        annual_return = float(weights @ annual_mean)
-        annual_volatility = portfolio_volatility(weights)
-        sharpe = annual_return / annual_volatility if annual_volatility > 0 else 0.0
-        sim_results[0, index] = annual_return
-        sim_results[1, index] = annual_volatility
-        sim_results[2, index] = sharpe
-        sim_results[3:, index] = weights
+    sim_data = np.column_stack([sim_returns, sim_vols, sim_sharpe, sim_weights])
+    portfolios = pd.DataFrame(sim_data, columns=["retorno", "volatilidade", "sharpe", *columns])
 
-    portfolios = pd.DataFrame(sim_results.T, columns=["retorno", "volatilidade", "sharpe", *columns])
-
-    # --- Efficient frontier via optimizer ---
-    # Limit frontier to the range visible in the simulated cloud
-    cloud_max_ret = float(portfolios["retorno"].quantile(0.98))
-    target_returns = np.linspace(min_vol_ret, cloud_max_ret, 50)
+    # ── Efficient frontier via optimizer (warm-started) ───────────
+    # Go from min-vol return up to the cloud's max return
+    cloud_max_ret = float(portfolios["retorno"].max())
+    n_frontier = 60
+    target_returns = np.linspace(min_vol_ret, cloud_max_ret, n_frontier)
 
     frontier_vols: list[float] = []
     frontier_rets: list[float] = []
+    prev_w = min_vol_w.copy()  # warm-start from min-vol solution
+
     for target in target_returns:
-        return_constraint = {"type": "eq", "fun": lambda w, t=target: float(w @ annual_mean) - t}
-        result = minimize(
-            portfolio_volatility, init_weights, method="SLSQP",
+        ret_eq = {"type": "eq", "fun": lambda w, t=target: float(w @ annual_mean) - t}
+        res = minimize(
+            portfolio_vol, prev_w, method="SLSQP",
             bounds=bounds,
-            constraints=[weight_sum_constraint, return_constraint],
+            constraints=[weight_sum_eq, ret_eq],
             options={"ftol": 1e-12, "maxiter": 1000},
         )
-        if result.success:
-            frontier_vols.append(portfolio_volatility(result.x))
+        if res.success:
+            vol = portfolio_vol(res.x)
+            frontier_vols.append(vol)
             frontier_rets.append(target)
+            prev_w = res.x.copy()  # warm-start next from this solution
 
     frontier = pd.DataFrame({"volatilidade": frontier_vols, "retorno": frontier_rets})
-
-    min_vol_weights_series = pd.Series(min_vol_w, index=columns)
-    max_sharpe_weights_series = pd.Series(max_sharpe_w, index=columns)
 
     return MarkowitzResult(
         portfolios=portfolios,
         frontier=frontier.dropna(),
-        max_sharpe_weights=max_sharpe_weights_series,
-        min_vol_weights=min_vol_weights_series,
+        max_sharpe_weights=pd.Series(max_sharpe_w, index=columns),
+        min_vol_weights=pd.Series(min_vol_w, index=columns),
         max_sharpe_return=max_sharpe_ret,
         max_sharpe_volatility=max_sharpe_vol,
         min_vol_return=min_vol_ret,
         min_vol_volatility=min_vol_vol,
     )
+
 
