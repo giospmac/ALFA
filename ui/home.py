@@ -323,10 +323,10 @@ def render_home_page() -> None:
         if asset_columns:
             st.subheader("Evolução por Ativo")
             _ASSET_COLORS = [
-                "#4979f6", "#1e379b", "#6366f1", "#8b5cf6", "#a78bfa",
-                "#3b82f6", "#0ea5e9", "#06b6d4", "#14b8a6", "#10b981",
-                "#22c55e", "#84cc16", "#eab308", "#f59e0b", "#f97316",
-                "#ef4444", "#ec4899", "#d946ef",
+                "#4979f6", "#1e379b", "#102170", "#2563eb", "#1d4ed8",
+                "#3b82f6", "#60a5fa", "#93c5fd", "#1e40af", "#1e3a8a",
+                "#2c5ff7", "#7ba4f8", "#0b3d91", "#4169e1", "#6495ed",
+                "#5b8def", "#a3bffa",
             ]
             fig_assets = go.Figure()
             for i, col in enumerate(asset_columns):
