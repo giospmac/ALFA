@@ -54,11 +54,13 @@ def render_markowitz_page() -> None:
         hovertemplate="Volatilidade: %{x:.2%}<br>Retorno: %{y:.2%}<br>Sharpe: %{marker.color:.2f}<extra></extra>"
     ))
 
+    frontier_sorted = result.frontier.sort_values("volatilidade")
+
     fig.add_trace(go.Scatter(
-        x=result.frontier["volatilidade"],
-        y=result.frontier["retorno"],
+        x=frontier_sorted["volatilidade"],
+        y=frontier_sorted["retorno"],
         mode="lines",
-        line=dict(color="#6B7280", width=1.8, dash="dash"),
+        line=dict(color="#1e379b", width=2, shape="spline"),
         name="Fronteira eficiente",
         hoverinfo="skip"
     ))
