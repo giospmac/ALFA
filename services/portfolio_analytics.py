@@ -1361,27 +1361,6 @@ def markowitz_frontier(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame) 
     max_sharpe_ret = float(max_sharpe_w @ annual_mean)
     max_sharpe_vol = portfolio_volatility(max_sharpe_w)
 
-    # --- Efficient frontier via optimizer ---
-    # Find the maximum achievable return (100% in the best asset)
-    max_ret = float(np.max(annual_mean))
-    target_returns = np.linspace(min_vol_ret, max_ret, 50)
-
-    frontier_vols: list[float] = []
-    frontier_rets: list[float] = []
-    for target in target_returns:
-        return_constraint = {"type": "eq", "fun": lambda w, t=target: float(w @ annual_mean) - t}
-        result = minimize(
-            portfolio_volatility, init_weights, method="SLSQP",
-            bounds=bounds,
-            constraints=[weight_sum_constraint, return_constraint],
-            options={"ftol": 1e-12, "maxiter": 1000},
-        )
-        if result.success:
-            frontier_vols.append(portfolio_volatility(result.x))
-            frontier_rets.append(target)
-
-    frontier = pd.DataFrame({"volatilidade": frontier_vols, "retorno": frontier_rets})
-
     # --- Monte Carlo scatter (for visualization only) ---
     rng = np.random.default_rng(42)
     n_simulations = 10000
@@ -1399,6 +1378,27 @@ def markowitz_frontier(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame) 
         sim_results[3:, index] = weights
 
     portfolios = pd.DataFrame(sim_results.T, columns=["retorno", "volatilidade", "sharpe", *columns])
+
+    # --- Efficient frontier via optimizer ---
+    # Limit frontier to the range visible in the simulated cloud
+    cloud_max_ret = float(portfolios["retorno"].quantile(0.98))
+    target_returns = np.linspace(min_vol_ret, cloud_max_ret, 50)
+
+    frontier_vols: list[float] = []
+    frontier_rets: list[float] = []
+    for target in target_returns:
+        return_constraint = {"type": "eq", "fun": lambda w, t=target: float(w @ annual_mean) - t}
+        result = minimize(
+            portfolio_volatility, init_weights, method="SLSQP",
+            bounds=bounds,
+            constraints=[weight_sum_constraint, return_constraint],
+            options={"ftol": 1e-12, "maxiter": 1000},
+        )
+        if result.success:
+            frontier_vols.append(portfolio_volatility(result.x))
+            frontier_rets.append(target)
+
+    frontier = pd.DataFrame({"volatilidade": frontier_vols, "retorno": frontier_rets})
 
     min_vol_weights_series = pd.Series(min_vol_w, index=columns)
     max_sharpe_weights_series = pd.Series(max_sharpe_w, index=columns)
