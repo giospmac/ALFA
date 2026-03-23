@@ -366,7 +366,6 @@ def _render_navigation() -> str:
             <div class="alfa-nav-brand" style="text-align: center;">
                 <img src="{logo_base64}" alt="ALFA Logo" style="max-width: 120px; object-fit: contain;">
             </div>
-            <div class="alfa-nav-section">Navegação</div>
             """,
             unsafe_allow_html=True,
         )
