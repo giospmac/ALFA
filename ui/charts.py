@@ -16,8 +16,8 @@ from services.portfolio_analytics import (
 
 PALETTE_PRIMARY = "#4979f6"
 PALETTE_SECONDARY = "#1e379b"
-PALETTE_NEGATIVE = "#102170"
-PALETTE_WARNING = "#102170"
+PALETTE_NEGATIVE = "#1e3a8a"
+PALETTE_WARNING = "#60a5fa"
 
 
 def _load_data():
@@ -165,13 +165,14 @@ def render_charts_page() -> None:
             nbinsx=50, 
             histnorm='probability density',
             marker_color=PALETTE_PRIMARY,
-            opacity=0.75,
+            opacity=0.7,
+            marker_line_color=PALETTE_SECONDARY,
+            marker_line_width=0.5,
             name="Retornos"
         ))
         
-        # Add vertical lines via shapes and annotations for Plotly
-        fig.add_vline(x=monte_carlo.var_5, line_dash="dash", line_color=PALETTE_NEGATIVE, annotation_text=f"VaR 5%: {monte_carlo.var_5:.2f}%", annotation_position="top left")
-        fig.add_vline(x=monte_carlo.cvar_5, line_dash="dash", line_color=PALETTE_WARNING, annotation_text=f"CVaR 5%: {monte_carlo.cvar_5:.2f}%", annotation_position="top right")
+        fig.add_vline(x=monte_carlo.var_5, line_dash="dash", line_width=2, line_color=PALETTE_NEGATIVE, annotation_text=f"VaR 5%: {monte_carlo.var_5:.2f}%", annotation_position="top left", annotation_font_color=PALETTE_NEGATIVE, annotation_font_size=11)
+        fig.add_vline(x=monte_carlo.cvar_5, line_dash="dot", line_width=2, line_color=PALETTE_WARNING, annotation_text=f"CVaR 5%: {monte_carlo.cvar_5:.2f}%", annotation_position="top right", annotation_font_color=PALETTE_WARNING, annotation_font_size=11)
         
         _apply_alfa_style(fig, title="Distribuição dos retornos simulados em 4 semanas")
         fig.update_xaxes(title_text="Retorno (%)")
