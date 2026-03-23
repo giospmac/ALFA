@@ -162,20 +162,32 @@ def render_charts_page() -> None:
         fig = go.Figure()
         fig.add_trace(go.Histogram(
             x=monte_carlo.simulated_returns * 100, 
-            nbinsx=50, 
+            nbinsx=60, 
             histnorm='probability density',
-            marker_color=PALETTE_PRIMARY,
-            opacity=0.7,
-            marker_line_color=PALETTE_SECONDARY,
-            marker_line_width=0.5,
-            name="Retornos"
+            marker_color="rgba(73, 121, 246, 0.55)",
+            marker_line_width=0,
+            name="Retornos",
+            hovertemplate="Retorno: %{x:.1f}%<extra></extra>",
         ))
         
-        fig.add_vline(x=monte_carlo.var_5, line_dash="dash", line_width=2, line_color=PALETTE_NEGATIVE, annotation_text=f"VaR 5%: {monte_carlo.var_5:.2f}%", annotation_position="top left", annotation_font_color=PALETTE_NEGATIVE, annotation_font_size=11)
-        fig.add_vline(x=monte_carlo.cvar_5, line_dash="dot", line_width=2, line_color=PALETTE_WARNING, annotation_text=f"CVaR 5%: {monte_carlo.cvar_5:.2f}%", annotation_position="top right", annotation_font_color=PALETTE_WARNING, annotation_font_size=11)
+        fig.add_vline(
+            x=monte_carlo.var_5, line_dash="dash", line_width=1.5,
+            line_color="#1e3a8a",
+            annotation_text=f"VaR 5%  {monte_carlo.var_5:.2f}%",
+            annotation_position="bottom left",
+            annotation_font=dict(color="#1e3a8a", size=10, family="Inter"),
+        )
+        fig.add_vline(
+            x=monte_carlo.cvar_5, line_dash="dash", line_width=1.5,
+            line_color="#1e3a8a",
+            annotation_text=f"CVaR 5%  {monte_carlo.cvar_5:.2f}%",
+            annotation_position="top left",
+            annotation_font=dict(color="#1e3a8a", size=10, family="Inter"),
+        )
         
-        _apply_alfa_style(fig, title="Distribuição dos retornos simulados em 4 semanas")
-        fig.update_xaxes(title_text="Retorno (%)")
+        _apply_alfa_style(fig)
+        fig.update_xaxes(title_text="", ticksuffix="%")
+        fig.update_yaxes(showticklabels=False, showgrid=False, title_text="")
         st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
 
     st.subheader("Volatilidade anualizada rolling")
