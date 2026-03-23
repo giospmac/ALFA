@@ -12,8 +12,23 @@ class PortfolioAnalysisError(Exception):
 
 
 DEFAULT_PORTFOLIO_ROWS = [
-    {"Ticker": "AAPL", "Peso (%)": 50.0},
-    {"Ticker": "MSFT", "Peso (%)": 50.0},
+    {"Ticker": "ITUB4.SA", "Peso (%)": 8.0},
+    {"Ticker": "BBAS3.SA", "Peso (%)": 4.0},
+    {"Ticker": "BPAC11.SA", "Peso (%)": 8.0},
+    {"Ticker": "RDOR3.SA", "Peso (%)": 6.0},
+    {"Ticker": "WEGE3.SA", "Peso (%)": 5.0},
+    {"Ticker": "ENGI11.SA", "Peso (%)": 6.0},
+    {"Ticker": "PRIO3.SA", "Peso (%)": 7.0},
+    {"Ticker": "SUZB3.SA", "Peso (%)": 4.0},
+    {"Ticker": "MBRF3.SA", "Peso (%)": 9.0},
+    {"Ticker": "MULT3.SA", "Peso (%)": 7.0},
+    {"Ticker": "TEND3.SA", "Peso (%)": 4.0},
+    {"Ticker": "RENT3.SA", "Peso (%)": 4.0},
+    {"Ticker": "CURY3.SA", "Peso (%)": 3.0},
+    {"Ticker": "RAIL3.SA", "Peso (%)": 5.0},
+    {"Ticker": "MSFT", "Peso (%)": 7.0},
+    {"Ticker": "NVDA", "Peso (%)": 7.0},
+    {"Ticker": "GOOGL", "Peso (%)": 6.0},
 ]
 
 
