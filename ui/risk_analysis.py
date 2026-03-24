@@ -9,6 +9,16 @@ import plotly.graph_objects as go
 import streamlit as st
 import matplotlib.colors as mcolors
 
+ALFA_DIVERGING = mcolors.LinearSegmentedColormap.from_list(
+    "alfa_diverging", ["#9CA3AF", "#D1D5DB", "#f4f5f0", "#93c5fd", "#4979f6", "#1e379b"]
+)
+ALFA_SEQ = mcolors.LinearSegmentedColormap.from_list(
+    "alfa_seq", ["#f4f5f0", "#93c5fd", "#4979f6", "#1e379b"]
+)
+ALFA_REDS = mcolors.LinearSegmentedColormap.from_list(
+    "alfa_reds", ["#f4f5f0", "#fca5a5", "#EF4444", "#991B1B"]
+)
+
 from core.config_repository import ConfigRepository
 from core.portfolio_repository import PortfolioRepository
 from services.capm import (
@@ -100,16 +110,13 @@ def render_risk_analysis_page() -> None:
         st.subheader("Rentabilidade acumulada")
         returns_df = _returns_table_to_frame(monthly_table, yearly_table)
         if not returns_df.empty:
-            custom_cmap = mcolors.LinearSegmentedColormap.from_list(
-                "alfa_diverging", ["#9CA3AF", "#D1D5DB", "#f4f5f0", "#93c5fd", "#4979f6", "#1e379b"]
-            )
             st.dataframe(
                 returns_df.style
                 .format("{:.2f}%", na_rep="-", subset=MONTH_LABELS + ["Acumulado (Ano)"])
                 .format("{:.0f}", na_rep="-", subset=["Ano"])
                 .highlight_null(color="rgba(0,0,0,0)")
                 .background_gradient(
-                    subset=MONTH_LABELS + ["Acumulado (Ano)"], cmap=custom_cmap, vmin=-15, vmax=15, text_color_threshold=0.5
+                    subset=MONTH_LABELS + ["Acumulado (Ano)"], cmap=ALFA_DIVERGING, vmin=-15, vmax=15, text_color_threshold=0.5
                 )
                 .set_properties(**{"text-align": "center"}),
                 use_container_width=True,
@@ -127,11 +134,8 @@ def render_risk_analysis_page() -> None:
         st.info("Dados insuficientes para a analise individual.")
     else:
         metrics_df = pd.DataFrame(metrics).rename(index={"media": "Média D.", "variancia": "Variância D.", "volatilidade": "Volatilidade D."})
-        alfa_cmap = mcolors.LinearSegmentedColormap.from_list(
-            "alfa_seq", ["#f4f5f0", "#93c5fd", "#4979f6", "#1e379b"]
-        )
         st.dataframe(
-            metrics_df.style.format("{:.4f}").background_gradient(cmap=alfa_cmap, axis=1, text_color_threshold=0.5),
+            metrics_df.style.format("{:.4f}").background_gradient(cmap=ALFA_SEQ, axis=1, text_color_threshold=0.5),
             use_container_width=True
         )
 
@@ -167,14 +171,14 @@ def render_risk_analysis_page() -> None:
         else:
             st.write("Nível de confiança 95%")
             var_95_df = pd.DataFrame(var_95).rename(index={"var": "VaR (R$)", "cvar": "CVaR (R$)"})
-            st.dataframe(var_95_df.style.format("R$ {:,.2f}").background_gradient(cmap="Reds", axis=0), use_container_width=True)
+            st.dataframe(var_95_df.style.format("R$ {:,.2f}").background_gradient(cmap=ALFA_REDS, axis=0, text_color_threshold=0.5), use_container_width=True)
     with var_col_2:
         if var_99 is None:
             st.info("Não foi possível calcular o VaR/CVaR a 99%.")
         else:
             st.write("Nível de confiança 99%")
             var_99_df = pd.DataFrame(var_99).rename(index={"var": "VaR (R$)", "cvar": "CVaR (R$)"})
-            st.dataframe(var_99_df.style.format("R$ {:,.2f}").background_gradient(cmap="Reds", axis=0), use_container_width=True)
+            st.dataframe(var_99_df.style.format("R$ {:,.2f}").background_gradient(cmap=ALFA_REDS, axis=0, text_color_threshold=0.5), use_container_width=True)
 
     # ── CAPM Forward-Looking ─────────────────────────────────────
     st.subheader("Avaliação de rendimento e risco (CAPM)")
@@ -266,7 +270,7 @@ def render_risk_analysis_page() -> None:
         format_dict["Alfa de Jensen"] = "{:.4f}"
         st.dataframe(
             asset_table.style.format(format_dict).background_gradient(
-                subset=["R²"], cmap="Blues", vmin=0, vmax=1
+                subset=["R²"], cmap=ALFA_SEQ, vmin=0, vmax=1, text_color_threshold=0.5
             ),
             use_container_width=True,
             hide_index=True,
@@ -346,7 +350,7 @@ def render_risk_analysis_page() -> None:
             }
         )
         st.dataframe(
-            indices_df.style.format("{:.4f}").background_gradient(cmap="Blues", axis=0), 
+            indices_df.style.format("{:.4f}").background_gradient(cmap=ALFA_SEQ, axis=0, text_color_threshold=0.5), 
             use_container_width=True
         )
 
@@ -358,6 +362,6 @@ def render_risk_analysis_page() -> None:
     else:
         matrix, _ = correlation_result
         st.dataframe(
-            matrix.style.format("{:.4f}").background_gradient(cmap="RdBu", vmin=-1, vmax=1), 
+            matrix.style.format("{:.4f}").background_gradient(cmap=ALFA_DIVERGING, vmin=-1, vmax=1, text_color_threshold=0.5), 
             use_container_width=True
         )
