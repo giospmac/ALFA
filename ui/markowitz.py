@@ -124,7 +124,7 @@ def _build_frontier_chart(
         fig.add_trace(go.Scatter(
             x=[current_vol], y=[current_ret],
             mode="markers",
-            marker=dict(size=12, symbol="circle", color="#EF4444", line=dict(color="#991B1B", width=1.5)),
+            marker=dict(size=12, symbol="circle", color="#93c5fd", line=dict(color="#60a5fa", width=1.5)),
             name="Carteira atual",
             hovertemplate="Vol: %{x:.2%}<br>Ret: %{y:.2%}<extra></extra>",
         ))
@@ -144,19 +144,18 @@ def _build_frontier_chart(
         x_range, y_range = None, None
 
     fig.update_layout(
-        title=dict(text="Fronteira Eficiente de Markowitz", font=dict(color="#111827", size=14, family="Inter"), pad=dict(b=10)),
         paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
         font=dict(color="#6B7280", size=11, family="Inter"),
         margin=dict(l=0, r=20, t=60, b=40), hovermode="closest",
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, title=""),
     )
     fig.update_xaxes(
-        title_text="Volatilidade anualizada", showgrid=True, gridcolor="#E5E7EB", gridwidth=1,
+        title_text="", showgrid=True, gridcolor="#E5E7EB", gridwidth=1,
         zeroline=False, showline=True, linecolor="#E5E7EB", linewidth=1, tickformat=".0%",
         range=x_range,
     )
     fig.update_yaxes(
-        title_text="Retorno anualizado esperado", showgrid=True, gridcolor="#E5E7EB", gridwidth=1,
+        title_text="", showgrid=True, gridcolor="#E5E7EB", gridwidth=1,
         zeroline=False, showline=False, tickformat=".0%",
         range=y_range,
     )
