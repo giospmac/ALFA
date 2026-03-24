@@ -287,11 +287,11 @@ def render_risk_analysis_page() -> None:
             
             fig_risk.add_trace(go.Bar(
                 x=sorted_risk["Ativo"], y=sorted_risk["Vol Sistêmica"],
-                name="Sistêmico", marker_color="#4979f6"
+                name="Sistêmico", marker_color="#1e379b"
             ))
             fig_risk.add_trace(go.Bar(
                 x=sorted_risk["Ativo"], y=sorted_risk["Vol Idiossincrática"],
-                name="Idiossincrático", marker_color="#93c5fd"
+                name="Idiossincrático", marker_color="#4979f6"
             ))
             
             fig_risk.update_layout(
@@ -301,7 +301,7 @@ def render_risk_analysis_page() -> None:
                 margin=dict(l=0, r=20, t=30, b=40),
                 legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
                 xaxis=dict(showgrid=False, zeroline=False, showline=True, linecolor="#E5E7EB", linewidth=1),
-                yaxis=dict(title="Volatilidade Anualizada", tickformat=".1%", showgrid=True, gridcolor="#E5E7EB", gridwidth=1, zeroline=False, showline=False)
+                yaxis=dict(title="", tickformat=".0%", showgrid=True, gridcolor="#E5E7EB", gridwidth=1, zeroline=False, showline=False)
             )
             st.plotly_chart(fig_risk, use_container_width=True, config={"displayModeBar": False})
 
