@@ -70,7 +70,10 @@ def _returns_table_to_frame(table_data: dict[int, dict[int, float]], yearly_tabl
         annual_value = yearly_table.get(year)
         row["Acumulado (Ano)"] = annual_value * 100 if annual_value is not None else np.nan
         rows.append(row)
-    return pd.DataFrame(rows)
+    df = pd.DataFrame(rows)
+    cols = MONTH_LABELS + ["Acumulado (Ano)"]
+    df[cols] = df[cols].astype(float)
+    return df
 
 
 def render_risk_analysis_page() -> None:
@@ -97,7 +100,7 @@ def render_risk_analysis_page() -> None:
                 returns_df.style
                 .format("{:.2f}%", na_rep="-", subset=MONTH_LABELS + ["Acumulado (Ano)"])
                 .format("{:.0f}", na_rep="-", subset=["Ano"])
-                .highlight_null(color="white")
+                .highlight_null(color="transparent")
                 .background_gradient(
                     subset=MONTH_LABELS + ["Acumulado (Ano)"], cmap=ALFA_DIVERGING, vmin=-15, vmax=15, text_color_threshold=0.5
                 )
