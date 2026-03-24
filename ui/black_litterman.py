@@ -195,7 +195,7 @@ def render_black_litterman_page() -> None:
     fig = go.Figure()
     fig.add_trace(go.Bar(
         x=comp_df["Ativo"], y=comp_df["Equilíbrio (π)"],
-        name="Equilíbrio", marker_color="#93c5fd",
+        name="Equilíbrio", marker_color="#1e379b",
     ))
     fig.add_trace(go.Bar(
         x=comp_df["Ativo"], y=comp_df["Posterior (BL)"],
