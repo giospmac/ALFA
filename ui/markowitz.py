@@ -9,11 +9,8 @@ import streamlit as st
 
 from core.config_repository import ConfigRepository
 from core.portfolio_repository import PortfolioRepository
-from services.black_litterman import BLView, run_black_litterman, save_views_to_csv
 from services.markowitz import (
     MarkowitzFullResult,
-    estimate_covariance,
-    estimate_expected_returns,
     run_markowitz,
 )
 from services.portfolio_analytics import (
@@ -23,7 +20,6 @@ from services.portfolio_analytics import (
 
 
 _PROJECT_ROOT = Path(__file__).resolve().parents[1]
-_VIEWS_CSV = _PROJECT_ROOT / "bl_views.csv"
 _CUSTOM_BLUES = [[0.0, "#93c5fd"], [0.35, "#4979f6"], [0.7, "#1e379b"], [1.0, "#102170"]]
 
 
@@ -59,8 +55,6 @@ def _build_frontier_chart(
     show_cloud: bool = True,
     current_vol: float | None = None,
     current_ret: float | None = None,
-    bl_vol: float | None = None,
-    bl_ret: float | None = None,
 ) -> go.Figure:
     fig = go.Figure()
 
@@ -135,17 +129,7 @@ def _build_frontier_chart(
             hovertemplate="Vol: %{x:.2%}<br>Ret: %{y:.2%}<extra></extra>",
         ))
 
-    # BL portfolio
-    if bl_vol is not None and bl_ret is not None:
-        fig.add_trace(go.Scatter(
-            x=[bl_vol], y=[bl_ret],
-            mode="markers",
-            marker=dict(size=12, symbol="hexagon", color="#059669", line=dict(color="#064E3B", width=1.5)),
-            name="Carteira BL",
-            hovertemplate="Vol: %{x:.2%}<br>Ret: %{y:.2%}<extra></extra>",
-        ))
-
-    # Collect all x/y data for axis ranges
+    # Axis ranges
     all_x, all_y = [], []
     for trace in fig.data:
         all_x.extend([v for v in trace.x if v is not None and np.isfinite(v)])
@@ -181,41 +165,6 @@ def _build_frontier_chart(
 
 
 # ------------------------------------------------------------------
-# Render functions
-# ------------------------------------------------------------------
-
-def _render_weights_table(result: MarkowitzFullResult, bl_weights: pd.Series | None = None):
-    """Weights comparison table."""
-    cols_dict = {
-        "Ativo": result.asset_names,
-        "Max Sharpe (%)": result.max_sharpe.weights.values * 100,
-        "Mín. Vol. (%)": result.min_variance.weights.values * 100,
-    }
-    if bl_weights is not None:
-        cols_dict["Black-Litterman (%)"] = bl_weights.reindex(result.asset_names).fillna(0).values * 100
-
-    weights_df = pd.DataFrame(cols_dict)
-    weights_df["Ativo"] = weights_df["Ativo"].str.replace(".SA", "", regex=False)
-    # Show only meaningful weights
-    threshold_cols = [c for c in weights_df.columns if c != "Ativo"]
-    mask = weights_df[threshold_cols].abs().max(axis=1) > 0.1
-    weights_df = weights_df[mask].sort_values("Max Sharpe (%)", ascending=False)
-
-    col_config = {c: st.column_config.NumberColumn(format="%.2f") for c in threshold_cols}
-    st.dataframe(weights_df, use_container_width=True, hide_index=True, column_config=col_config)
-
-
-def _render_summary_metrics(result: MarkowitzFullResult, bl_ret: float | None = None, bl_vol: float | None = None):
-    cols = st.columns(3 if bl_ret is None else 4)
-    cols[0].metric("Max Sharpe", f"{result.max_sharpe.expected_return:.1%} ret · {result.max_sharpe.volatility:.1%} vol")
-    cols[1].metric("Mín. Volatilidade", f"{result.min_variance.expected_return:.1%} ret · {result.min_variance.volatility:.1%} vol")
-    if result.tangency:
-        cols[2].metric("Tangência", f"{result.tangency.expected_return:.1%} ret · {result.tangency.volatility:.1%} vol")
-    if bl_ret is not None and bl_vol is not None:
-        cols[-1].metric("Black-Litterman", f"{bl_ret:.1%} ret · {bl_vol:.1%} vol")
-
-
-# ------------------------------------------------------------------
 # Main page
 # ------------------------------------------------------------------
 
@@ -223,7 +172,7 @@ def render_markowitz_page() -> None:
     portfolio_df, historical_df = _load_data()
 
     st.title("Fronteira Eficiente")
-    st.caption("Simulação, otimização e alocação Black-Litterman.")
+    st.caption("Simulação e otimização de carteiras pela teoria de Markowitz.")
 
     if portfolio_df.empty or historical_df.empty:
         st.info("Monte o portfolio e atualize o histórico na página principal para liberar a análise de Markowitz.")
@@ -237,12 +186,12 @@ def render_markowitz_page() -> None:
     # ── Mode selection ───────────────────────────────────────────
     mode_tab = st.radio(
         "Modo de análise",
-        ["Simulação", "Otimização", "Black-Litterman"],
+        ["Simulação", "Otimização"],
         horizontal=True,
         label_visibility="collapsed",
     )
 
-    # ── Premisses sidebar ────────────────────────────────────────
+    # ── Parameters ───────────────────────────────────────────────
     config_repo = ConfigRepository(base_path=_PROJECT_ROOT)
     config = config_repo.load()
 
@@ -251,113 +200,21 @@ def render_markowitz_page() -> None:
         rf_val = p1.number_input("Rf (a.a.)", value=config.risk_free_rate, min_value=0.0, max_value=1.0, step=0.0025, format="%.4f")
         emrp_val = p2.number_input("EMRP (a.a.)", value=config.emrp, min_value=0.0, max_value=0.30, step=0.005, format="%.4f")
         max_w = p3.number_input("Peso máx. por ativo", value=config.max_weight, min_value=0.05, max_value=1.0, step=0.05, format="%.2f")
-
-        ret_source = "historical"
-        if mode_tab == "Black-Litterman":
-            ret_source = "bl_posterior"
-        else:
-            ret_source = p4.selectbox("Retornos", ["Históricos", "CAPM forward"], index=0)
-            ret_source = "capm" if ret_source == "CAPM forward" else "historical"
+        ret_source = p4.selectbox("Retornos", ["Históricos", "CAPM forward"], index=0)
+        ret_source = "capm" if ret_source == "CAPM forward" else "historical"
 
         if rf_val != config.risk_free_rate or emrp_val != config.emrp or max_w != config.max_weight:
             config_repo.update(risk_free_rate=rf_val, emrp=emrp_val, max_weight=max_w)
 
-    # ── BL Views (only in BL mode) ───────────────────────────────
-    bl_result = None
-    bl_weights = None
-    bl_vol, bl_ret = None, None
-
-    if mode_tab == "Black-Litterman":
-        st.subheader("Views do gestor")
-        with st.expander("⚙️  Parâmetros Black-Litterman", expanded=False):
-            bl_c1, bl_c2, bl_c3 = st.columns(3)
-            delta_val = bl_c1.number_input("δ (aversão ao risco)", value=config.delta, min_value=0.1, max_value=10.0, step=0.1, format="%.2f")
-            tau_val = bl_c2.number_input("τ", value=config.tau, min_value=0.001, max_value=0.5, step=0.005, format="%.3f")
-            use_current = bl_c3.checkbox("Usar pesos atuais como market weights", value=True)
-            if delta_val != config.delta or tau_val != config.tau:
-                config_repo.update(delta=delta_val, tau=tau_val)
-
-        # Editable views
-        views_key = "bl_views_editor"
-        if views_key not in st.session_state:
-            st.session_state[views_key] = pd.DataFrame({
-                "Tipo": ["absolute"],
-                "Ativo 1": [asset_names[0].replace(".SA", "") if asset_names else ""],
-                "Ativo 2": [""],
-                "Retorno esperado (a.a.)": [0.14],
-                "Confiança (0-1)": [0.7],
-                "Ativo": [True],
-            })
-
-        edited_views = st.data_editor(
-            st.session_state[views_key],
-            num_rows="dynamic",
-            use_container_width=True,
-            column_config={
-                "Tipo": st.column_config.SelectboxColumn(options=["absolute", "relative"]),
-                "Retorno esperado (a.a.)": st.column_config.NumberColumn(format="%.4f"),
-                "Confiança (0-1)": st.column_config.NumberColumn(min_value=0.01, max_value=0.99, format="%.2f"),
-            },
-        )
-        st.session_state[views_key] = edited_views
-
-        # Parse views
-        bl_views: list[BLView] = []
-        for idx, row in edited_views.iterrows():
-            if not row.get("Ativo", True):
-                continue
-            a1 = str(row.get("Ativo 1", "")).strip()
-            if not a1:
-                continue
-            # Try to match with .SA suffix
-            a1_full = a1 if a1 in asset_names else f"{a1}.SA" if f"{a1}.SA" in asset_names else a1
-            a2_raw = str(row.get("Ativo 2", "")).strip()
-            a2_full = None
-            if a2_raw:
-                a2_full = a2_raw if a2_raw in asset_names else f"{a2_raw}.SA" if f"{a2_raw}.SA" in asset_names else a2_raw
-
-            bl_views.append(BLView(
-                view_id=idx,
-                view_type=str(row.get("Tipo", "absolute")),
-                asset_1=a1_full,
-                asset_2=a2_full,
-                expected_excess_return=float(row.get("Retorno esperado (a.a.)", 0.0)),
-                confidence=float(row.get("Confiança (0-1)", 0.5)),
-                enabled=True,
-            ))
-
-        if bl_views:
-            prices = historical_df[asset_names].ffill().bfill()
-            cov_df = estimate_covariance(prices)
-            mkt_w = _normalized_weights(portfolio_df, asset_names) if use_current else pd.Series(np.ones(len(asset_names)) / len(asset_names), index=asset_names)
-
-            bl_result = run_black_litterman(
-                cov=cov_df,
-                market_weights=mkt_w,
-                views=bl_views,
-                asset_universe=asset_names,
-                risk_aversion=delta_val,
-                tau=tau_val,
-                rf=rf_val,
-                max_weight=max_w,
-            )
-
-            if bl_result is not None:
-                bl_weights = bl_result.optimal_weights
-                bl_ret = float(bl_weights.values @ bl_result.posterior_mu.reindex(asset_names).fillna(0).values)
-                bl_vol = float(np.sqrt(bl_weights.values @ cov_df.reindex(index=asset_names, columns=asset_names).fillna(0).values @ bl_weights.values))
-
     # ── Run Markowitz ────────────────────────────────────────────
     run_sim = mode_tab == "Simulação"
-    bl_posterior = bl_result.posterior_mu if bl_result is not None else None
 
     result = run_markowitz(
         prices=historical_df,
         asset_names=asset_names,
         rf=rf_val,
-        return_method=ret_source if mode_tab != "Black-Litterman" else "historical",
+        return_method=ret_source,
         emrp=emrp_val,
-        bl_posterior=bl_posterior,
         max_weight=max_w,
         run_simulation=run_sim,
         n_frontier_points=60,
@@ -371,36 +228,33 @@ def render_markowitz_page() -> None:
     cur_vol, cur_ret = _current_portfolio_point(portfolio_df, historical_df, asset_names, result.mu, result.cov)
 
     # Chart
-    fig = _build_frontier_chart(
-        result,
-        show_cloud=run_sim,
-        current_vol=cur_vol, current_ret=cur_ret,
-        bl_vol=bl_vol, bl_ret=bl_ret,
-    )
+    fig = _build_frontier_chart(result, show_cloud=run_sim, current_vol=cur_vol, current_ret=cur_ret)
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
     # Weights table
     st.subheader("Carteiras otimizadas")
-    _render_weights_table(result, bl_weights)
+    weights_df = pd.DataFrame({
+        "Ativo": result.asset_names,
+        "Max Sharpe (%)": result.max_sharpe.weights.values * 100,
+        "Mín. Vol. (%)": result.min_variance.weights.values * 100,
+    })
+    weights_df["Ativo"] = weights_df["Ativo"].str.replace(".SA", "", regex=False)
+    mask = weights_df[["Max Sharpe (%)", "Mín. Vol. (%)"]].abs().max(axis=1) > 0.1
+    weights_df = weights_df[mask].sort_values("Max Sharpe (%)", ascending=False)
+
+    st.dataframe(
+        weights_df,
+        use_container_width=True,
+        hide_index=True,
+        column_config={
+            "Max Sharpe (%)": st.column_config.NumberColumn(format="%.2f"),
+            "Mín. Vol. (%)": st.column_config.NumberColumn(format="%.2f"),
+        },
+    )
 
     # Summary KPIs
-    _render_summary_metrics(result, bl_ret, bl_vol)
-
-    # BL comparison table
-    if bl_result is not None:
-        st.subheader("Retornos: Equilíbrio vs. Posterior")
-        comp_df = pd.DataFrame({
-            "Ativo": [a.replace(".SA", "") for a in asset_names],
-            "Retorno de Equilíbrio": bl_result.prior_pi.values,
-            "Retorno Posterior (BL)": bl_result.posterior_mu.values,
-            "Diferença": bl_result.posterior_mu.values - bl_result.prior_pi.values,
-        })
-        st.dataframe(
-            comp_df.style.format({
-                "Retorno de Equilíbrio": "{:.2%}",
-                "Retorno Posterior (BL)": "{:.2%}",
-                "Diferença": "{:+.2%}",
-            }),
-            use_container_width=True,
-            hide_index=True,
-        )
+    cols = st.columns(3)
+    cols[0].metric("Max Sharpe", f"{result.max_sharpe.expected_return:.1%} ret · {result.max_sharpe.volatility:.1%} vol")
+    cols[1].metric("Mín. Volatilidade", f"{result.min_variance.expected_return:.1%} ret · {result.min_variance.volatility:.1%} vol")
+    if result.tangency:
+        cols[2].metric("Tangência", f"{result.tangency.expected_return:.1%} ret · {result.tangency.volatility:.1%} vol")
