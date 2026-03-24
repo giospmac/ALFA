@@ -100,7 +100,7 @@ def render_risk_analysis_page() -> None:
         returns_df = _returns_table_to_frame(monthly_table, yearly_table)
         if not returns_df.empty:
             custom_cmap = mcolors.LinearSegmentedColormap.from_list(
-                "alfa_diverging", ["#EF4444", "#fca5a5", "#f4f5f0", "#93c5fd", "#4979f6", "#1e379b"]
+                "alfa_diverging", ["#9CA3AF", "#D1D5DB", "#f4f5f0", "#93c5fd", "#4979f6", "#1e379b"]
             )
             st.dataframe(
                 returns_df.style
