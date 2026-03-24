@@ -282,11 +282,11 @@ def render_risk_analysis_page() -> None:
             sorted_risk = asset_table.sort_values("Vol Total", ascending=False)
             
             fig_risk.add_trace(go.Bar(
-                x=sorted_risk["Ticker"], y=sorted_risk["Vol Sistêmica"],
+                x=sorted_risk["Ativo"], y=sorted_risk["Vol Sistêmica"],
                 name="Sistêmico", marker_color="#4979f6"
             ))
             fig_risk.add_trace(go.Bar(
-                x=sorted_risk["Ticker"], y=sorted_risk["Vol Idiossincrática"],
+                x=sorted_risk["Ativo"], y=sorted_risk["Vol Idiossincrática"],
                 name="Idiossincrático", marker_color="#93c5fd"
             ))
             
@@ -314,7 +314,7 @@ def render_risk_analysis_page() -> None:
             ))
             fig_sml.add_trace(go.Scatter(
                 x=sorted_risk["Beta"], y=sorted_risk["Retorno Histórico"],
-                mode="markers+text", text=sorted_risk["Ticker"], textposition="top center",
+                mode="markers+text", text=sorted_risk["Ativo"], textposition="top center",
                 name="Ativos",
                 marker=dict(size=10, color="#4979f6", line=dict(width=1, color="white")),
                 hovertemplate="<b>%{text}</b><br>Beta: %{x:.2f}<br>Retorno: %{y:.2%}<extra></extra>"
