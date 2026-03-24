@@ -146,8 +146,8 @@ def render_charts_page() -> None:
             fillcolor='rgba(73, 121, 246, 0.15)',
             name="Drawdown"
         ))
-        _apply_alfa_style(fig, title="Histórico de drawdown do portfolio")
-        fig.update_yaxes(title_text="Drawdown (%)")
+        _apply_alfa_style(fig)
+        fig.update_yaxes(title_text="", tickformat=".0%")
         st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
 
     st.subheader("Simulação de Monte Carlo")
@@ -159,36 +159,69 @@ def render_charts_page() -> None:
         metric_col_1.metric("VaR 5%", f"{monte_carlo.var_5:.2f}%")
         metric_col_2.metric("CVaR 5%", f"{monte_carlo.cvar_5:.2f}%")
 
+        import numpy as np
+        from scipy.stats import gaussian_kde
+
+        sim_pct = monte_carlo.simulated_returns * 100
+        kde = gaussian_kde(sim_pct, bw_method=0.25)
+        x_range = np.linspace(float(sim_pct.min()) - 2, float(sim_pct.max()) + 2, 300)
+        y_kde = kde(x_range)
+
         fig = go.Figure()
-        fig.add_trace(go.Histogram(
-            x=monte_carlo.simulated_returns * 100, 
-            nbinsx=60, 
-            histnorm='probability density',
-            marker_color="rgba(73, 121, 246, 0.55)",
-            marker_line_width=0,
-            name="Retornos",
-            hovertemplate="Retorno: %{x:.1f}%<extra></extra>",
+
+        # Tail region (below VaR) — shaded red
+        tail_mask = x_range <= monte_carlo.var_5
+        if tail_mask.any():
+            fig.add_trace(go.Scatter(
+                x=x_range[tail_mask], y=y_kde[tail_mask],
+                fill="tozeroy", mode="lines",
+                line=dict(width=0),
+                fillcolor="rgba(239, 68, 68, 0.25)",
+                name="Cauda (VaR 5%)",
+                hoverinfo="skip",
+            ))
+
+        # Full distribution curve — main fill
+        fig.add_trace(go.Scatter(
+            x=x_range, y=y_kde,
+            fill="tozeroy", mode="lines",
+            line=dict(color="#4979f6", width=2.2),
+            fillcolor="rgba(73, 121, 246, 0.12)",
+            name="Distribuição",
+            hovertemplate="Retorno: %{x:.1f}%<br>Densidade: %{y:.4f}<extra></extra>",
         ))
-        
-        fig.add_vline(
-            x=monte_carlo.var_5, line_dash="dash", line_width=1.5,
-            line_color="#1e3a8a",
-            annotation_text=f"VaR 5%  {monte_carlo.var_5:.2f}%",
-            annotation_position="bottom left",
-            annotation_font=dict(color="#1e3a8a", size=10, family="Inter"),
-        )
-        fig.add_vline(
-            x=monte_carlo.cvar_5, line_dash="dash", line_width=1.5,
-            line_color="#1e3a8a",
-            annotation_text=f"CVaR 5%  {monte_carlo.cvar_5:.2f}%",
-            annotation_position="top left",
-            annotation_font=dict(color="#1e3a8a", size=10, family="Inter"),
-        )
-        
+
+        # VaR line
+        fig.add_trace(go.Scatter(
+            x=[monte_carlo.var_5, monte_carlo.var_5],
+            y=[0, float(kde([monte_carlo.var_5])[0])],
+            mode="lines",
+            line=dict(color="#EF4444", width=2, dash="dash"),
+            name=f"VaR 5%  ({monte_carlo.var_5:.2f}%)",
+            hoverinfo="skip",
+        ))
+
+        # CVaR line
+        fig.add_trace(go.Scatter(
+            x=[monte_carlo.cvar_5, monte_carlo.cvar_5],
+            y=[0, float(kde([monte_carlo.cvar_5])[0])],
+            mode="lines",
+            line=dict(color="#991B1B", width=2, dash="dot"),
+            name=f"CVaR 5%  ({monte_carlo.cvar_5:.2f}%)",
+            hoverinfo="skip",
+        ))
+
         _apply_alfa_style(fig)
+        fig.update_layout(
+            showlegend=True,
+            legend=dict(
+                orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1,
+                font=dict(size=10),
+            ),
+        )
         fig.update_xaxes(title_text="", ticksuffix="%")
         fig.update_yaxes(showticklabels=False, showgrid=False, title_text="")
-        st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+        st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
     st.subheader("Volatilidade anualizada rolling")
     rolling_vol = rolling_volatility_series(portfolio_df, historical_df)
@@ -198,6 +231,6 @@ def render_charts_page() -> None:
         fig = go.Figure()
         fig.add_trace(go.Scatter(x=rolling_vol.index, y=rolling_vol.values, mode='lines', line=dict(color=PALETTE_PRIMARY, width=2), name="Volatilidade"))
         
-        _apply_alfa_style(fig, title="Volatilidade anualizada · janela de 21 dias úteis")
-        fig.update_yaxes(title_text="Volatilidade", tickformat=".0%")
+        _apply_alfa_style(fig)
+        fig.update_yaxes(title_text="", tickformat=".0%")
         st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
