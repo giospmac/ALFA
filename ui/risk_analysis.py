@@ -298,60 +298,58 @@ def render_risk_analysis_page() -> None:
 
         # ── Risk Decomposition & SML Charts ─────────────────────
         st.markdown("<br>", unsafe_allow_html=True)
-        col_chart_1, col_chart_2 = st.columns(2)
+        
+        st.subheader("Decomposição de Risco")
+        fig_risk = go.Figure()
+        sorted_risk = asset_table.sort_values("Vol Total", ascending=False)
+        
+        fig_risk.add_trace(go.Bar(
+            x=sorted_risk["Ativo"], y=sorted_risk["Vol Sistêmica"],
+            name="Sistêmico", marker_color="#1e379b"
+        ))
+        fig_risk.add_trace(go.Bar(
+            x=sorted_risk["Ativo"], y=sorted_risk["Vol Idiossincrática"],
+            name="Idiossincrático", marker_color="#4979f6"
+        ))
+        
+        fig_risk.update_layout(
+            barmode="stack",
+            paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+            font=dict(color="#6B7280", size=11, family="Inter"),
+            margin=dict(l=0, r=20, t=30, b=40),
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+            xaxis=dict(showgrid=False, zeroline=False, showline=True, linecolor="#E5E7EB", linewidth=1),
+            yaxis=dict(title="", tickformat=".0%", showgrid=True, gridcolor="#E5E7EB", gridwidth=1, zeroline=False, showline=False)
+        )
+        st.plotly_chart(fig_risk, use_container_width=True, config={"displayModeBar": False})
 
-        with col_chart_1:
-            st.subheader("Decomposição de Risco")
-            fig_risk = go.Figure()
-            sorted_risk = asset_table.sort_values("Vol Total", ascending=False)
-            
-            fig_risk.add_trace(go.Bar(
-                x=sorted_risk["Ativo"], y=sorted_risk["Vol Sistêmica"],
-                name="Sistêmico", marker_color="#1e379b"
-            ))
-            fig_risk.add_trace(go.Bar(
-                x=sorted_risk["Ativo"], y=sorted_risk["Vol Idiossincrática"],
-                name="Idiossincrático", marker_color="#4979f6"
-            ))
-            
-            fig_risk.update_layout(
-                barmode="stack",
-                paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-                font=dict(color="#6B7280", size=11, family="Inter"),
-                margin=dict(l=0, r=20, t=30, b=40),
-                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-                xaxis=dict(showgrid=False, zeroline=False, showline=True, linecolor="#E5E7EB", linewidth=1),
-                yaxis=dict(title="", tickformat=".0%", showgrid=True, gridcolor="#E5E7EB", gridwidth=1, zeroline=False, showline=False)
-            )
-            st.plotly_chart(fig_risk, use_container_width=True, config={"displayModeBar": False})
-
-        with col_chart_2:
-            st.subheader("SML (Security Market Line)")
-            fig_sml = go.Figure()
-            max_beta = max(1.5, sorted_risk["Beta"].max() * 1.1) if not sorted_risk.empty else 1.5
-            x_sml = np.linspace(0, max_beta, 100)
-            y_sml = rf_annual + x_sml * emrp_annual
-            fig_sml.add_trace(go.Scatter(
-                x=x_sml, y=y_sml, mode="lines", name="SML Teórica",
-                line=dict(color="#1e379b", width=2, dash="dash"),
-                hovertemplate="Beta: %{x:.2f}<br>Retorno CAPM: %{y:.2%}<extra></extra>"
-            ))
-            fig_sml.add_trace(go.Scatter(
-                x=sorted_risk["Beta"], y=sorted_risk["Retorno Histórico"],
-                mode="markers+text", text=sorted_risk["Ativo"], textposition="top center",
-                name="Ativos",
-                marker=dict(size=10, color="#4979f6", line=dict(width=1, color="white")),
-                hovertemplate="<b>%{text}</b><br>Beta: %{x:.2f}<br>Retorno: %{y:.2%}<extra></extra>"
-            ))
-            fig_sml.update_layout(
-                paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
-                font=dict(color="#6B7280", size=11, family="Inter"),
-                margin=dict(l=0, r=20, t=30, b=40),
-                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-                xaxis=dict(title="Beta de Mercado", showgrid=False, zeroline=False, showline=True, linecolor="#E5E7EB", linewidth=1),
-                yaxis=dict(title="Retorno Anualizado", tickformat=".1%", showgrid=True, gridcolor="#E5E7EB", gridwidth=1, zeroline=False, showline=False)
-            )
-            st.plotly_chart(fig_sml, use_container_width=True, config={"displayModeBar": False})
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.subheader("SML (Security Market Line)")
+        fig_sml = go.Figure()
+        max_beta = max(1.5, sorted_risk["Beta"].max() * 1.1) if not sorted_risk.empty else 1.5
+        x_sml = np.linspace(0, max_beta, 100)
+        y_sml = rf_annual + x_sml * emrp_annual
+        fig_sml.add_trace(go.Scatter(
+            x=x_sml, y=y_sml, mode="lines", name="SML Teórica",
+            line=dict(color="#1e379b", width=2, dash="dash"),
+            hovertemplate="Beta: %{x:.2f}<br>Retorno CAPM: %{y:.2%}<extra></extra>"
+        ))
+        fig_sml.add_trace(go.Scatter(
+            x=sorted_risk["Beta"], y=sorted_risk["Retorno Histórico"],
+            mode="markers+text", text=sorted_risk["Ativo"], textposition="top center",
+            name="Ativos",
+            marker=dict(size=10, color="#4979f6", line=dict(width=1, color="white")),
+            hovertemplate="<b>%{text}</b><br>Beta: %{x:.2f}<br>Retorno: %{y:.2%}<extra></extra>"
+        ))
+        fig_sml.update_layout(
+            paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+            font=dict(color="#6B7280", size=11, family="Inter"),
+            margin=dict(l=0, r=20, t=30, b=40),
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+            xaxis=dict(title="Beta de Mercado", showgrid=False, zeroline=False, showline=True, linecolor="#E5E7EB", linewidth=1),
+            yaxis=dict(title="Retorno Anualizado", tickformat=".1%", showgrid=True, gridcolor="#E5E7EB", gridwidth=1, zeroline=False, showline=False)
+        )
+        st.plotly_chart(fig_sml, use_container_width=True, config={"displayModeBar": False})
     else:
         st.info("São necessários pelo menos 20 observações por ativo para a tabela CAPM.")
 
