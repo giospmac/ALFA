@@ -119,16 +119,13 @@ def _portfolio_table_view(portfolio_df: pd.DataFrame, total_pl: float) -> pd.Dat
             "ticker": "Ticker",
             "nome": "Nome",
             "tipo_ativo": "Tipo",
-            "preco": "Preco/Titulo",
-            "taxa": "Taxa (%)",
-            "porcentagem_desejada": "Peso Desejado (%)",
             "porcentagem_real": "Peso Real (%)",
             "qtd_acoes": "Quantidade",
             "valor_real": "Valor Real (R$)",
             "data_fechamento": "Data Base",
-            "data_vencimento": "Vencimento",
         }
     )
+    view_df = view_df.drop(columns=[c for c in ["preco", "taxa", "porcentagem_desejada", "data_vencimento"] if c in view_df.columns], errors="ignore")
 
     cash_remaining = max(total_pl - pd.to_numeric(portfolio_df["valor_real"], errors="coerce").fillna(0).sum(), 0.0)
     cash_row = pd.DataFrame(
@@ -137,20 +134,16 @@ def _portfolio_table_view(portfolio_df: pd.DataFrame, total_pl: float) -> pd.Dat
                 "Ticker": "Valor Restante",
                 "Nome": "",
                 "Tipo": "caixa",
-                "Preco/Titulo": "",
-                "Taxa (%)": "",
-                "Peso Desejado (%)": "",
                 "Peso Real (%)": (cash_remaining / total_pl) * 100 if total_pl > 0 else 0.0,
                 "Quantidade": "",
                 "Valor Real (R$)": cash_remaining,
                 "Data Base": "",
-                "Vencimento": "",
             }
         ]
     )
     view_df = pd.concat([view_df, cash_row], ignore_index=True)
 
-    for column in ["Preco/Titulo", "Taxa (%)", "Peso Desejado (%)", "Peso Real (%)", "Quantidade", "Valor Real (R$)"]:
+    for column in ["Peso Real (%)", "Quantidade", "Valor Real (R$)"]:
         if column in view_df.columns:
             view_df[column] = pd.to_numeric(view_df[column], errors="coerce")
 
@@ -265,10 +258,10 @@ def render_home_page() -> None:
         # Formatar colunas para o padrão BR antes de exibir
         display_df = _portfolio_table_view(portfolio_df, total_pl)
         if not display_df.empty:
-            for col in ["Preco/Titulo", "Valor Real (R$)"]:
+            for col in ["Valor Real (R$)"]:
                 if col in display_df.columns:
                     display_df[col] = display_df[col].apply(lambda x: _format_br_number(x, True))
-            for col in ["Taxa (%)", "Peso Desejado (%)", "Peso Real (%)", "Quantidade"]:
+            for col in ["Peso Real (%)", "Quantidade"]:
                 if col in display_df.columns:
                     display_df[col] = display_df[col].apply(lambda x: _format_br_number(x, False))
 
