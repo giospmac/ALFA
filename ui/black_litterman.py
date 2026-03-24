@@ -60,20 +60,38 @@ def render_black_litterman_page() -> None:
     config_repo = ConfigRepository(base_path=_PROJECT_ROOT)
     config = config_repo.load()
 
-    with st.expander("⚙️  Parâmetros Black-Litterman", expanded=False):
-        p1, p2, p3, p4 = st.columns(4)
-        rf_val = p1.number_input("Rf (a.a.)", value=config.risk_free_rate, min_value=0.0, max_value=1.0, step=0.0025, format="%.4f", key="bl_rf")
-        delta_val = p2.number_input("δ (aversão ao risco)", value=config.delta, min_value=0.1, max_value=10.0, step=0.1, format="%.2f", key="bl_delta")
-        tau_val = p3.number_input("τ", value=config.tau, min_value=0.001, max_value=0.5, step=0.005, format="%.3f", key="bl_tau")
-        max_w = p4.number_input("Peso máx. por ativo", value=config.max_weight, min_value=0.05, max_value=1.0, step=0.05, format="%.2f", key="bl_maxw")
-        use_current = st.checkbox("Usar pesos atuais da carteira como market weights", value=True)
+    with st.expander("⚙️ Configurações Básicas", expanded=False):
+        st.write("Defina as regras básicas de como o modelo deve balancear o seu dinheiro.")
+        p1, p2 = st.columns(2)
+        rf_val = p1.number_input(
+            "Rendimento Seguro (Selic a.a.)", 
+            value=config.risk_free_rate, min_value=0.0, max_value=1.0, step=0.0025, format="%.4f", key="bl_rf",
+            help="Taxa de rendimento livre de risco (ex: Tesouro Selic atual)."
+        )
+        max_w = p2.number_input(
+            "Concentração Máxima por Ativo", 
+            value=config.max_weight, min_value=0.05, max_value=1.0, step=0.05, format="%.2f", key="bl_maxw",
+            help="Limite de quanto do seu dinheiro pode ficar em uma única ação (ex: 1.00 = 100%)."
+        )
+        
+        use_current = st.checkbox(
+            "Usar minha carteira atual como ponto de partida neutro", 
+            value=True,
+            help="O modelo vai tentar respeitar os pesos que você já tem hoje, alterando apenas os ativos sobre os quais você colocar uma 'Visão' abaixo."
+        )
+
+        with st.expander("🔧 Modo Avançado (Nerd)"):
+            st.caption("Ajustes finos do algoritmo. Se não souber o que são, deixe como estão!")
+            a1, a2 = st.columns(2)
+            delta_val = a1.number_input("Aversão ao Risco (δ)", value=config.delta, min_value=0.1, max_value=10.0, step=0.1, format="%.2f", key="bl_delta")
+            tau_val = a2.number_input("Peso do Histórico (τ)", value=config.tau, min_value=0.001, max_value=0.5, step=0.005, format="%.3f", key="bl_tau")
 
         if delta_val != config.delta or tau_val != config.tau or rf_val != config.risk_free_rate or max_w != config.max_weight:
             config_repo.update(risk_free_rate=rf_val, delta=delta_val, tau=tau_val, max_weight=max_w)
 
     # ── Views editor ─────────────────────────────────────────────
-    st.subheader("Views do gestor")
-    st.caption('Adicione visões absolutas ou relativas. Ex: "PETR4 terá retorno de 14% a.a." ou "VALE3 supera PETR4 em 3 p.p."')
+    st.subheader("Suas Visões de Mercado")
+    st.caption('Como você acha que seus investimentos vão render? Adicione sua expectativa aqui (ex: "Acho que BBAS3 vai render 14% ao ano" ou "Acho que VALE vai render mais que PETR").')
 
     views_key = "bl_views_editor_page"
     if views_key not in st.session_state:
