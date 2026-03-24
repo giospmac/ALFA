@@ -12,12 +12,15 @@ import matplotlib.colors as mcolors
 ALFA_DIVERGING = mcolors.LinearSegmentedColormap.from_list(
     "alfa_diverging", ["#9CA3AF", "#D1D5DB", "#f4f5f0", "#93c5fd", "#4979f6", "#1e379b"]
 )
+ALFA_DIVERGING.set_bad(color="#ffffff")
 ALFA_SEQ = mcolors.LinearSegmentedColormap.from_list(
     "alfa_seq", ["#f4f5f0", "#93c5fd", "#4979f6", "#1e379b"]
 )
+ALFA_SEQ.set_bad(color="#ffffff")
 ALFA_REDS = mcolors.LinearSegmentedColormap.from_list(
     "alfa_reds", ["#f4f5f0", "#fca5a5", "#EF4444", "#991B1B"]
 )
+ALFA_REDS.set_bad(color="#ffffff")
 
 from core.config_repository import ConfigRepository
 from core.portfolio_repository import PortfolioRepository
@@ -98,8 +101,8 @@ def render_risk_analysis_page() -> None:
         if not returns_df.empty:
             st.dataframe(
                 returns_df.style
-                .format("{:.2f}%", na_rep="-", subset=MONTH_LABELS + ["Acumulado (Ano)"])
-                .format("{:.0f}", na_rep="-", subset=["Ano"])
+                .format("{:.2f}%", na_rep="", subset=MONTH_LABELS + ["Acumulado (Ano)"])
+                .format("{:.0f}", na_rep="", subset=["Ano"])
                 .highlight_null(color="transparent")
                 .background_gradient(
                     subset=MONTH_LABELS + ["Acumulado (Ano)"], cmap=ALFA_DIVERGING, vmin=-15, vmax=15, text_color_threshold=0.5
