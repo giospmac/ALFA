@@ -108,9 +108,9 @@ def render_risk_analysis_page() -> None:
                 .format("{:.0f}", na_rep="-", subset=["Ano"])
                 .highlight_null(color="rgba(0,0,0,0)")
                 .background_gradient(
-                    subset=MONTH_LABELS + ["Acumulado (Ano)"], cmap=custom_cmap, vmin=-15, vmax=15
+                    subset=MONTH_LABELS + ["Acumulado (Ano)"], cmap=custom_cmap, vmin=-15, vmax=15, text_color_threshold=0.5
                 )
-                .set_properties(**{"text-align": "center", "color": "#111827"}),
+                .set_properties(**{"text-align": "center"}),
                 use_container_width=True,
                 hide_index=True,
             )
@@ -130,8 +130,7 @@ def render_risk_analysis_page() -> None:
             "alfa_seq", ["#f4f5f0", "#93c5fd", "#4979f6", "#1e379b"]
         )
         st.dataframe(
-            metrics_df.style.format("{:.4f}").background_gradient(cmap=alfa_cmap, axis=1)
-            .set_properties(**{"color": "#111827"}),
+            metrics_df.style.format("{:.4f}").background_gradient(cmap=alfa_cmap, axis=1, text_color_threshold=0.5),
             use_container_width=True
         )
 
