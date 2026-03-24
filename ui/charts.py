@@ -123,12 +123,15 @@ def render_charts_page() -> None:
             go.Bar(
                 x=contribution_df["ticker"], 
                 y=contribution_df["contribuicao"] * 100,
-                marker_color=PALETTE_PRIMARY,
-                width=0.4
+                marker_color="#1e379b",
+                width=0.4,
+                text=contribution_df["contribuicao"] * 100,
+                texttemplate="%{text:.2f}%",
+                textposition="outside"
             )
         ])
-        _apply_alfa_style(fig, title="Contribuição de cada ativo no último ano")
-        fig.update_yaxes(title_text="Contribuição (%)")
+        _apply_alfa_style(fig, title="")
+        fig.update_yaxes(title_text="", showticklabels=False, showgrid=True, gridcolor="#E5E7EB", zeroline=True)
         st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
 
     st.subheader("Drawdown histórico")
