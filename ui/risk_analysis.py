@@ -101,8 +101,8 @@ def render_risk_analysis_page() -> None:
         if not returns_df.empty:
             st.dataframe(
                 returns_df.style
-                .format("{:.2f}%", na_rep="", subset=MONTH_LABELS + ["Acumulado (Ano)"])
-                .format("{:.0f}", na_rep="", subset=["Ano"])
+                .format("{:.2f}%", na_rep="-", subset=MONTH_LABELS + ["Acumulado (Ano)"])
+                .format("{:.0f}", na_rep="-", subset=["Ano"])
                 .highlight_null(color="transparent")
                 .background_gradient(
                     subset=MONTH_LABELS + ["Acumulado (Ano)"], cmap=ALFA_DIVERGING, vmin=-15, vmax=15, text_color_threshold=0.5
