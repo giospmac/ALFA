@@ -171,14 +171,14 @@ def render_risk_analysis_page() -> None:
         else:
             st.write("Nível de confiança 95%")
             var_95_df = pd.DataFrame(var_95).rename(index={"var": "VaR (R$)", "cvar": "CVaR (R$)"})
-            st.dataframe(var_95_df.style.format("R$ {:,.2f}").background_gradient(cmap=ALFA_REDS, axis=0, text_color_threshold=0.5), use_container_width=True)
+            st.dataframe(var_95_df.style.format("R$ {:,.2f}").background_gradient(cmap=ALFA_SEQ, axis=0, text_color_threshold=0.5), use_container_width=True)
     with var_col_2:
         if var_99 is None:
             st.info("Não foi possível calcular o VaR/CVaR a 99%.")
         else:
             st.write("Nível de confiança 99%")
             var_99_df = pd.DataFrame(var_99).rename(index={"var": "VaR (R$)", "cvar": "CVaR (R$)"})
-            st.dataframe(var_99_df.style.format("R$ {:,.2f}").background_gradient(cmap=ALFA_REDS, axis=0, text_color_threshold=0.5), use_container_width=True)
+            st.dataframe(var_99_df.style.format("R$ {:,.2f}").background_gradient(cmap=ALFA_SEQ, axis=0, text_color_threshold=0.5), use_container_width=True)
 
     # ── CAPM Forward-Looking ─────────────────────────────────────
     st.subheader("Avaliação de rendimento e risco (CAPM)")
