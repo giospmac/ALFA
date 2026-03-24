@@ -100,7 +100,7 @@ def render_risk_analysis_page() -> None:
         returns_df = _returns_table_to_frame(monthly_table, yearly_table)
         if not returns_df.empty:
             custom_cmap = mcolors.LinearSegmentedColormap.from_list(
-                "custom_blues", ["#97bdff", "#4979f6", "#102170"]
+                "alfa_diverging", ["#EF4444", "#fca5a5", "#f4f5f0", "#93c5fd", "#4979f6", "#1e379b"]
             )
             st.dataframe(
                 returns_df.style
@@ -108,9 +108,9 @@ def render_risk_analysis_page() -> None:
                 .format("{:.0f}", na_rep="-", subset=["Ano"])
                 .highlight_null(color="rgba(0,0,0,0)")
                 .background_gradient(
-                    subset=MONTH_LABELS + ["Acumulado (Ano)"], cmap=custom_cmap
+                    subset=MONTH_LABELS + ["Acumulado (Ano)"], cmap=custom_cmap, vmin=-15, vmax=15
                 )
-                .set_properties(**{"text-align": "center"}),
+                .set_properties(**{"text-align": "center", "color": "#111827"}),
                 use_container_width=True,
                 hide_index=True,
             )
@@ -126,8 +126,12 @@ def render_risk_analysis_page() -> None:
         st.info("Dados insuficientes para a analise individual.")
     else:
         metrics_df = pd.DataFrame(metrics).rename(index={"media": "Média D.", "variancia": "Variância D.", "volatilidade": "Volatilidade D."})
+        alfa_cmap = mcolors.LinearSegmentedColormap.from_list(
+            "alfa_seq", ["#f4f5f0", "#93c5fd", "#4979f6", "#1e379b"]
+        )
         st.dataframe(
-            metrics_df.style.format("{:.4f}").background_gradient(cmap="Blues", axis=1), 
+            metrics_df.style.format("{:.4f}").background_gradient(cmap=alfa_cmap, axis=1)
+            .set_properties(**{"color": "#111827"}),
             use_container_width=True
         )
 
