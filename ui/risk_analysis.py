@@ -107,6 +107,7 @@ def render_risk_analysis_page() -> None:
                 )
                 .format("{:.0f}", na_rep="-", subset=["Ano"])
                 .background_gradient(
+                    axis=None,
                     subset=cols, 
                     gmap=numeric_df,
                     cmap=ALFA_DIVERGING, 
