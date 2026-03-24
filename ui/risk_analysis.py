@@ -142,12 +142,31 @@ def render_risk_analysis_page() -> None:
         st.markdown("<br>", unsafe_allow_html=True)
         st.subheader("Risco vs Retorno Esperado")
         fig_scatter = go.Figure()
+        x_scatter = metrics_df.loc["Volatilidade D."] * np.sqrt(TRADING_DAYS_PER_YEAR)
+        y_scatter = metrics_df.loc["Média D."] * TRADING_DAYS_PER_YEAR
+
+        if len(x_scatter) > 1:
+            try:
+                m, b = np.polyfit(np.array(x_scatter, dtype=float), np.array(y_scatter, dtype=float), 1)
+                x_line = np.array([x_scatter.min() * 0.9, x_scatter.max() * 1.1])
+                y_line = m * x_line + b
+                fig_scatter.add_trace(go.Scatter(
+                    x=x_line, y=y_line,
+                    mode="lines",
+                    name="Tendência",
+                    line=dict(color="#9CA3AF", width=1, dash="dash"),
+                    hoverinfo="skip"
+                ))
+            except Exception:
+                pass
+
         fig_scatter.add_trace(go.Scatter(
-            x=metrics_df.loc["Volatilidade D."] * np.sqrt(TRADING_DAYS_PER_YEAR),
-            y=metrics_df.loc["Média D."] * TRADING_DAYS_PER_YEAR,
+            x=x_scatter,
+            y=y_scatter,
             mode="markers+text",
             text=metrics_df.columns,
             textposition="top center",
+            name="Ativos",
             marker=dict(size=12, color="#4979f6", line=dict(width=1, color="white")),
             hovertemplate="<b>%{text}</b><br>Retorno (Anual): %{y:.2%}<br>Volatilidade (Anual): %{x:.2%}<extra></extra>"
         ))
@@ -155,8 +174,9 @@ def render_risk_analysis_page() -> None:
             paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
             font=dict(color="#6B7280", size=11, family="Inter"),
             margin=dict(l=0, r=20, t=30, b=40),
-            xaxis=dict(title="Volatilidade Anualizada", tickformat=".1%", showgrid=False, zeroline=False, showline=True, linecolor="#E5E7EB", linewidth=1),
-            yaxis=dict(title="Retorno Médio Anualizado", tickformat=".1%", showgrid=True, gridcolor="#E5E7EB", gridwidth=1, zeroline=False, showline=False)
+            showlegend=False,
+            xaxis=dict(title="", tickformat=".0%", showgrid=False, zeroline=False, showline=True, linecolor="#E5E7EB", linewidth=1),
+            yaxis=dict(title="", tickformat=".0%", showgrid=True, gridcolor="#E5E7EB", gridwidth=1, zeroline=False, showline=False)
         )
         st.plotly_chart(fig_scatter, use_container_width=True, config={"displayModeBar": False})
 
