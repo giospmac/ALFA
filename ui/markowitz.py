@@ -187,7 +187,7 @@ def render_markowitz_page() -> None:
     config_repo = ConfigRepository(base_path=_PROJECT_ROOT)
     config = config_repo.load()
 
-    with st.expander("⚙️  Parâmetros", expanded=False):
+    with st.expander("Parâmetros", expanded=False):
         p1, p2, p3, p4 = st.columns(4)
         rf_val = p1.number_input("Rf (a.a.)", value=config.risk_free_rate, min_value=0.0, max_value=1.0, step=0.0025, format="%.4f")
         emrp_val = p2.number_input("EMRP (a.a.)", value=config.emrp, min_value=0.0, max_value=0.30, step=0.005, format="%.4f")

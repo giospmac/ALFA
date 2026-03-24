@@ -48,7 +48,7 @@ def render_apt_page() -> None:
         return
 
     # ── Controls ─────────────────────────────────────────────────
-    with st.expander("⚙️  Parâmetros APT", expanded=False):
+    with st.expander("Parâmetros APT", expanded=False):
         c1, c2, c3 = st.columns(3)
         window_years = c1.selectbox("Janela (anos)", [1, 2, 3, 5, 10], index=2)
         lags_val = c2.number_input("Defasagens (meses)", min_value=0, max_value=6, value=0)

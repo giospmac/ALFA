@@ -196,7 +196,7 @@ def render_risk_analysis_page() -> None:
     config_repo = ConfigRepository(base_path=Path(__file__).resolve().parents[1])
     config = config_repo.load()
 
-    with st.expander("⚙️  Premissas CAPM", expanded=False):
+    with st.expander("Premissas CAPM", expanded=False):
         prem_col_1, prem_col_2 = st.columns(2)
         rf_input = prem_col_1.number_input(
             "Taxa livre de risco (a.a.)",

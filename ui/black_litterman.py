@@ -60,7 +60,7 @@ def render_black_litterman_page() -> None:
     config_repo = ConfigRepository(base_path=_PROJECT_ROOT)
     config = config_repo.load()
 
-    with st.expander("⚙️ Configurações Básicas", expanded=False):
+    with st.expander("Configurações Básicas", expanded=False):
         st.write("Defina as regras básicas de como o modelo deve balancear o seu dinheiro.")
         p1, p2 = st.columns(2)
         rf_val = p1.number_input(
