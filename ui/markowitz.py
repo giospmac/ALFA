@@ -97,7 +97,7 @@ def _build_frontier_chart(
         cml_y = [result.rf, result.rf + cml_slope * cml_max_vol]
         fig.add_trace(go.Scatter(
             x=cml_x, y=cml_y,
-            mode="lines", line=dict(color="#059669", width=1.5, dash="dot"),
+            mode="lines", line=dict(color="#93c5fd", width=1.5, dash="dot"),
             name="CML", hoverinfo="skip",
         ))
 
