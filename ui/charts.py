@@ -119,16 +119,25 @@ def render_charts_page() -> None:
     if contribution_df.empty:
         st.info("Dados insuficientes para calcular a contribuição de retorno dos ativos.")
     else:
+        x_vals = contribution_df["ticker"].tolist() + ["Total"]
+        y_vals = (contribution_df["contribuicao"] * 100).tolist() + [0]
+        measure_vals = ["relative"] * len(contribution_df) + ["total"]
+
         fig = go.Figure(data=[
-            go.Bar(
-                x=contribution_df["ticker"], 
-                y=contribution_df["contribuicao"] * 100,
-                marker_color=PALETTE_PRIMARY,
-                width=0.4
+            go.Waterfall(
+                x=x_vals,
+                y=y_vals,
+                measure=measure_vals,
+                decreasing=dict(marker=dict(color="#EF4444")),
+                increasing=dict(marker=dict(color=PALETTE_PRIMARY)),
+                totals=dict(marker=dict(color="#1e379b")),
+                width=0.5,
+                textposition="outside",
+                texttemplate="%{y:.2f}%"
             )
         ])
-        _apply_alfa_style(fig, title="Contribuição de cada ativo no último ano")
-        fig.update_yaxes(title_text="Contribuição (%)")
+        _apply_alfa_style(fig, title="")
+        fig.update_yaxes(title_text="", showticklabels=False, showgrid=True, gridcolor="#E5E7EB", zeroline=True)
         st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
 
     st.subheader("Drawdown histórico")
