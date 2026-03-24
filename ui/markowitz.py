@@ -242,9 +242,4 @@ def render_markowitz_page() -> None:
         },
     )
 
-    # Summary KPIs
-    cols = st.columns(3)
-    cols[0].metric("Max Sharpe", f"{result.max_sharpe.expected_return:.1%} ret · {result.max_sharpe.volatility:.1%} vol")
-    cols[1].metric("Mín. Volatilidade", f"{result.min_variance.expected_return:.1%} ret · {result.min_variance.volatility:.1%} vol")
-    if result.tangency:
-        cols[2].metric("Tangência", f"{result.tangency.expected_return:.1%} ret · {result.tangency.volatility:.1%} vol")
+
