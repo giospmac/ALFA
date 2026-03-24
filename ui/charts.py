@@ -176,7 +176,7 @@ def render_charts_page() -> None:
                 x=x_range[tail_mask], y=y_kde[tail_mask],
                 fill="tozeroy", mode="lines",
                 line=dict(width=0),
-                fillcolor="rgba(239, 68, 68, 0.25)",
+                fillcolor="rgba(30, 55, 155, 0.25)",
                 name="Cauda (VaR 5%)",
                 hoverinfo="skip",
             ))
@@ -196,7 +196,7 @@ def render_charts_page() -> None:
             x=[monte_carlo.var_5, monte_carlo.var_5],
             y=[0, float(kde([monte_carlo.var_5])[0])],
             mode="lines",
-            line=dict(color="#EF4444", width=2, dash="dash"),
+            line=dict(color="#1e379b", width=2, dash="dash"),
             name=f"VaR 5%  ({monte_carlo.var_5:.2f}%)",
             hoverinfo="skip",
         ))
@@ -206,7 +206,7 @@ def render_charts_page() -> None:
             x=[monte_carlo.cvar_5, monte_carlo.cvar_5],
             y=[0, float(kde([monte_carlo.cvar_5])[0])],
             mode="lines",
-            line=dict(color="#991B1B", width=2, dash="dot"),
+            line=dict(color="#102263", width=2, dash="dot"),
             name=f"CVaR 5%  ({monte_carlo.cvar_5:.2f}%)",
             hoverinfo="skip",
         ))
