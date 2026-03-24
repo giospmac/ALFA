@@ -66,9 +66,9 @@ def _returns_table_to_frame(table_data: dict[int, dict[int, float]], yearly_tabl
         row = {"Ano": year}
         for month_number, month_label in enumerate(MONTH_LABELS, start=1):
             value = table_data.get(year, {}).get(month_number)
-            row[month_label] = value * 100 if value is not None else None
+            row[month_label] = value * 100 if value is not None else np.nan
         annual_value = yearly_table.get(year)
-        row["Acumulado (Ano)"] = annual_value * 100 if annual_value is not None else None
+        row["Acumulado (Ano)"] = annual_value * 100 if annual_value is not None else np.nan
         rows.append(row)
     return pd.DataFrame(rows)
 
@@ -83,25 +83,8 @@ def render_risk_analysis_page() -> None:
         st.info("Monte o portfolio e atualize o historico na pagina principal antes de abrir esta analise.")
         return
 
-    min_date = historical_df.index.min().date() if not historical_df.empty else datetime.today().date()
-    max_date = historical_df.index.max().date() if not historical_df.empty else datetime.today().date()
-    
-    default_start = max_date - timedelta(days=365)
-    if default_start < min_date:
-        default_start = min_date
-
-    control_col_1, control_col_2, _ = st.columns([1.5, 1.5, 1])
-    start_date_val = control_col_1.date_input("Data Inicial", value=default_start, min_value=min_date, max_value=max_date)
-    end_date_val = control_col_2.date_input("Data Final", value=max_date, min_value=min_date, max_value=max_date)
-    
-    start_ts = pd.Timestamp(start_date_val)
-    end_ts = pd.Timestamp(end_date_val)
-    
-    if start_ts > end_ts:
-        st.error("A Data Inicial não pode ser maior do que a Data Final.")
-        return
-
-    st.markdown("---")
+    start_ts = historical_df.index.min() if not historical_df.empty else pd.Timestamp.today()
+    end_ts = historical_df.index.max() if not historical_df.empty else pd.Timestamp.today()
 
     # ── Accumulated returns ──────────────────────────────────────
     returns_result = accumulated_returns_table(portfolio_df, historical_df, start_ts, end_ts)
@@ -114,7 +97,7 @@ def render_risk_analysis_page() -> None:
                 returns_df.style
                 .format("{:.2f}%", na_rep="-", subset=MONTH_LABELS + ["Acumulado (Ano)"])
                 .format("{:.0f}", na_rep="-", subset=["Ano"])
-                .highlight_null(color="rgba(0,0,0,0)")
+                .highlight_null(color="white")
                 .background_gradient(
                     subset=MONTH_LABELS + ["Acumulado (Ano)"], cmap=ALFA_DIVERGING, vmin=-15, vmax=15, text_color_threshold=0.5
                 )
