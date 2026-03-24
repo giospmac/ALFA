@@ -183,14 +183,6 @@ def render_markowitz_page() -> None:
         st.info("São necessários pelo menos dois ativos válidos para a análise.")
         return
 
-    # ── Mode selection ───────────────────────────────────────────
-    mode_tab = st.radio(
-        "Modo de análise",
-        ["Simulação", "Otimização"],
-        horizontal=True,
-        label_visibility="collapsed",
-    )
-
     # ── Parameters ───────────────────────────────────────────────
     config_repo = ConfigRepository(base_path=_PROJECT_ROOT)
     config = config_repo.load()
@@ -207,8 +199,6 @@ def render_markowitz_page() -> None:
             config_repo.update(risk_free_rate=rf_val, emrp=emrp_val, max_weight=max_w)
 
     # ── Run Markowitz ────────────────────────────────────────────
-    run_sim = mode_tab == "Simulação"
-
     result = run_markowitz(
         prices=historical_df,
         asset_names=asset_names,
@@ -216,7 +206,7 @@ def render_markowitz_page() -> None:
         return_method=ret_source,
         emrp=emrp_val,
         max_weight=max_w,
-        run_simulation=run_sim,
+        run_simulation=True,
         n_frontier_points=60,
     )
 
@@ -228,7 +218,7 @@ def render_markowitz_page() -> None:
     cur_vol, cur_ret = _current_portfolio_point(portfolio_df, historical_df, asset_names, result.mu, result.cov)
 
     # Chart
-    fig = _build_frontier_chart(result, show_cloud=run_sim, current_vol=cur_vol, current_ret=cur_ret)
+    fig = _build_frontier_chart(result, show_cloud=True, current_vol=cur_vol, current_ret=cur_ret)
     st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
     # Weights table
