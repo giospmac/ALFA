@@ -147,7 +147,7 @@ def _build_frontier_chart(
         paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
         font=dict(color="#6B7280", size=11, family="Inter"),
         margin=dict(l=0, r=20, t=60, b=40), hovermode="closest",
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, title=""),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="center", x=0.5, title=""),
     )
     fig.update_xaxes(
         title_text="", showgrid=True, gridcolor="#E5E7EB", gridwidth=1,
