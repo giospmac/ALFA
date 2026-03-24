@@ -139,10 +139,10 @@ def render_risk_analysis_page() -> None:
         st.subheader("Risco vs Retorno Esperado")
         fig_scatter = go.Figure()
         fig_scatter.add_trace(go.Scatter(
-            x=metrics_df["Volatilidade D."] * np.sqrt(TRADING_DAYS_PER_YEAR),
-            y=metrics_df["Média D."] * TRADING_DAYS_PER_YEAR,
+            x=metrics_df.loc["Volatilidade D."] * np.sqrt(TRADING_DAYS_PER_YEAR),
+            y=metrics_df.loc["Média D."] * TRADING_DAYS_PER_YEAR,
             mode="markers+text",
-            text=metrics_df.index,
+            text=metrics_df.columns,
             textposition="top center",
             marker=dict(size=12, color="#4979f6", line=dict(width=1, color="white")),
             hovertemplate="<b>%{text}</b><br>Retorno (Anual): %{y:.2%}<br>Volatilidade (Anual): %{x:.2%}<extra></extra>"
