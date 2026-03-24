@@ -278,16 +278,14 @@ def render_home_page() -> None:
             hide_index=True,
         )
 
-        remove_col_1, remove_col_2 = st.columns([3, 1])
-        selected_ticker = remove_col_1.selectbox("Remover ativo", portfolio_df["ticker"].astype(str).tolist())
-        with remove_col_2:
-            st.markdown('<div class="align-remove-btn" style="display: none;"></div>', unsafe_allow_html=True)
-            if st.button("Remover selecionado", use_container_width=True):
-                st.session_state["portfolio_df"] = remove_position(portfolio_df, selected_ticker, total_pl)
-                _save_portfolio()
-                _refresh_history(show_success=False)
-                st.session_state["portfolio_notice"] = f"{selected_ticker} removido do portfolio."
-                st.rerun()
+        remove_col_1, remove_col_2, _ = st.columns([2, 1, 3], vertical_alignment="bottom")
+        selected_ticker = remove_col_1.selectbox("Remover ativo", portfolio_df["ticker"].astype(str).tolist(), label_visibility="collapsed")
+        if remove_col_2.button("🗑️  Remover", type="secondary", use_container_width=True):
+            st.session_state["portfolio_df"] = remove_position(portfolio_df, selected_ticker, total_pl)
+            _save_portfolio()
+            _refresh_history(show_success=False)
+            st.session_state["portfolio_notice"] = f"{selected_ticker} removido do portfolio."
+            st.rerun()
 
     st.subheader("Evolução do Portfólio")
     normalized_df = normalized_history_with_portfolio(portfolio_df, historical_df)
