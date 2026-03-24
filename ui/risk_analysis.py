@@ -69,13 +69,11 @@ def _returns_table_to_frame(table_data: dict[int, dict[int, float]], yearly_tabl
         row = {"Ano": year}
         for month_number, month_label in enumerate(MONTH_LABELS, start=1):
             value = table_data.get(year, {}).get(month_number)
-            row[month_label] = value * 100 if value is not None else np.nan
+            row[month_label] = value * 100 if value is not None else "-"
         annual_value = yearly_table.get(year)
-        row["Acumulado (Ano)"] = annual_value * 100 if annual_value is not None else np.nan
+        row["Acumulado (Ano)"] = annual_value * 100 if annual_value is not None else "-"
         rows.append(row)
     df = pd.DataFrame(rows)
-    cols = MONTH_LABELS + ["Acumulado (Ano)"]
-    df[cols] = df[cols].astype(float)
     return df
 
 
@@ -99,13 +97,22 @@ def render_risk_analysis_page() -> None:
         st.subheader("Rentabilidade acumulada")
         returns_df = _returns_table_to_frame(monthly_table, yearly_table)
         if not returns_df.empty:
+            cols = MONTH_LABELS + ["Acumulado (Ano)"]
+            numeric_df = returns_df[cols].replace("-", np.nan).astype(float)
             st.dataframe(
                 returns_df.style
-                .format("{:.2f}%", na_rep="-", subset=MONTH_LABELS + ["Acumulado (Ano)"])
+                .format(
+                    lambda v: f"{v:.2f}%" if isinstance(v, (int, float)) and not pd.isna(v) else str(v), 
+                    subset=cols
+                )
                 .format("{:.0f}", na_rep="-", subset=["Ano"])
-                .highlight_null(color="transparent")
                 .background_gradient(
-                    subset=MONTH_LABELS + ["Acumulado (Ano)"], cmap=ALFA_DIVERGING, vmin=-15, vmax=15, text_color_threshold=0.5
+                    subset=cols, 
+                    gmap=numeric_df,
+                    cmap=ALFA_DIVERGING, 
+                    vmin=-15, 
+                    vmax=15, 
+                    text_color_threshold=0.5
                 )
                 .set_properties(**{"text-align": "center"}),
                 use_container_width=True,
