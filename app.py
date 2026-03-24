@@ -1,12 +1,10 @@
 from __future__ import annotations
 
 from ui.asset_analysis import render_asset_analysis_page
-from ui.apt import render_apt_page
 from ui.black_litterman import render_black_litterman_page
 from ui.charts import render_charts_page
 from ui.home import render_home_page
 from ui.markowitz import render_markowitz_page
-from ui.operations import render_operations_page
 from ui.quant_projections import render_quant_projections_page
 from ui.risk_analysis import render_risk_analysis_page
 from ui.stock_comparison import render_stock_comparison_page
@@ -31,11 +29,9 @@ PAGE_CONFIG = {
     "stress": {"label": "Stress Test & Cenários", "render": render_stress_scenarios_page},
     "frontier": {"label": "Markowitz", "render": render_markowitz_page},
     "bl": {"label": "Black-Litterman", "render": render_black_litterman_page},
-    "operations": {"label": "Operações", "render": render_operations_page},
     "assets": {"label": "Análise de Ativos", "render": render_asset_analysis_page},
     "comparison": {"label": "Comparador", "render": render_stock_comparison_page},
     "quant": {"label": "Projeções Quant", "render": render_quant_projections_page},
-    "apt": {"label": "APT / Fatores", "render": render_apt_page},
 }
 
 
