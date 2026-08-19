@@ -67,13 +67,16 @@ def _render_hero(on_fund, on_process) -> None:
     with st.container(key="alfa_hero"):
         c.render(
             c.reveal(f'<img class="alfa-hero-logo" src="{asset_data_uri("logo-alfa-white.png")}" alt="ALFA">', step=1)
-            + c.reveal(c.eyebrow("Departamento de Economia · PUC-Rio"), step=2)
-            + c.reveal("<h1>Laboratório de Finanças Aplicadas</h1>", step=3)
+            + c.reveal('<h1 class="alfa-hero-title">ALFA</h1>', step=2)
+            + c.reveal(
+                '<p class="alfa-hero-sub">Laboratório de Finanças Aplicadas PUC-Rio · '
+                "Departamento de Economia</p>",
+                step=3,
+            )
             + c.reveal(
                 c.lead(
-                    "Formamos talentos e lideranças para o mercado financeiro por meio de uma vivência "
-                    "prática: um fundo de investimento simulado, com análises autorais e filosofia de "
-                    "<strong>Value Investing</strong>."
+                    "Formamos talentos e lideranças para o mercado financeiro por meio de um fundo de "
+                    "investimento long only simulado, com análises autorais."
                 ),
                 step=4,
             )

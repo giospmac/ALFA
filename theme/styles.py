@@ -261,9 +261,26 @@ a:hover {{ color: var(--blue-600); }}
   -webkit-mask-image: radial-gradient(72% 62% at 50% 42%, #000 30%, transparent 100%);
   pointer-events: none;
 }}
-.alfa-hero-logo {{ height: clamp(58px, 9vw, 88px); margin: 0 auto clamp(20px, 3vw, 30px); display: block; }}
+.alfa-hero-logo {{ height: clamp(46px, 7vw, 68px); margin: 0 auto clamp(18px, 2.6vw, 26px); display: block; }}
 .st-key-alfa_hero h1 {{ color: #fff; max-width: 15ch; margin-inline: auto; }}
-.st-key-alfa_hero .alfa-lead {{ color: var(--on-dark-soft); font-size: clamp(1rem, 1.8vw, 1.2rem); margin-inline: auto; }}
+.st-key-alfa_hero .alfa-lead {{ color: var(--on-dark-soft); font-size: clamp(1rem, 1.8vw, 1.2rem); margin-inline: auto; max-width: 42rem; }}
+
+/* A 1.6x aplica `text-align: left` no stElementContainer, anulando a
+   centralização herdada do hero. Reforçamos nos descendentes. */
+.st-key-alfa_hero div, .st-key-alfa_hero h1,
+.st-key-alfa_hero p, .st-key-alfa_hero span {{ text-align: center; }}
+
+/* Lockup do hero: marca, nome e assinatura */
+.alfa-hero-title {{
+  color: #fff; font-weight: 900; line-height: 1;
+  font-size: clamp(3rem, 9vw, 5.4rem); letter-spacing: .02em;
+  margin: 0 0 clamp(14px, 2vw, 20px); max-width: none;
+}}
+.alfa-hero-sub {{
+  color: var(--blue-300); font-weight: 600;
+  font-size: clamp(1rem, 2.2vw, 1.35rem); letter-spacing: -.005em;
+  line-height: 1.45; margin: 0 auto clamp(18px, 2.6vw, 26px); max-width: 32rem;
+}}
 
 .alfa-scrollcue {{
   margin-top: clamp(30px, 5vw, 52px);
