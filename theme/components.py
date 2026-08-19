@@ -189,13 +189,25 @@ def member(*, nome: str, cargo: str, foto_uri: str = "", linkedin: str = "", ste
 
 
 def alumni_card(*, nome: str, posicao: str, linkedin: str = "", step: int = 1) -> str:
-    """Card compacto de alumni: nome e posição, sem foto."""
+    """Card compacto de alumni: nome, posição e o espaço do LinkedIn.
+
+    O slot do ícone é sempre renderizado — invisível quando não há link — para
+    que todos os cards tenham a mesma largura útil e nada se desloque conforme
+    os links forem preenchidos em `content/alumni.json`.
+    """
     nome_markup = esc(nome)
     if linkedin:
         nome_markup = f'<a href="{esc(linkedin)}" target="_blank" rel="noopener">{nome_markup}</a>'
+        slot = (
+            f'<a class="alfa-alum__link" href="{esc(linkedin)}" target="_blank" rel="noopener" '
+            f'title="LinkedIn de {esc(nome)}" aria-label="LinkedIn de {esc(nome)}">{_LINKEDIN}</a>'
+        )
+    else:
+        slot = '<span class="alfa-alum__link alfa-alum__link--vazio" aria-hidden="true"></span>'
     return reveal(
-        f'<div class="alfa-alum"><div class="alfa-alum__name">{nome_markup}</div>'
-        f'<div class="alfa-alum__role">{esc(posicao)}</div></div>',
+        f'<div class="alfa-alum"><div class="alfa-alum__info">'
+        f'<div class="alfa-alum__name">{nome_markup}</div>'
+        f'<div class="alfa-alum__role">{esc(posicao)}</div></div>{slot}</div>',
         step=step,
     )
 

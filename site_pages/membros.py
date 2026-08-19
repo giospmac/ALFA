@@ -10,7 +10,7 @@ from theme import components as c
 DESCRICOES = {
     "Presidência": "Direção geral do núcleo e das duas frentes, ALFA Asset e ALFA Núcleo.",
     "Equity Research": "Análise setorial, valuation e construção das teses de investimento.",
-    "Gestão e Risco": "Controle de risco, performance vs. benchmark, automação e modelos de alocação.",
+    "Gestão & Risco": "Controle de risco, performance vs. benchmark, automação e modelos de alocação.",
     "Mercado": "Palestras, visitas institucionais, competições e oportunidades de carreira.",
     "Pessoas": "Processo seletivo, período trainee e programa de capacitação.",
 }

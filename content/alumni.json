@@ -1,5 +1,5 @@
 {
-  "_comentario": "Cada alumni: nome, posicao (como aparece no card) e linkedin (opcional — com o link preenchido o nome vira clicavel). O agrupamento da pagina sai da posicao: 'Presidente'/'VP' vao para Presidencia, 'Diretor'/'Diretora' para Diretoria, o resto para Associados.",
+  "_comentario": "Cada alumni: nome, posicao (como aparece no card) e linkedin. Cole a URL completa do perfil em 'linkedin' (ex.: https://www.linkedin.com/in/fulano/) e o card passa a mostrar o icone do LinkedIn a direita, com o nome tambem clicavel; deixando vazio, o espaco fica reservado e invisivel. O agrupamento da pagina sai da posicao: 'Presidente'/'VP' vao para Presidencia, 'Diretor'/'Diretora' para Diretoria, o resto para Associados.",
   "alumni": [
     {
       "nome": "Ana Vitória Prado",

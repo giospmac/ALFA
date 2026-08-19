@@ -18,7 +18,7 @@ DIRETORIAS = [
     },
     {
         "frente": "ALFA Asset",
-        "nome": "Risco & Quant",
+        "nome": "Gestão & Risco",
         "texto": "Controle de risco do portfólio, análise de performance vs. benchmark, "
         "automação e modelos de alocação.",
     },
@@ -202,7 +202,7 @@ def _render_plataforma_teaser(on_platform) -> None:
                 + c.lead(
                     "Fronteira eficiente de Markowitz, VaR/CVaR, CAPM, drawdown, Monte Carlo, "
                     "correlações e análise de ativos — os mesmos modelos que a diretoria de "
-                    "Risco &amp; Quant usa para gerir o fundo, rodando ao vivo."
+                    "Gestão &amp; Risco usa para gerir o fundo, rodando ao vivo."
                 ),
                 step=1,
             )

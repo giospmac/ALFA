@@ -91,15 +91,26 @@ def goto(page: str) -> None:
 
 
 def _bootstrap_route() -> None:
-    """Aplica navegação pendente e, na 1ª execução, o `?p=` da URL (deep link)."""
+    """Aplica navegação pendente e deixa a URL mandar no resto.
+
+    Na ordem: (1) a seção pedida por um CTA na execução anterior; (2) o `?p=` da
+    URL sempre que divergir do estado — é o que faz deep link e o botão voltar do
+    navegador funcionarem, já que no reload o Streamlit reaproveita a sessão e o
+    estado sobreviveria à troca de URL; (3) o padrão, na primeira execução.
+
+    Não há conflito com os cliques na navegação: toda troca de seção grava o
+    parâmetro junto com o estado, então os dois só divergem quando a URL muda
+    por fora.
+    """
     pending = st.session_state.pop(PENDING_KEY, None)
     if pending:
         _set_page(pending)
         return
-    if STATE_KEY in st.session_state:
-        return
-    requested = st.query_params.get("p", DEFAULT_PAGE)
-    _set_page(requested if requested in PAGES else DEFAULT_PAGE)
+    requested = st.query_params.get("p")
+    if requested in PAGES and requested != st.session_state.get(STATE_KEY):
+        _set_page(requested)
+    elif STATE_KEY not in st.session_state:
+        _set_page(DEFAULT_PAGE)
 
 
 def _on_nav_change() -> None:

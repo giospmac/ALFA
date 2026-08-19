@@ -3,7 +3,9 @@
 Como editar
 -----------
 A lista vive em `content/alumni.json`. Cada entrada tem `nome`, `posicao` e
-`linkedin` (opcional — com o link preenchido, o nome vira clicável).
+`linkedin`. Todo card reserva o espaço do ícone do LinkedIn à direita: com a URL
+preenchida o ícone aparece e o nome também vira clicável; vazio, o espaço fica
+invisível — assim a grade não muda de forma conforme os links chegam.
 
 O agrupamento é derivado da `posicao` pelas palavras-chave em `GRUPOS`: quem
 tiver "Presidente" ou "VP" cai em Presidência, "Diretor"/"Diretora" em
@@ -31,7 +33,7 @@ GRUPOS: list[tuple[str, tuple[str, ...], str]] = [
     (
         "Diretoria",
         ("diretor", "diretora"),
-        "Ex-diretores das áreas de Equity Research, Gestão e Risco, Mercado e Pessoas.",
+        "Ex-diretores das áreas de Equity Research, Gestão & Risco, Mercado e Pessoas.",
     ),
     (
         "Associados",

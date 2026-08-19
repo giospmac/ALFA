@@ -1,6 +1,6 @@
 {
-  "_comentario": "Cada membro: nome, diretoria (Presidência | Equity Research | Gestão e Risco | Mercado | Pessoas), cargo, foto (arquivo em assets/membros/, opcional — sem foto o card mostra as iniciais), linkedin (opcional). A ordem dentro de cada diretoria é a ordem de exibição.",
-  "diretorias": ["Presidência", "Equity Research", "Gestão e Risco", "Mercado", "Pessoas"],
+  "_comentario": "Cada membro: nome, diretoria (Presidência | Equity Research | Gestão & Risco | Mercado | Pessoas), cargo, foto (arquivo em assets/membros/, opcional — sem foto o card mostra as iniciais), linkedin (opcional). A ordem dentro de cada diretoria é a ordem de exibição.",
+  "diretorias": ["Presidência", "Equity Research", "Gestão & Risco", "Mercado", "Pessoas"],
   "membros": [
     { "nome": "Ananda Botelho", "diretoria": "Presidência", "cargo": "Presidente", "foto": "", "linkedin": "" },
     { "nome": "Haroldo Fazolo Flores", "diretoria": "Presidência", "cargo": "VP", "foto": "", "linkedin": "" },
@@ -13,11 +13,11 @@
     { "nome": "Christian Mogami", "diretoria": "Equity Research", "cargo": "Equity", "foto": "", "linkedin": "" },
     { "nome": "Gabriel Werner", "diretoria": "Equity Research", "cargo": "Equity", "foto": "", "linkedin": "" },
 
-    { "nome": "Guilherme Cohen Gutman", "diretoria": "Gestão e Risco", "cargo": "Diretor de Gestão e Risco", "foto": "", "linkedin": "" },
-    { "nome": "Miguel Oliveira Macedo Dias", "diretoria": "Gestão e Risco", "cargo": "Gestão e Risco", "foto": "", "linkedin": "" },
-    { "nome": "Ian Pessoni Valente", "diretoria": "Gestão e Risco", "cargo": "Gestão e Risco", "foto": "", "linkedin": "" },
-    { "nome": "André Machado de Mello Mariz", "diretoria": "Gestão e Risco", "cargo": "Gestão e Risco", "foto": "", "linkedin": "" },
-    { "nome": "Eduardo Quintella", "diretoria": "Gestão e Risco", "cargo": "Gestão e Risco", "foto": "", "linkedin": "" },
+    { "nome": "Guilherme Cohen Gutman", "diretoria": "Gestão & Risco", "cargo": "Diretor de Gestão & Risco", "foto": "", "linkedin": "" },
+    { "nome": "Miguel Oliveira Macedo Dias", "diretoria": "Gestão & Risco", "cargo": "Gestão & Risco", "foto": "", "linkedin": "" },
+    { "nome": "Ian Pessoni Valente", "diretoria": "Gestão & Risco", "cargo": "Gestão & Risco", "foto": "", "linkedin": "" },
+    { "nome": "André Machado de Mello Mariz", "diretoria": "Gestão & Risco", "cargo": "Gestão & Risco", "foto": "", "linkedin": "" },
+    { "nome": "Eduardo Quintella", "diretoria": "Gestão & Risco", "cargo": "Gestão & Risco", "foto": "", "linkedin": "" },
 
     { "nome": "Joana Gontijo Garrido", "diretoria": "Mercado", "cargo": "Diretora de Mercado", "foto": "", "linkedin": "" },
     { "nome": "Vinicius Pereira Paiva", "diretoria": "Mercado", "cargo": "Mercado", "foto": "", "linkedin": "" },

@@ -72,7 +72,7 @@ def _render_header(tool: Tool) -> None:
                 + c.reveal("<h1>Ferramentas de análise</h1>", step=2)
                 + c.reveal(
                     c.lead(
-                        "Os modelos que a diretoria de Risco &amp; Quant usa para gerir o fundo simulado — "
+                        "Os modelos que a diretoria de Gestão &amp; Risco usa para gerir o fundo simulado — "
                         "rodando ao vivo, com dados de mercado do Brasil e dos EUA."
                     ),
                     step=3,

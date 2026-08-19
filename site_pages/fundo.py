@@ -237,9 +237,9 @@ def _render_vitrine(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame) -> 
         c.render(
             '<div class="alfa-center">'
             + c.section_head(
-                kicker="Risco & Quant",
+                kicker="Gestão & Risco",
                 title="A carteira em números",
-                subtitle="Indicadores calculados pela diretoria de Risco &amp; Quant sobre a carteira "
+                subtitle="Indicadores calculados pela diretoria de Gestão &amp; Risco sobre a carteira "
                 "simulada — os mesmos modelos disponíveis na plataforma.",
                 center=True,
             )

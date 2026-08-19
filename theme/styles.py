@@ -445,8 +445,21 @@ a:hover {{ color: var(--blue-600); }}
   background: var(--surface); border: 1px solid var(--border);
   border-left: 3px solid var(--blue-300);
   border-radius: 10px; padding: 13px 16px; height: 100%;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
   transition: transform .22s var(--ease), box-shadow .22s var(--ease), border-left-color .22s var(--ease);
 }}
+.alfa-alum__info {{ min-width: 0; }}
+/* O slot do LinkedIn existe em todos os cards: invisível quando não há link,
+   para a grade não mudar de forma conforme os links forem preenchidos. */
+.alfa-alum__link {{
+  flex: 0 0 32px; width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border); color: var(--ink-soft);
+  transition: background .2s var(--ease), border-color .2s var(--ease), color .2s var(--ease);
+}}
+.alfa-alum__link svg {{ width: 15px; height: 15px; fill: currentColor; }}
+.alfa-alum__link:hover {{ background: var(--blue-500); border-color: var(--blue-500); color: #fff; }}
+.alfa-alum__link--vazio {{ visibility: hidden; }}
 .alfa-alum:hover {{
   transform: translateY(-2px); box-shadow: var(--shadow-md);
   border-left-color: var(--blue-500);
@@ -455,8 +468,14 @@ a:hover {{ color: var(--blue-600); }}
   font-weight: 700; font-size: .95rem; color: var(--ink);
   line-height: 1.3; letter-spacing: -.01em;
 }}
-.alfa-alum__name a {{ color: inherit; }}
-.alfa-alum__name a:hover {{ color: var(--blue-600); }}
+/* O nome linkado herdaria o azul sublinhado do markdown do Streamlit; quem
+   sinaliza o link é o ícone à direita, então o nome fica discreto. */
+.alfa-alum__name a, .alfa-member__name a {{
+  color: inherit !important; text-decoration: none !important;
+}}
+.alfa-alum__name a:hover, .alfa-member__name a:hover {{
+  color: var(--blue-600) !important; text-decoration: underline !important;
+}}
 .alfa-alum__role {{ color: var(--ink-soft); font-size: .82rem; margin-top: 3px; }}
 .alfa-section--dark .alfa-alum, [class*="st-key-alfaband_dark"] .alfa-alum {{
   background: rgba(16,26,58,.62); border-color: rgba(138,168,250,.16);
@@ -464,6 +483,7 @@ a:hover {{ color: var(--blue-600); }}
 }}
 .alfa-section--dark .alfa-alum__name {{ color: var(--on-dark); }}
 .alfa-section--dark .alfa-alum__role {{ color: var(--on-dark-soft); }}
+.alfa-section--dark .alfa-alum__link {{ border-color: rgba(138,168,250,.24); color: var(--on-dark-soft); }}
 
 /* Agenda / calendário */
 .alfa-agenda {{ display: flex; flex-direction: column; }}
