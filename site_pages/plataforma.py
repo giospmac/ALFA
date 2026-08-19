@@ -28,31 +28,25 @@ class Tool:
 
 def _tools() -> tuple[Tool, ...]:
     # importado aqui dentro para o app subir rápido e só carregar o que usar
-    from ui.apt import render_apt_page
     from ui.asset_analysis import render_asset_analysis_page
-    from ui.black_litterman import render_black_litterman_page
     from ui.charts import render_charts_page
     from ui.home import render_home_page
     from ui.markowitz import render_markowitz_page
-    from ui.quant_projections import render_quant_projections_page
     from ui.risk_analysis import render_risk_analysis_page
     from ui.stock_comparison import render_stock_comparison_page
-    from ui.stress_scenarios import render_stress_scenarios_page
 
     return (
         Tool("carteira", "Carteira", "Fundo", "Posições, pesos e histórico consolidado.", render_home_page),
         Tool("historico", "Histórico", "Fundo", "Retorno vs. benchmark, drawdown e Monte Carlo.", render_charts_page),
         Tool("risco", "Risco", "Fundo", "VaR, CVaR, CAPM, correlação e índices ajustados.", render_risk_analysis_page),
-        Tool("stress", "Stress Test", "Fundo", "Cenários históricos e choques customizados.", render_stress_scenarios_page),
         Tool("markowitz", "Markowitz", "Alocação", "Fronteira eficiente e carteiras ótimas.", render_markowitz_page),
-        Tool("bl", "Black-Litterman", "Alocação", "Retornos de equilíbrio combinados com suas visões.", render_black_litterman_page),
-        Tool("apt", "APT", "Alocação", "Regressão multifatorial contra fatores macro.", render_apt_page),
         Tool("ativos", "Análise de Ativos", "Ativos", "Fundamentos, preço e risco de um ticker.", render_asset_analysis_page),
         Tool("comparador", "Comparador", "Ativos", "Até cinco ações lado a lado.", render_stock_comparison_page),
-        Tool("quant", "Projeções Quant", "Ativos", "Projeção de preços por séries temporais.", render_quant_projections_page),
-        # `ui/operations.py` (registro de compras/vendas/aportes) fica de fora
-        # por ser tela de gestão interna. Para publicá-la, importe
-        # `render_operations_page` e acrescente uma Tool aqui.
+        # Fora do ar por ora, mas os modulos seguem em `ui/`: Stress Test
+        # (`stress_scenarios`), Black-Litterman (`black_litterman`), APT (`apt`),
+        # Projecoes Quant (`quant_projections`) e Operacoes (`operations`).
+        # Para publicar qualquer uma, importe o `render_*_page` acima e
+        # acrescente uma Tool aqui.
     )
 
 

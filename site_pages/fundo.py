@@ -364,8 +364,8 @@ def _render_cta(on_platform) -> None:
             '<div class="alfa-center">'
             + c.section_head(
                 title="Explore a matemática por trás do fundo",
-                subtitle="As mesmas ferramentas de risco, otimização e projeção usadas na gestão estão "
-                "abertas para qualquer pessoa usar.",
+                subtitle="As mesmas ferramentas de risco e otimização de carteira usadas na gestão "
+                "estão abertas para qualquer pessoa usar.",
                 center=True,
             )
             + "</div>"

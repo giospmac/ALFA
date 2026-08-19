@@ -5,9 +5,13 @@ Um único app Streamlit que junta:
 - **o site institucional** (Início, O Fundo, Newsletter, Membros, Alumni, Atividades,
   Processo Seletivo), com o conteúdo que hoje vive no repositório
   `alfapucrio.github.io`;
-- **a plataforma quant** (Carteira, Histórico, Risco, Stress Test, Markowitz,
-  Black-Litterman, APT, Análise de Ativos, Comparador, Projeções Quant), com os
-  mesmos modelos e cálculos do app Streamlit atual.
+- **a plataforma quant** (Carteira, Histórico, Risco, Markowitz, Análise de
+  Ativos e Comparador), com os mesmos modelos e cálculos do app Streamlit atual.
+
+  Ficaram fora do ar — mas com o código preservado em `ui/` — Stress Test,
+  Black-Litterman, APT, Projeções Quant e Operações. Para republicar qualquer
+  uma, basta importar o `render_*_page` e acrescentar uma `Tool` em
+  `site_pages/plataforma.py`.
 
 O visual é o da identidade ALFA (navy `#0a1128`, azul `#4979f6`, off-white
 `#f2f1ec`, tipografia Inter), num layout de landing page: faixas full-bleed

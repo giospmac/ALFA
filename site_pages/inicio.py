@@ -197,8 +197,8 @@ def _render_plataforma_teaser(on_platform) -> None:
                 c.eyebrow("Plataforma quant")
                 + "<h2>As ferramentas de gestão, abertas</h2>"
                 + c.lead(
-                    "Fronteira eficiente de Markowitz, Black-Litterman, APT, VaR/CVaR, stress test, "
-                    "projeções quantitativas e análise de ativos — os mesmos modelos que a diretoria de "
+                    "Fronteira eficiente de Markowitz, VaR/CVaR, CAPM, drawdown, Monte Carlo, "
+                    "correlações e análise de ativos — os mesmos modelos que a diretoria de "
                     "Risco &amp; Quant usa para gerir o fundo, rodando ao vivo."
                 ),
                 step=1,
@@ -206,7 +206,7 @@ def _render_plataforma_teaser(on_platform) -> None:
             + c.reveal(
                 c.grid(
                     [
-                        c.kpi("Modelos", "9", note="Markowitz, BL, APT, CAPM…"),
+                        c.kpi("Ferramentas", "6", note="Markowitz, CAPM, VaR/CVaR…"),
                         c.kpi("Ativos cobertos", "B3 + EUA", note="via Yahoo Finance"),
                         c.kpi("Benchmarks", "IBOV · CDI", note="atualizados sob demanda"),
                         c.kpi("Custo", "Aberto", note="uso livre e educacional"),

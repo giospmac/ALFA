@@ -16,8 +16,7 @@ sys.path.insert(0, ROOT)  # AppTest não adiciona o diretório do app ao sys.pat
 from streamlit.testing.v1 import AppTest
 
 PAGES = ["inicio", "fundo", "newsletter", "membros", "alumni", "atividades", "processo"]
-TOOLS = ["carteira", "historico", "risco", "stress", "markowitz", "bl", "apt",
-         "ativos", "comparador", "quant"]
+TOOLS = ["carteira", "historico", "risco", "markowitz", "ativos", "comparador"]
 
 fails = []
 
