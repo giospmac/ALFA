@@ -7,6 +7,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
+from core.config_repository import ConfigRepository
 from services.portfolio_analytics import (
     benchmark_return_series,
     capm_alpha_beta_correlation,
@@ -15,7 +16,7 @@ from services.portfolio_analytics import (
     performance_indices,
     var_cvar_metrics,
 )
-from site_pages._shared import brl_compact, clear_fund_cache, fund_snapshot, num, pct, short_ticker
+from site_pages._shared import ROOT, brl_compact, clear_fund_cache, fund_snapshot, num, pct, short_ticker
 from theme import components as c
 from theme import tokens as T
 from theme.plotly_theme import CHART_CONFIG, style
@@ -68,7 +69,11 @@ def _fund_metrics(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame) -> di
     if not metricas or "Portfolio" not in metricas:
         return {"ok": False}
 
-    total_pl = float(pd.to_numeric(portfolio_df["valor_real"], errors="coerce").fillna(0).sum())
+    # Mesma fonte de verdade da tela Carteira: o PL é um parâmetro do fundo,
+    # não a soma das posições (que carrega o arredondamento das quantidades).
+    total_pl = float(ConfigRepository(base_path=ROOT).load().total_pl)
+    if total_pl <= 0:
+        total_pl = float(pd.to_numeric(portfolio_df["valor_real"], errors="coerce").fillna(0).sum())
     vol_diaria = metricas["Portfolio"]["volatilidade"]
 
     resultado: dict = {

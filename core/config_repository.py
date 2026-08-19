@@ -9,6 +9,7 @@ from pathlib import Path
 class ModelConfig:
     """Centralised model premisses persisted as JSON."""
 
+    total_pl: float = 100_000_000.0      # Patrimonio liquido do fundo (R$)
     risk_free_rate: float = 0.1075       # Rf annualised (default: CDI 10.75%)
     emrp: float = 0.06                   # Equity Market Risk Premium (expected)
     delta: float = 2.5                    # Risk aversion (Black-Litterman)

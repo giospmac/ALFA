@@ -7,6 +7,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
+from core.config_repository import ConfigRepository
 from core.portfolio_repository import PortfolioRepository
 from services.portfolio_analytics import (
     PortfolioAnalyticsError,
@@ -26,6 +27,10 @@ from services.portfolio_analytics import (
 )
 
 
+def _get_config_repository() -> ConfigRepository:
+    return ConfigRepository(base_path=Path(__file__).resolve().parents[1])
+
+
 def _get_repository() -> PortfolioRepository:
     return PortfolioRepository(base_path=Path(__file__).resolve().parents[1])
 
@@ -37,11 +42,13 @@ def _bootstrap_state() -> None:
     snapshot = _get_repository().load_snapshot()
     portfolio_df = ensure_portfolio_schema(snapshot.portfolio)
     historical_df = snapshot.historical.copy()
-    total_pl = float(pd.to_numeric(portfolio_df["valor_real"], errors="coerce").fillna(0).sum())
+    # O PL e um parametro do fundo, nao a soma das posicoes: somar `valor_real`
+    # arrastava o arredondamento das quantidades (ex.: 99.999.422,61).
+    total_pl = float(_get_config_repository().load().total_pl)
 
     st.session_state["portfolio_df"] = portfolio_df
     st.session_state["historical_df"] = historical_df
-    st.session_state["portfolio_total_pl"] = total_pl if total_pl > 0 else 100000000.0
+    st.session_state["portfolio_total_pl"] = total_pl if total_pl > 0 else 100_000_000.0
     st.session_state["invalid_tickers"] = []
     st.session_state["portfolio_notice"] = ""
 
@@ -74,6 +81,7 @@ def _sync_total_pl(total_pl: float) -> None:
     st.session_state["portfolio_total_pl"] = total_pl
     st.session_state["portfolio_df"] = recalculate_portfolio(st.session_state["portfolio_df"], total_pl)
     _save_portfolio()
+    _get_config_repository().update(total_pl=total_pl)
 
 
 def _format_currency(value: float) -> str:
