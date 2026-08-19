@@ -461,6 +461,8 @@ a:hover {{ color: var(--blue-600); }}
 
 /* CTA da vitrine da plataforma: respiro maior em relação aos cards acima. */
 .st-key-cta_plataforma {{ margin-top: clamp(20px, 3.5vw, 40px); }}
+/* Botão de atualizar o histórico: afasta do selo da data-base. */
+.st-key-fundo_atualizar {{ margin-top: clamp(14px, 2vw, 24px); }}
 
 /* Alumni: card compacto (sem foto), pensado para listas longas */
 .alfa-alum {{

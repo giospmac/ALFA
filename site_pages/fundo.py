@@ -76,7 +76,6 @@ def _fund_metrics(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame) -> di
         "inicio": inicio,
         "fim": fim,
         "total_pl": total_pl,
-        "asset_count": int((portfolio_df["ticker"].astype(str).str.strip() != "").sum()),
         "vol_anual": float(vol_diaria * np.sqrt(TRADING_DAYS) * 100),
     }
 
@@ -90,6 +89,11 @@ def _fund_metrics(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame) -> di
     cdi_abertura = benchmark_return_series(portfolio_df, historical_df, "CDI", start=inicio)
     if not cdi_abertura.empty:
         resultado["curva_cdi"] = cdi_abertura["CDI"]
+
+    # `total_pl` é o capital nocional com que o fundo abriu; o patrimônio de
+    # hoje é esse capital corrigido pelo retorno acumulado desde a abertura.
+    resultado["capital_inicial"] = total_pl
+    resultado["pl_acumulado"] = total_pl * (1 + resultado.get("ret_abertura", 0.0) / 100)
 
     # --- retorno de 12 meses ---------------------------------------------
     doze_meses = benchmark_return_series(portfolio_df, historical_df, "IBOVESPA", years=1)
@@ -162,32 +166,7 @@ def _curve_chart(metrics: dict) -> go.Figure | None:
         )
     figure.update_yaxes(ticksuffix="%")
     titulo = f"Retorno acumulado · desde {metrics['inicio'].strftime('%d/%m/%Y')}"
-    return style(figure, title=titulo, dark=True, height=380)
-
-
-def _allocation_chart(portfolio_df: pd.DataFrame) -> go.Figure | None:
-    working = portfolio_df.copy()
-    working["porcentagem_real"] = pd.to_numeric(working["porcentagem_real"], errors="coerce").fillna(0.0)
-    working = working[working["porcentagem_real"] > 0].sort_values("porcentagem_real")
-    if working.empty:
-        return None
-
-    figure = go.Figure(
-        go.Bar(
-            x=working["porcentagem_real"],
-            y=[short_ticker(t) for t in working["ticker"]],
-            orientation="h",
-            marker=dict(
-                color=working["porcentagem_real"],
-                colorscale=[[i / (len(T.SEQUENTIAL) - 1), color] for i, color in enumerate(T.SEQUENTIAL)],
-                line=dict(width=0),
-            ),
-            hovertemplate="%{y}: %{x:.2f}%<extra></extra>",
-        )
-    )
-    figure.update_xaxes(ticksuffix="%")
-    figure.update_layout(hovermode="closest", showlegend=False)
-    return style(figure, title="Composição da carteira", dark=True, height=max(380, 22 * len(working)))
+    return style(figure, title=titulo, dark=True, height=430)
 
 
 # -------------------------------------------------------------------- blocos
@@ -344,8 +323,8 @@ def _cards(metrics: dict) -> list[str]:
         ),
         c.kpi(
             "Patrimônio líquido",
-            brl_compact(metrics["total_pl"]),
-            note=f"acumulado desde {abertura} · {metrics['asset_count']} posições",
+            brl_compact(metrics.get("pl_acumulado", metrics["total_pl"])),
+            note=f"de {brl_compact(metrics['capital_inicial'])} na abertura, em {abertura}",
             step=8,
         ),
     ]
@@ -381,15 +360,9 @@ def _render_vitrine(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame) -> 
         c.render(c.grid(_cards(metrics), cols=4))
 
         st.write("")
-        left, right = st.columns([1.35, 1], gap="large")
-        with left:
-            curve = _curve_chart(metrics)
-            if curve is not None:
-                st.plotly_chart(curve, use_container_width=True, theme=None, config=CHART_CONFIG)
-        with right:
-            allocation = _allocation_chart(portfolio_df)
-            if allocation is not None:
-                st.plotly_chart(allocation, use_container_width=True, theme=None, config=CHART_CONFIG)
+        curve = _curve_chart(metrics)
+        if curve is not None:
+            st.plotly_chart(curve, use_container_width=True, theme=None, config=CHART_CONFIG)
 
         _render_tabela(portfolio_df, historical_df)
 
