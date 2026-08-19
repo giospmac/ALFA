@@ -440,6 +440,14 @@ a:hover {{ color: var(--blue-600); }}
 .alfa-member__name {{ font-weight: 700; font-size: 1rem; color: var(--ink); margin-bottom: 2px; }}
 .alfa-member__role {{ color: var(--ink-soft); font-size: .86rem; }}
 
+/* O markdown do Streamlit sublinha todo <a>. Nos nossos componentes o link
+   já é sinalizado pela forma (botão, pílula, ícone), então o sublinhado só
+   suja — fica reservado para os links de texto corrido do rodapé, no hover. */
+.alfa-btn, .alfa-social a, .alfa-alum__link, .alfa-tag,
+.alfa-footer a, .alfa-agenda a {{ text-decoration: none !important; }}
+.alfa-footer__grid a:hover {{ text-decoration: underline !important; }}
+.alfa-social a:hover {{ text-decoration: none !important; }}
+
 /* Alumni: card compacto (sem foto), pensado para listas longas */
 .alfa-alum {{
   background: var(--surface); border: 1px solid var(--border);
@@ -452,13 +460,17 @@ a:hover {{ color: var(--blue-600); }}
 /* O slot do LinkedIn existe em todos os cards: invisível quando não há link,
    para a grade não mudar de forma conforme os links forem preenchidos. */
 .alfa-alum__link {{
-  flex: 0 0 32px; width: 32px; height: 32px; border-radius: 50%;
+  flex: 0 0 30px; width: 30px; height: 30px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  border: 1px solid var(--border); color: var(--ink-soft);
+  border: 1px solid var(--border);
+  color: var(--blue-500) !important;
   transition: background .2s var(--ease), border-color .2s var(--ease), color .2s var(--ease);
 }}
-.alfa-alum__link svg {{ width: 15px; height: 15px; fill: currentColor; }}
-.alfa-alum__link:hover {{ background: var(--blue-500); border-color: var(--blue-500); color: #fff; }}
+.alfa-alum__link svg {{ width: 16px; height: 16px; fill: currentColor; }}
+.alfa-alum__link:hover {{
+  background: var(--blue-500); border-color: var(--blue-500); color: #fff !important;
+}}
+.alfa-alum__link:hover svg {{ fill: currentColor; }}
 .alfa-alum__link--vazio {{ visibility: hidden; }}
 .alfa-alum:hover {{
   transform: translateY(-2px); box-shadow: var(--shadow-md);
@@ -483,7 +495,9 @@ a:hover {{ color: var(--blue-600); }}
 }}
 .alfa-section--dark .alfa-alum__name {{ color: var(--on-dark); }}
 .alfa-section--dark .alfa-alum__role {{ color: var(--on-dark-soft); }}
-.alfa-section--dark .alfa-alum__link {{ border-color: rgba(138,168,250,.24); color: var(--on-dark-soft); }}
+.alfa-section--dark .alfa-alum__link {{
+  border-color: rgba(138,168,250,.24); color: var(--blue-300) !important;
+}}
 
 /* Agenda / calendário */
 .alfa-agenda {{ display: flex; flex-direction: column; }}
@@ -921,11 +935,13 @@ input, select, textarea, [data-baseweb="select"], [data-testid="stSelectbox"] {{
 .alfa-social a {{
   width: 36px; height: 36px; border-radius: 50%;
   border: 1px solid rgba(138,168,250,.24);
+  color: var(--blue-300) !important;
   display: flex; align-items: center; justify-content: center;
-  transition: background .2s var(--ease), transform .2s var(--ease), border-color .2s var(--ease);
+  transition: background .2s var(--ease), transform .2s var(--ease), border-color .2s var(--ease), color .2s var(--ease);
 }}
+.alfa-social a:hover {{ color: #fff !important; }}
 .alfa-social a:hover {{ background: var(--blue-500); border-color: var(--blue-500); transform: translateY(-2px); }}
-.alfa-social svg {{ width: 17px; height: 17px; fill: currentColor; }}
+.alfa-social svg {{ width: 18px; height: 18px; fill: currentColor; }}
 
 /* ====================================================================
    10. RESPONSIVO
