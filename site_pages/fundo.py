@@ -9,6 +9,7 @@ import streamlit as st
 
 from services.portfolio_analytics import (
     benchmark_return_series,
+    capm_alpha_beta_correlation,
     drawdown_series,
     individual_metrics,
     performance_indices,
@@ -20,6 +21,11 @@ from theme import tokens as T
 from theme.plotly_theme import CHART_CONFIG, style
 
 TRADING_DAYS = 252
+
+#: Data de abertura do fundo. Toda a vitrine (série do gráfico, retorno desde a
+#: abertura, vol, Sharpe, VaR, alfa e drawdown) é ancorada aqui — mude só esta
+#: linha se a data mudar.
+ABERTURA_FUNDO = pd.Timestamp("2026-01-01")
 
 PROCESSO = [
     {"titulo": "Screening Setorial", "descricao": "Mapeamento de oportunidades para identificar possíveis assimetrias."},
@@ -44,65 +50,81 @@ PILARES = [
 
 @st.cache_data(show_spinner=False, ttl=900)
 def _fund_metrics(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame) -> dict:
-    """Indicadores da carteira na janela de 12 meses (ou no histórico disponível)."""
-    empty = {"ok": False}
+    """Indicadores da carteira desde a abertura do fundo.
+
+    Vol, Sharpe, VaR/CVaR, alfa e drawdown usam a janela desde a abertura; o
+    retorno de 12 meses é o único indicador que olha para trás dela, aplicando
+    os pesos atuais sobre o histórico dos ativos.
+    """
     if portfolio_df.empty or historical_df.empty:
-        return empty
+        return {"ok": False}
 
-    end_date = historical_df.index.max()
-    start_date = max(end_date - pd.DateOffset(years=1), historical_df.index.min())
+    fim = historical_df.index.max()
+    inicio = max(ABERTURA_FUNDO, historical_df.index.min())
+    if inicio >= fim:
+        return {"ok": False}
 
-    metrics = individual_metrics(portfolio_df, historical_df, start_date, end_date)
-    if not metrics or "Portfolio" not in metrics:
-        return empty
+    metricas = individual_metrics(portfolio_df, historical_df, inicio, fim)
+    if not metricas or "Portfolio" not in metricas:
+        return {"ok": False}
 
     total_pl = float(pd.to_numeric(portfolio_df["valor_real"], errors="coerce").fillna(0).sum())
-    daily_vol = metrics["Portfolio"]["volatilidade"]
-    daily_mean = metrics["Portfolio"]["media"]
+    vol_diaria = metricas["Portfolio"]["volatilidade"]
 
-    result = {
+    resultado: dict = {
         "ok": True,
-        "start": start_date,
-        "end": end_date,
+        "inicio": inicio,
+        "fim": fim,
         "total_pl": total_pl,
         "asset_count": int((portfolio_df["ticker"].astype(str).str.strip() != "").sum()),
-        "vol_anual": float(daily_vol * np.sqrt(TRADING_DAYS) * 100),
-        "retorno_anualizado": float(((1 + daily_mean) ** TRADING_DAYS - 1) * 100),
+        "vol_anual": float(vol_diaria * np.sqrt(TRADING_DAYS) * 100),
     }
 
-    ibov = benchmark_return_series(portfolio_df, historical_df, "IBOVESPA", years=1)
-    if not ibov.empty:
-        result["ret_portfolio"] = float(ibov["Portfolio"].iloc[-1])
-        result["ret_ibov"] = float(ibov["IBOVESPA"].iloc[-1])
-        result["curva_ibov"] = ibov
+    # --- retorno desde a abertura (também alimenta o gráfico) -------------
+    desde_abertura = benchmark_return_series(portfolio_df, historical_df, "IBOVESPA", start=inicio)
+    if not desde_abertura.empty:
+        resultado["ret_abertura"] = float(desde_abertura["Portfolio"].iloc[-1])
+        resultado["ret_ibov_abertura"] = float(desde_abertura["IBOVESPA"].iloc[-1])
+        resultado["curva"] = desde_abertura
 
-    cdi = benchmark_return_series(portfolio_df, historical_df, "CDI", years=1)
-    if not cdi.empty:
-        result["ret_cdi"] = float(cdi["CDI"].iloc[-1])
-        result["curva_cdi"] = cdi["CDI"]
+    cdi_abertura = benchmark_return_series(portfolio_df, historical_df, "CDI", start=inicio)
+    if not cdi_abertura.empty:
+        resultado["curva_cdi"] = cdi_abertura["CDI"]
 
-    var_metrics = var_cvar_metrics(portfolio_df, historical_df, total_pl, start_date, end_date, 0.95)
-    if var_metrics and "Portfolio" in var_metrics and total_pl > 0:
-        result["var_pct"] = float(var_metrics["Portfolio"]["var"] / total_pl * 100)
-        result["cvar_pct"] = float(var_metrics["Portfolio"]["cvar"] / total_pl * 100)
+    # --- retorno de 12 meses ---------------------------------------------
+    doze_meses = benchmark_return_series(portfolio_df, historical_df, "IBOVESPA", years=1)
+    if not doze_meses.empty:
+        resultado["ret_12m"] = float(doze_meses["Portfolio"].iloc[-1])
+        resultado["ret_ibov_12m"] = float(doze_meses["IBOVESPA"].iloc[-1])
 
-    indices = performance_indices(portfolio_df, historical_df, start_date, end_date)
+    # --- risco ------------------------------------------------------------
+    var = var_cvar_metrics(portfolio_df, historical_df, total_pl, inicio, fim, 0.95)
+    if var and "Portfolio" in var and total_pl > 0:
+        resultado["var_pct"] = float(var["Portfolio"]["var"] / total_pl * 100)
+        resultado["cvar_pct"] = float(var["Portfolio"]["cvar"] / total_pl * 100)
+
+    indices = performance_indices(portfolio_df, historical_df, inicio, fim)
     if indices:
-        result["sharpe"] = float(indices["anual"]["sharpe"])
-        result["sortino"] = float(indices["anual"]["sortino"])
+        resultado["sharpe"] = float(indices["anual"]["sharpe"])
 
-    drawdown = drawdown_series(portfolio_df, historical_df)
+    capm = capm_alpha_beta_correlation(portfolio_df, historical_df, inicio, fim)
+    if capm:
+        # o alfa do OLS é diário; anualizamos para leitura na vitrine
+        resultado["alfa_anual"] = float(((1 + capm["alfa"]) ** TRADING_DAYS - 1) * 100)
+        resultado["beta"] = float(capm["beta"])
+
+    drawdown = drawdown_series(portfolio_df, historical_df.loc[inicio:])
     if not drawdown.empty:
-        result["max_drawdown"] = float(drawdown.min())
+        resultado["max_drawdown"] = float(drawdown.min())
 
-    return result
+    return resultado
 
 
 def _curve_chart(metrics: dict) -> go.Figure | None:
-    if "curva_ibov" not in metrics:
+    if "curva" not in metrics:
         return None
 
-    ibov = metrics["curva_ibov"]
+    ibov = metrics["curva"]
     figure = go.Figure()
     figure.add_trace(
         go.Scatter(
@@ -139,7 +161,8 @@ def _curve_chart(metrics: dict) -> go.Figure | None:
             )
         )
     figure.update_yaxes(ticksuffix="%")
-    return style(figure, title="Retorno acumulado · 12 meses", dark=True, height=380)
+    titulo = f"Retorno acumulado · desde {metrics['inicio'].strftime('%d/%m/%Y')}"
+    return style(figure, title=titulo, dark=True, height=380)
 
 
 def _allocation_chart(portfolio_df: pd.DataFrame) -> go.Figure | None:
@@ -225,62 +248,137 @@ def _render_processo() -> None:
     )
 
 
+def _atualizar_historico(portfolio_df: pd.DataFrame) -> None:
+    """Rebaixa preços, benchmarks e títulos públicos e regrava o histórico."""
+    from services.portfolio_analytics import build_historical_dataset
+    from site_pages._shared import repository
+
+    with st.spinner("Baixando preços e recalculando indicadores…"):
+        resultado = build_historical_dataset(portfolio_df)
+        repository().save_historical_data(resultado.historical)
+
+    clear_fund_cache()
+    _fund_metrics.clear()
+    if resultado.invalid_tickers:
+        st.warning("Tickers sem dados: " + ", ".join(resultado.invalid_tickers))
+    st.rerun()
+
+
+def _render_status(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame) -> None:
+    """Selo com a data-base do histórico e o botão de atualização."""
+    fim = historical_df.index.max() if not historical_df.empty else None
+    hoje = pd.Timestamp.today().normalize()
+    # 4 dias cobrem um feriado emendado no fim de semana sem alarme falso
+    defasado = fim is None or (hoje - fim).days > 4
+
+    selo = f"Dados de {fim.strftime('%d/%m/%Y')}" if fim is not None else "Sem histórico"
+    c.render(
+        f'<div class="alfa-center" style="margin-top:-20px">{c.chip(selo, tone="wait" if defasado else "info")}</div>'
+    )
+
+    if defasado:
+        atraso = f" — {(hoje - fim).days} dias atrás" if fim is not None else ""
+        st.warning(
+            f"O histórico não chega até hoje{atraso}. Atualize para recalcular os indicadores.",
+            icon=":material/update:",
+        )
+
+    _, meio, _ = st.columns([1, 1.1, 1])
+    with meio:
+        if st.button(
+            "Atualizar histórico",
+            key="fundo_atualizar",
+            type="primary" if defasado else "secondary",
+            use_container_width=True,
+        ):
+            _atualizar_historico(portfolio_df)
+
+
+def _cards(metrics: dict) -> list[str]:
+    """Os oito indicadores da vitrine, na ordem definida pela diretoria."""
+    ret_abertura = metrics.get("ret_abertura", float("nan"))
+    ret_12m = metrics.get("ret_12m", float("nan"))
+    alfa = metrics.get("alfa_anual", float("nan"))
+    abertura = metrics["inicio"].strftime("%d/%m/%Y")
+
+    def tom(valor: float, referencia: float) -> str:
+        if pd.isna(valor) or pd.isna(referencia):
+            return ""
+        return "up" if valor >= referencia else "down"
+
+    return [
+        c.kpi(
+            "Retorno desde a abertura",
+            pct(ret_abertura, signed=True),
+            note=f"Ibovespa {pct(metrics.get('ret_ibov_abertura', float('nan')), signed=True)}",
+            tone=tom(ret_abertura, metrics.get("ret_ibov_abertura", float("nan"))),
+            step=1,
+        ),
+        c.kpi(
+            "Retorno 12M",
+            pct(ret_12m, signed=True),
+            note=f"Ibovespa {pct(metrics.get('ret_ibov_12m', float('nan')), signed=True)}",
+            tone=tom(ret_12m, metrics.get("ret_ibov_12m", float("nan"))),
+            step=2,
+        ),
+        c.kpi("Volatilidade", pct(metrics["vol_anual"]), note="desvio-padrão anualizado", step=3),
+        c.kpi("Sharpe (a.a.)", num(metrics.get("sharpe", float("nan"))), note="excesso sobre o CDI", step=4),
+        c.kpi(
+            "VaR 95% diário",
+            pct(metrics.get("var_pct", float("nan"))),
+            note=f"CVaR {pct(metrics.get('cvar_pct', float('nan')))}",
+            step=5,
+        ),
+        c.kpi(
+            "Alfa (a.a.)",
+            pct(alfa, decimals=2, signed=True),
+            note=f"vs. Ibovespa · beta {num(metrics.get('beta', float('nan')))}",
+            tone="up" if not pd.isna(alfa) and alfa >= 0 else "down",
+            step=6,
+        ),
+        c.kpi(
+            "Máx. drawdown",
+            pct(metrics.get("max_drawdown", float("nan"))),
+            note="pior queda desde a abertura",
+            step=7,
+        ),
+        c.kpi(
+            "Patrimônio líquido",
+            brl_compact(metrics["total_pl"]),
+            note=f"acumulado desde {abertura} · {metrics['asset_count']} posições",
+            step=8,
+        ),
+    ]
+
+
 def _render_vitrine(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame) -> None:
     metrics = _fund_metrics(portfolio_df, historical_df)
 
     with st.container(key="alfaband_dark_vitrine"):
-        reference = (
-            f"Dados de {metrics['end'].strftime('%d/%m/%Y')}"
-            if metrics.get("ok")
-            else "Aguardando atualização do histórico"
-        )
         c.render(
             '<div class="alfa-center">'
             + c.section_head(
                 kicker="Gestão & Risco",
                 title="A carteira em números",
                 subtitle="Indicadores calculados pela diretoria de Gestão &amp; Risco sobre a carteira "
-                "simulada — os mesmos modelos disponíveis na plataforma.",
+                f"simulada, desde a abertura do fundo em {ABERTURA_FUNDO.strftime('%d/%m/%Y')}.",
                 center=True,
             )
-            + f'<p style="margin-top:-20px">{c.chip(reference)}</p></div>'
+            + "</div>"
         )
+
+        _render_status(portfolio_df, historical_df)
 
         if not metrics.get("ok"):
-            _render_sem_dados()
+            st.info(
+                "O histórico consolidado ainda não cobre as posições atuais da carteira. "
+                "Use o botão acima para baixar os dados de mercado.",
+                icon=":material/info:",
+            )
             return
 
-        c.render(
-            c.grid(
-                [
-                    c.kpi(
-                        "Retorno 12m",
-                        pct(metrics.get("ret_portfolio", float("nan")), signed=True),
-                        note=f"Ibovespa {pct(metrics.get('ret_ibov', float('nan')), signed=True)}",
-                        tone="up"
-                        if metrics.get("ret_portfolio", 0) >= metrics.get("ret_ibov", 0)
-                        else "down",
-                        step=1,
-                    ),
-                    c.kpi("Volatilidade anual", pct(metrics["vol_anual"]), note="desvio-padrão anualizado", step=2),
-                    c.kpi("Sharpe (a.a.)", num(metrics.get("sharpe", float("nan"))), note="excesso sobre o CDI", step=3),
-                    c.kpi(
-                        "VaR 95% diário",
-                        pct(metrics.get("var_pct", float("nan"))),
-                        note=f"CVaR {pct(metrics.get('cvar_pct', float('nan')))}",
-                        step=4,
-                    ),
-                    c.kpi(
-                        "Máx. drawdown",
-                        pct(metrics.get("max_drawdown", float("nan"))),
-                        note="pior queda no período",
-                        step=5,
-                    ),
-                    c.kpi("Patrimônio simulado", brl_compact(metrics["total_pl"]), note=f"{metrics['asset_count']} posições", step=6),
-                ],
-                cols=3,
-            )
-        )
+        st.write("")
+        c.render(c.grid(_cards(metrics), cols=4))
 
         st.write("")
         left, right = st.columns([1.35, 1], gap="large")
@@ -293,10 +391,42 @@ def _render_vitrine(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame) -> 
             if allocation is not None:
                 st.plotly_chart(allocation, use_container_width=True, theme=None, config=CHART_CONFIG)
 
-        _render_tabela(portfolio_df)
+        _render_tabela(portfolio_df, historical_df)
 
 
-def _render_tabela(portfolio_df: pd.DataFrame) -> None:
+def _variacao(historical_df: pd.DataFrame, ticker: str, *, meses: int) -> float | None:
+    """Retorno do ativo na janela pedida, em %.
+
+    Devolve None quando o histórico não cobre a janela inteira — melhor mostrar
+    um traço do que um número calculado sobre um período mais curto.
+    """
+    if historical_df.empty or ticker not in historical_df.columns:
+        return None
+    serie = pd.to_numeric(historical_df[ticker], errors="coerce").dropna()
+    if serie.empty:
+        return None
+
+    fim = serie.index.max()
+    anterior = serie.loc[: fim - pd.DateOffset(months=meses)]
+    if anterior.empty:
+        return None
+
+    base = float(anterior.iloc[-1])
+    if base == 0:
+        return None
+    return (float(serie.iloc[-1]) / base - 1) * 100
+
+
+def _celula_variacao(valor: float | None) -> str:
+    if valor is None:
+        return '<span style="color:var(--on-dark-soft)">—</span>'
+    if abs(valor) < 0.005:  # arredondaria para 0,00%: sai neutro, sem sinal
+        return '<span style="color:var(--on-dark-soft)">0,00%</span>'
+    classe = "pos" if valor > 0 else "neg"
+    return f'<span class="{classe}">{pct(valor, decimals=2, signed=True)}</span>'
+
+
+def _render_tabela(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame) -> None:
     working = portfolio_df.copy()
     for column in ("preco", "porcentagem_desejada", "porcentagem_real", "valor_real"):
         working[column] = pd.to_numeric(working[column], errors="coerce")
@@ -305,17 +435,16 @@ def _render_tabela(portfolio_df: pd.DataFrame) -> None:
     if working.empty:
         return
 
-    max_weight = float(working["porcentagem_real"].max() or 1)
     rows = []
     for _, row in working.iterrows():
-        width = max(2.0, float(row["porcentagem_real"]) / max_weight * 100)
         rows.append(
             [
                 f'<b>{c.esc(short_ticker(row["ticker"]))}</b>',
                 c.esc(str(row["nome"]).title().strip()),
                 f'R$ {num(row["preco"])}',
                 pct(row["porcentagem_real"], decimals=2),
-                f'<span class="bar" style="width:{width:.0f}%"></span>',
+                _celula_variacao(_variacao(historical_df, str(row["ticker"]), meses=1)),
+                _celula_variacao(_variacao(historical_df, str(row["ticker"]), meses=12)),
             ]
         )
 
@@ -323,39 +452,13 @@ def _render_tabela(portfolio_df: pd.DataFrame) -> None:
         '<div style="margin-top:28px">'
         + c.reveal(
             c.data_table(
-                ["Ticker", "Empresa", "Preço", "Peso", ""],
+                ["Ticker", "Empresa", "Preço", "Peso", "1 mês", "12 meses"],
                 rows,
                 numeric_from=2,
             )
         )
         + "</div>"
     )
-
-
-def _render_sem_dados() -> None:
-    st.info(
-        "O histórico consolidado ainda não cobre as posições atuais da carteira. "
-        "Atualize os dados de mercado para liberar os indicadores.",
-        icon=":material/update:",
-    )
-    with st.expander("Atualizar dados de mercado"):
-        st.caption(
-            "Baixa o histórico de preços das posições, dos benchmarks (Ibovespa, CDI) e dos títulos "
-            "públicos. Leva de 20 a 60 segundos."
-        )
-        if st.button("Atualizar agora", key="fundo_refresh", type="primary"):
-            from services.portfolio_analytics import build_historical_dataset
-            from site_pages._shared import repository
-
-            portfolio_df, _ = fund_snapshot()
-            with st.spinner("Baixando preços e recalculando indicadores…"):
-                result = build_historical_dataset(portfolio_df)
-                repository().save_historical_data(result.historical)
-            clear_fund_cache()
-            _fund_metrics.clear()
-            if result.invalid_tickers:
-                st.warning("Tickers sem dados: " + ", ".join(result.invalid_tickers))
-            st.rerun()
 
 
 def _render_cta(on_platform) -> None:

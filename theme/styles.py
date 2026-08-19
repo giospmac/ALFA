@@ -279,8 +279,19 @@ a:hover {{ color: var(--blue-600); }}
 .alfa-hero-sub {{
   color: var(--blue-300); font-weight: 600;
   font-size: clamp(1rem, 2.2vw, 1.35rem); letter-spacing: -.005em;
-  line-height: 1.45; margin: 0 auto clamp(18px, 2.6vw, 26px); max-width: 32rem;
+  line-height: 1.45; margin: 0 auto clamp(18px, 2.6vw, 26px);
 }}
+/* Centralização do hero com especificidade suficiente para vencer as regras
+   de parágrafo do markdown do Streamlit, que variam entre versões. */
+.st-key-alfa_hero h1,
+.st-key-alfa_hero .alfa-hero-sub,
+.st-key-alfa_hero .alfa-lead {{
+  text-align: center !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}}
+.st-key-alfa_hero .alfa-hero-sub {{ max-width: 48rem !important; }}
+.st-key-alfa_hero .alfa-lead {{ max-width: 44rem !important; }}
 
 .alfa-scrollcue {{
   margin-top: clamp(30px, 5vw, 52px);
@@ -448,6 +459,9 @@ a:hover {{ color: var(--blue-600); }}
 .alfa-footer__grid a:hover {{ text-decoration: underline !important; }}
 .alfa-social a:hover {{ text-decoration: none !important; }}
 
+/* CTA da vitrine da plataforma: respiro maior em relação aos cards acima. */
+.st-key-cta_plataforma {{ margin-top: clamp(20px, 3.5vw, 40px); }}
+
 /* Alumni: card compacto (sem foto), pensado para listas longas */
 .alfa-alum {{
   background: var(--surface); border: 1px solid var(--border);
@@ -463,7 +477,7 @@ a:hover {{ color: var(--blue-600); }}
   flex: 0 0 30px; width: 30px; height: 30px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   border: 1px solid var(--border);
-  color: var(--blue-500) !important;
+  color: var(--border) !important;   /* #E2E0D8: mesmo tom do anel, bem discreto */
   transition: background .2s var(--ease), border-color .2s var(--ease), color .2s var(--ease);
 }}
 .alfa-alum__link svg {{ width: 16px; height: 16px; fill: currentColor; }}

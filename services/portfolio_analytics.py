@@ -723,7 +723,14 @@ def benchmark_return_series(
     *,
     years: int | None = None,
     months: int | None = None,
+    start: pd.Timestamp | None = None,
 ) -> pd.DataFrame:
+    """Retorno acumulado da carteira vs. um benchmark, em %.
+
+    A janela vem de `years`/`months` (relativos ao fim do histórico) ou de
+    `start`, que fixa uma data absoluta e tem precedência — é o que permite
+    ancorar a série na data de abertura do fundo.
+    """
     if historical_df.empty or benchmark_column not in historical_df.columns:
         return pd.DataFrame()
 
@@ -737,6 +744,8 @@ def benchmark_return_series(
         start_date = end_date - pd.DateOffset(months=months)
     if years is not None:
         start_date = end_date - pd.DateOffset(years=years)
+    if start is not None:
+        start_date = max(pd.Timestamp(start), historical_df.index.min())
 
     period_df = pd.concat(
         [portfolio_prices.rename("Portfolio"), historical_df[benchmark_column].rename(benchmark_column)],
