@@ -440,6 +440,31 @@ a:hover {{ color: var(--blue-600); }}
 .alfa-member__name {{ font-weight: 700; font-size: 1rem; color: var(--ink); margin-bottom: 2px; }}
 .alfa-member__role {{ color: var(--ink-soft); font-size: .86rem; }}
 
+/* Alumni: card compacto (sem foto), pensado para listas longas */
+.alfa-alum {{
+  background: var(--surface); border: 1px solid var(--border);
+  border-left: 3px solid var(--blue-300);
+  border-radius: 10px; padding: 13px 16px; height: 100%;
+  transition: transform .22s var(--ease), box-shadow .22s var(--ease), border-left-color .22s var(--ease);
+}}
+.alfa-alum:hover {{
+  transform: translateY(-2px); box-shadow: var(--shadow-md);
+  border-left-color: var(--blue-500);
+}}
+.alfa-alum__name {{
+  font-weight: 700; font-size: .95rem; color: var(--ink);
+  line-height: 1.3; letter-spacing: -.01em;
+}}
+.alfa-alum__name a {{ color: inherit; }}
+.alfa-alum__name a:hover {{ color: var(--blue-600); }}
+.alfa-alum__role {{ color: var(--ink-soft); font-size: .82rem; margin-top: 3px; }}
+.alfa-section--dark .alfa-alum, [class*="st-key-alfaband_dark"] .alfa-alum {{
+  background: rgba(16,26,58,.62); border-color: rgba(138,168,250,.16);
+  border-left-color: var(--blue-500); box-shadow: none;
+}}
+.alfa-section--dark .alfa-alum__name {{ color: var(--on-dark); }}
+.alfa-section--dark .alfa-alum__role {{ color: var(--on-dark-soft); }}
+
 /* Agenda / calendário */
 .alfa-agenda {{ display: flex; flex-direction: column; }}
 .alfa-agenda__row {{

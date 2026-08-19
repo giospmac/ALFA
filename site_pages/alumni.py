@@ -1,35 +1,66 @@
-"""Página Alumni — placeholder, a preencher.
+"""Página Alumni — ex-membros do núcleo, agrupados por posição.
 
-Como preencher
---------------
-1. Crie `content/alumni.json` no formato:
+Como editar
+-----------
+A lista vive em `content/alumni.json`. Cada entrada tem `nome`, `posicao` e
+`linkedin` (opcional — com o link preenchido, o nome vira clicável).
 
-       {
-         "alumni": [
-           {
-             "nome": "Nome Sobrenome",
-             "turma": "2024.1",
-             "cargo": "Analista · Nome da Gestora",
-             "foto": "",
-             "linkedin": ""
-           }
-         ]
-       }
-
-   As fotos vão em `assets/membros/` (mesma pasta dos membros ativos).
-
-2. Descomente o bloco `_render_alumni()` no fim deste arquivo e a chamada dele
-   em `render()`. O layout de grade já é o mesmo da página Membros.
+O agrupamento é derivado da `posicao` pelas palavras-chave em `GRUPOS`: quem
+tiver "Presidente" ou "VP" cai em Presidência, "Diretor"/"Diretora" em
+Diretoria, e o restante em Associados. Uma posição nova que não case com
+nenhuma palavra-chave vai para o último grupo.
 """
 
 from __future__ import annotations
 
+import unicodedata
+
+import streamlit as st
+
+from site_pages._shared import load_content
 from theme import components as c
 
-# from site_pages._shared import load_content, photo_uri  # usar ao ligar o JSON
+#: (título do grupo, palavras-chave da posição). A ordem é a de exibição e a
+#: última entrada funciona como grupo de fallback.
+GRUPOS: list[tuple[str, tuple[str, ...], str]] = [
+    (
+        "Presidência",
+        ("presidente", "vp", "vice-presidente"),
+        "Quem liderou o núcleo e as duas frentes, ALFA Asset e ALFA Núcleo.",
+    ),
+    (
+        "Diretoria",
+        ("diretor", "diretora"),
+        "Ex-diretores das áreas de Equity Research, Gestão e Risco, Mercado e Pessoas.",
+    ),
+    (
+        "Associados",
+        (),
+        "Quem passou pelas análises, pelos modelos e pelos projetos do núcleo.",
+    ),
+]
 
 
-def _render_header() -> None:
+def _normalizar(texto: str) -> str:
+    sem_acento = unicodedata.normalize("NFKD", texto).encode("ascii", "ignore").decode()
+    return sem_acento.lower()
+
+
+def _agrupar(pessoas: list[dict]) -> dict[str, list[dict]]:
+    grupos: dict[str, list[dict]] = {titulo: [] for titulo, _, _ in GRUPOS}
+    fallback = GRUPOS[-1][0]
+    for pessoa in pessoas:
+        posicao = _normalizar(pessoa.get("posicao", ""))
+        destino = next(
+            (titulo for titulo, chaves, _ in GRUPOS if any(chave in posicao for chave in chaves)),
+            fallback,
+        )
+        grupos[destino].append(pessoa)
+    return grupos
+
+
+def _render_header(total: int) -> None:
+    contagem = f"{total} ex-membros" if total else "Os ex-membros do núcleo"
     c.render(
         c.section(
             c.container(
@@ -37,8 +68,8 @@ def _render_header() -> None:
                 + c.reveal("<h1>Alumni</h1>", step=2)
                 + c.reveal(
                     c.lead(
-                        "Quem passou pelo ALFA e hoje atua no mercado — a rede que conecta as "
-                        "turmas do núcleo ao buy-side, ao sell-side e à academia."
+                        f"{contagem} que construíram o ALFA desde a fundação — de presidências e "
+                        "diretorias a associados que passaram pelas análises e pelos modelos do fundo."
                     ),
                     step=3,
                 )
@@ -50,57 +81,74 @@ def _render_header() -> None:
     )
 
 
-def render(*, goto=None) -> None:  # noqa: ARG001 — assinatura comum às páginas
-    _render_header()
+def _render_grupo(titulo: str, descricao: str, pessoas: list[dict], *, variant: str) -> None:
+    if not pessoas:
+        return
+    cards = [
+        c.alumni_card(
+            nome=pessoa.get("nome", ""),
+            posicao=pessoa.get("posicao", ""),
+            linkedin=pessoa.get("linkedin", ""),
+            step=(index % 6) + 1,
+        )
+        for index, pessoa in enumerate(pessoas)
+    ]
     c.render(
         c.section(
             c.container(
-                c.coming_soon(
-                    titulo="Estamos montando a rede",
-                    descricao="Esta página vai reunir os ex-membros do ALFA por turma. "
-                    "Se você passou pelo núcleo, fale com a gente.",
+                c.section_head(
+                    kicker=f"{len(pessoas)} {'pessoa' if len(pessoas) == 1 else 'pessoas'}",
+                    title=titulo,
+                    subtitle=descricao,
                 )
-                + '<div class="alfa-center" style="margin-top:28px">'
-                + c.ctas(
-                    c.button(
-                        "Falar com o ALFA", "mailto:alfapucrio@gmail.com", variant="outline"
-                    )
-                )
-                + "</div>"
+                + c.grid(cards, cols=3)
             ),
-            variant="light",
+            variant=variant,
         )
     )
 
 
-# ---------------------------------------------------------------------------
-# Bloco pronto para quando a lista existir — descomente e chame
-# `_render_alumni()` dentro de `render()`, logo após `_render_header()`.
-# ---------------------------------------------------------------------------
-# def _render_alumni() -> None:
-#     pessoas = load_content("alumni").get("alumni", [])
-#     if not pessoas:
-#         return
-#     turmas: dict[str, list[dict]] = {}
-#     for pessoa in pessoas:
-#         turmas.setdefault(pessoa.get("turma", "Sem turma"), []).append(pessoa)
-#
-#     blocos = []
-#     for turma in sorted(turmas, reverse=True):
-#         cards = [
-#             c.member(
-#                 nome=p.get("nome", ""),
-#                 cargo=p.get("cargo", ""),
-#                 foto_uri=photo_uri("membros", p.get("foto", "")),
-#                 linkedin=p.get("linkedin", ""),
-#                 step=(index % 6) + 1,
-#             )
-#             for index, p in enumerate(turmas[turma])
-#         ]
-#         blocos.append(
-#             '<div style="margin-bottom:clamp(44px,6vw,72px)">'
-#             + c.section_head(kicker=f"Turma {turma}", title=f"{len(cards)} alumni")
-#             + c.grid(cards, cols=4)
-#             + "</div>"
-#         )
-#     c.render(c.section(c.container("".join(blocos)), variant="light"))
+def _render_cta() -> None:
+    with st.container(key="alfaband_dark_alumnicta"):
+        c.render(
+            '<div class="alfa-center">'
+            + c.section_head(
+                title="Passou pelo ALFA e não está aqui?",
+                subtitle="Nos escreva para entrar na lista — ou para mandar seu LinkedIn e "
+                "aparecer com o link no seu nome.",
+                center=True,
+            )
+            + c.ctas(c.button("Falar com o ALFA", "mailto:alfapucrio@gmail.com"))
+            + "</div>"
+        )
+
+
+def render(*, goto=None) -> None:  # noqa: ARG001 — assinatura comum às páginas
+    pessoas = load_content("alumni").get("alumni", [])
+    _render_header(len(pessoas))
+
+    if not pessoas:
+        c.render(
+            c.section(
+                c.container(
+                    c.coming_soon(
+                        titulo="Estamos montando a rede",
+                        descricao="Edite content/alumni.json para publicar a lista de ex-membros.",
+                    )
+                ),
+                variant="light",
+            )
+        )
+        _render_cta()
+        return
+
+    grupos = _agrupar(pessoas)
+    for indice, (titulo, _, descricao) in enumerate(GRUPOS):
+        _render_grupo(
+            titulo,
+            descricao,
+            grupos[titulo],
+            variant="light" if indice % 2 == 0 else "surface",
+        )
+
+    _render_cta()

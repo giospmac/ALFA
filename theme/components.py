@@ -188,6 +188,18 @@ def member(*, nome: str, cargo: str, foto_uri: str = "", linkedin: str = "", ste
     )
 
 
+def alumni_card(*, nome: str, posicao: str, linkedin: str = "", step: int = 1) -> str:
+    """Card compacto de alumni: nome e posição, sem foto."""
+    nome_markup = esc(nome)
+    if linkedin:
+        nome_markup = f'<a href="{esc(linkedin)}" target="_blank" rel="noopener">{nome_markup}</a>'
+    return reveal(
+        f'<div class="alfa-alum"><div class="alfa-alum__name">{nome_markup}</div>'
+        f'<div class="alfa-alum__role">{esc(posicao)}</div></div>',
+        step=step,
+    )
+
+
 def agenda(rows: Sequence[dict]) -> str:
     items = []
     for row in rows:

@@ -1,0 +1,195 @@
+{
+  "_comentario": "Cada alumni: nome, posicao (como aparece no card) e linkedin (opcional — com o link preenchido o nome vira clicavel). O agrupamento da pagina sai da posicao: 'Presidente'/'VP' vao para Presidencia, 'Diretor'/'Diretora' para Diretoria, o resto para Associados.",
+  "alumni": [
+    {
+      "nome": "Ana Vitória Prado",
+      "posicao": "ex-Associado",
+      "linkedin": ""
+    },
+    {
+      "nome": "Bernardo Barauna Pinheiro de Freitas",
+      "posicao": "ex-Diretor",
+      "linkedin": ""
+    },
+    {
+      "nome": "Beatriz Roquette Reis Peixoto",
+      "posicao": "ex-Associado",
+      "linkedin": ""
+    },
+    {
+      "nome": "Bruno Gheventer",
+      "posicao": "ex-Associado",
+      "linkedin": ""
+    },
+    {
+      "nome": "Bruno Barcelos Simas",
+      "posicao": "ex-Diretor",
+      "linkedin": ""
+    },
+    {
+      "nome": "Clara Almeida",
+      "posicao": "ex-Diretora",
+      "linkedin": ""
+    },
+    {
+      "nome": "Daniel Beltrame Barboza",
+      "posicao": "ex-Associado",
+      "linkedin": ""
+    },
+    {
+      "nome": "Fernanda Serra",
+      "posicao": "ex-Associado",
+      "linkedin": ""
+    },
+    {
+      "nome": "Gabriel Vasconcelos de Andrade Manela",
+      "posicao": "ex-Associado",
+      "linkedin": ""
+    },
+    {
+      "nome": "Giovanna Maciel",
+      "posicao": "ex-Presidente",
+      "linkedin": ""
+    },
+    {
+      "nome": "Guilherme Nigri Sepulveda",
+      "posicao": "ex-Associado",
+      "linkedin": ""
+    },
+    {
+      "nome": "Helena Lemos Marçal Diehl",
+      "posicao": "ex-Associado",
+      "linkedin": ""
+    },
+    {
+      "nome": "Izabel Fernandes Lima",
+      "posicao": "ex-Associado",
+      "linkedin": ""
+    },
+    {
+      "nome": "João Felipe Monteiro Fernandes",
+      "posicao": "ex-Diretor",
+      "linkedin": ""
+    },
+    {
+      "nome": "João Lins de Vasconcellos",
+      "posicao": "ex-Associado",
+      "linkedin": ""
+    },
+    {
+      "nome": "João Pedro Alvim",
+      "posicao": "ex-Associado",
+      "linkedin": ""
+    },
+    {
+      "nome": "Joao Vitor Figueiredo Villa",
+      "posicao": "ex-Associado",
+      "linkedin": ""
+    },
+    {
+      "nome": "Joaquim Herculano",
+      "posicao": "ex-Associado",
+      "linkedin": ""
+    },
+    {
+      "nome": "José Serruya",
+      "posicao": "ex-Associado",
+      "linkedin": ""
+    },
+    {
+      "nome": "Júlia Guimarães Davidovich",
+      "posicao": "ex-Associado",
+      "linkedin": ""
+    },
+    {
+      "nome": "Leonardo Lacerda Gonçalves",
+      "posicao": "ex-Associado",
+      "linkedin": ""
+    },
+    {
+      "nome": "Lucas da Costa Marrucho",
+      "posicao": "ex-Associado",
+      "linkedin": ""
+    },
+    {
+      "nome": "Marcelo Augusto de Souza Martins",
+      "posicao": "ex-VP",
+      "linkedin": ""
+    },
+    {
+      "nome": "Marcos Felipe Krautz Chao",
+      "posicao": "ex-Associado",
+      "linkedin": ""
+    },
+    {
+      "nome": "Maria Bilac",
+      "posicao": "ex-Diretora",
+      "linkedin": ""
+    },
+    {
+      "nome": "Maria Eduarda Kerti Perez",
+      "posicao": "ex-Associado",
+      "linkedin": ""
+    },
+    {
+      "nome": "Mariana Moretzsohn",
+      "posicao": "ex-Diretora",
+      "linkedin": ""
+    },
+    {
+      "nome": "Maria Luiza Tostes",
+      "posicao": "ex-Associado",
+      "linkedin": ""
+    },
+    {
+      "nome": "Matheus Vasconcelos Quintas Alves",
+      "posicao": "ex-Associado",
+      "linkedin": ""
+    },
+    {
+      "nome": "Miguel Ghazi Maia",
+      "posicao": "ex-VP",
+      "linkedin": ""
+    },
+    {
+      "nome": "Rafael Goes",
+      "posicao": "ex-Presidente",
+      "linkedin": ""
+    },
+    {
+      "nome": "Raquel Eugênio Morgado Carneiro",
+      "posicao": "ex-Associado",
+      "linkedin": ""
+    },
+    {
+      "nome": "Rafael Jerke de Pontes Saraiva",
+      "posicao": "ex-Associado",
+      "linkedin": ""
+    },
+    {
+      "nome": "Rafael Lacorte Branco",
+      "posicao": "ex-Associado",
+      "linkedin": ""
+    },
+    {
+      "nome": "Rafaela de Castro Pereira Penna Cavalcanti",
+      "posicao": "ex-VP",
+      "linkedin": ""
+    },
+    {
+      "nome": "Suzana Ribeiro",
+      "posicao": "ex-VP",
+      "linkedin": ""
+    },
+    {
+      "nome": "Valentina Ayeta Abi Ramia",
+      "posicao": "ex-Diretora",
+      "linkedin": ""
+    },
+    {
+      "nome": "Wellington Guimarães Pereira Acioli",
+      "posicao": "ex-Associado",
+      "linkedin": ""
+    }
+  ]
+}
