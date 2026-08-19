@@ -464,6 +464,23 @@ a:hover {{ color: var(--blue-600); }}
 /* Botão de atualizar o histórico: afasta do selo da data-base. */
 .st-key-fundo_atualizar {{ margin-top: clamp(14px, 2vw, 24px); }}
 
+/* Lista de nomes (visitas institucionais): só o rótulo, sem cartão pesado */
+.alfa-listitem {{
+  background: var(--surface); border: 1px solid var(--border);
+  border-left: 3px solid var(--blue-300);
+  border-radius: 10px; padding: 14px 18px; height: 100%;
+  font-weight: 600; font-size: .98rem; color: var(--ink); letter-spacing: -.01em;
+  display: flex; align-items: center;
+  transition: transform .22s var(--ease), box-shadow .22s var(--ease), border-left-color .22s var(--ease);
+}}
+.alfa-listitem:hover {{
+  transform: translateY(-2px); box-shadow: var(--shadow-md); border-left-color: var(--blue-500);
+}}
+.alfa-section--dark .alfa-listitem, [class*="st-key-alfaband_dark"] .alfa-listitem {{
+  background: rgba(16,26,58,.62); border-color: rgba(138,168,250,.16);
+  border-left-color: var(--blue-500); color: var(--on-dark); box-shadow: none;
+}}
+
 /* Alumni: card compacto (sem foto), pensado para listas longas */
 .alfa-alum {{
   background: var(--surface); border: 1px solid var(--border);

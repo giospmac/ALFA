@@ -188,6 +188,11 @@ def member(*, nome: str, cargo: str, foto_uri: str = "", linkedin: str = "", ste
     )
 
 
+def nome_item(nome: str, *, step: int = 1) -> str:
+    """Item de lista com o nome apenas — sem status, descrição ou foto."""
+    return reveal(f'<div class="alfa-listitem">{esc(nome)}</div>', step=step)
+
+
 def alumni_card(*, nome: str, posicao: str, linkedin: str = "", step: int = 1) -> str:
     """Card compacto de alumni: nome, posição e o espaço do LinkedIn.
 

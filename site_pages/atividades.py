@@ -8,24 +8,6 @@ from site_pages._shared import load_content, photo_uri
 from theme import components as c
 
 
-def _visit_card(item: dict, step: int) -> str:
-    confirmada = str(item.get("status", "")).lower() == "confirmada"
-    badge = c.chip("Confirmada", tone="ok") if confirmada else c.chip("Agendando", tone="wait")
-    foto = photo_uri("atividades", item.get("foto", ""))
-    imagem = (
-        f'<img src="{foto}" alt="{c.esc(item.get("nome", ""))}" '
-        f'style="border-radius:10px;margin-bottom:14px;aspect-ratio:16/10;object-fit:cover;width:100%">'
-        if foto
-        else ""
-    )
-    return c.reveal(
-        f'<div class="alfa-card">{imagem}<div style="margin-bottom:10px">{badge}</div>'
-        f'<h3>{c.esc(item.get("nome", ""))}</h3>'
-        f'<p>{c.esc(item.get("descricao", ""))}</p></div>',
-        step=step,
-    )
-
-
 def _competition_card(item: dict, step: int) -> str:
     foto = photo_uri("atividades", item.get("foto", ""))
     imagem = (
@@ -67,18 +49,22 @@ def render(*, goto) -> None:
     )
 
     if visitas:
-        confirmadas = sum(1 for v in visitas if str(v.get("status", "")).lower() == "confirmada")
         c.render(
             c.section(
                 c.container(
                     c.section_head(
                         kicker="Visitas institucionais",
-                        title="Onde estivemos e para onde vamos",
-                        subtitle=f"{confirmadas} visitas confirmadas e {len(visitas) - confirmadas} em "
-                        "agendamento — bancos, gestoras e empresas do setor, incluindo imersões na "
-                        "Faria Lima.",
+                        title="Onde estivemos",
+                        subtitle="Bancos, gestoras e empresas do setor por onde o ALFA já passou, "
+                        "incluindo imersões na Faria Lima.",
                     )
-                    + c.grid([_visit_card(v, (i % 6) + 1) for i, v in enumerate(visitas)], cols=3)
+                    + c.grid(
+                        [
+                            c.nome_item(v.get("nome", ""), step=(i % 6) + 1)
+                            for i, v in enumerate(visitas)
+                        ],
+                        cols=3,
+                    )
                 ),
                 variant="light",
             )
