@@ -1,0 +1,15 @@
+{
+  "_comentario": "Calendário do semestre exibido em processo-seletivo.html. data no formato DD/MM. destaque: true deixa o item em negrito (visitas).",
+  "semestre": "2026.1",
+  "eventos": [
+    { "data": "23/03", "titulo": "Onboarding Trainees + Apresentação Mercado Financeiro", "destaque": false },
+    { "data": "26/03", "titulo": "DF para Análise de Empresas", "destaque": false },
+    { "data": "31/03", "titulo": "Introdução a Asset Management", "destaque": false },
+    { "data": "01/04", "titulo": "Visita IP Capital", "destaque": true },
+    { "data": "07/04", "titulo": "Introdução a Equity Research", "destaque": false },
+    { "data": "14/04", "titulo": "Modelagem Financeira I: Introdução às Finanças Corporativas", "destaque": false },
+    { "data": "15/04", "titulo": "Visita Vinci Compass", "destaque": true },
+    { "data": "16/04", "titulo": "Valuation I: Análise de Múltiplos", "destaque": false },
+    { "data": "21/04", "titulo": "Valuation II: DCF (parte 1)", "destaque": false }
+  ]
+}

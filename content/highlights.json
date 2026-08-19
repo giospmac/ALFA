@@ -1,0 +1,13 @@
+{
+  "_comentario": "Números exibidos na página inicial. Edite os valores e faça commit — o site atualiza sozinho.",
+  "itens": [
+    { "valor": "+30", "label": "membros ativos" },
+    { "valor": "4", "label": "diretorias" },
+    { "valor": "+40", "label": "projetos no último ano" },
+    { "valor": "+100h", "label": "de capacitação" }
+  ],
+  "mentor": {
+    "nome": "André Senna Duarte",
+    "cargo": "Mentor Acadêmico"
+  }
+}

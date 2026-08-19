@@ -1,0 +1,13 @@
+{
+  "_comentario": "Cada membro: nome, diretoria (Presidência | Equity Research | Risco & Quant | Mercado | Pessoas), cargo, foto (arquivo em assets/img/membros/, opcional), linkedin (opcional).",
+  "diretorias": ["Presidência", "Equity Research", "Risco & Quant", "Mercado", "Pessoas"],
+  "membros": [
+    { "nome": "Nome Sobrenome", "diretoria": "Presidência", "cargo": "Presidente", "foto": "", "linkedin": "" },
+    { "nome": "Nome Sobrenome", "diretoria": "Presidência", "cargo": "VP ALFA Asset", "foto": "", "linkedin": "" },
+    { "nome": "Nome Sobrenome", "diretoria": "Presidência", "cargo": "VP ALFA Núcleo", "foto": "", "linkedin": "" },
+    { "nome": "Nome Sobrenome", "diretoria": "Equity Research", "cargo": "Diretor(a)", "foto": "", "linkedin": "" },
+    { "nome": "Nome Sobrenome", "diretoria": "Risco & Quant", "cargo": "Diretor(a)", "foto": "", "linkedin": "" },
+    { "nome": "Nome Sobrenome", "diretoria": "Mercado", "cargo": "Diretor(a)", "foto": "", "linkedin": "" },
+    { "nome": "Nome Sobrenome", "diretoria": "Pessoas", "cargo": "Diretor(a)", "foto": "", "linkedin": "" }
+  ]
+}

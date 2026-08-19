@@ -1,0 +1,17 @@
+# Tema base do Streamlit alinhado aos tokens do ALFA (theme/tokens.py).
+# O visual completo vem do CSS em theme/styles.py — estas chaves só garantem
+# que os componentes nativos nasçam com as cores certas.
+[theme]
+base = "light"
+primaryColor = "#4979f6"
+backgroundColor = "#f2f1ec"
+secondaryBackgroundColor = "#ffffff"
+textColor = "#14192e"
+font = "sans serif"
+
+[browser]
+gatherUsageStats = false
+
+[client]
+toolbarMode = "minimal"
+showErrorDetails = false

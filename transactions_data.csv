@@ -1,0 +1,1 @@
+trade_id,timestamp,ticker,asset_type,side,quantity,price,gross_value,fees,net_value,strategy_tag,notes

@@ -1,0 +1,26 @@
+{
+  "_comentario": "Cards de atividades.html. foto: arquivo em assets/img/atividades/ (opcional). Em 'visitas', status pode ser 'confirmada' ou 'agendando'.",
+  "visitas": [
+    { "nome": "Itaú Asset", "descricao": "Visita institucional à mesa de gestão.", "status": "confirmada", "foto": "" },
+    { "nome": "IP Capital Partners", "descricao": "Conversa com o time de análise e gestão.", "status": "confirmada", "foto": "" },
+    { "nome": "Vinci Compass", "descricao": "Visita institucional e troca com profissionais.", "status": "confirmada", "foto": "" },
+    { "nome": "Bahia Asset Management", "descricao": "Visita institucional.", "status": "confirmada", "foto": "" },
+    { "nome": "Opportunity", "descricao": "Aguardando agendamento.", "status": "agendando", "foto": "" },
+    { "nome": "SPX Capital", "descricao": "Aguardando agendamento.", "status": "agendando", "foto": "" },
+    { "nome": "XP Investimentos", "descricao": "Aguardando agendamento.", "status": "agendando", "foto": "" },
+    { "nome": "BTG Pactual", "descricao": "Aguardando agendamento.", "status": "agendando", "foto": "" },
+    { "nome": "JGP", "descricao": "Aguardando agendamento.", "status": "agendando", "foto": "" },
+    { "nome": "Turim", "descricao": "Aguardando agendamento.", "status": "agendando", "foto": "" }
+  ],
+  "competicoes": [
+    { "nome": "CFA Institute Research Challenge", "area": "Equity Research", "foto": "" },
+    { "nome": "Desafio Opportunity", "area": "Equity Research", "foto": "" },
+    { "nome": "Desafio BTG Pactual", "area": "Equity Research", "foto": "" },
+    { "nome": "Desafio Bank of America", "area": "Equity Research", "foto": "" },
+    { "nome": "Desafio JGP", "area": "Asset Management", "foto": "" },
+    { "nome": "Desafio Safra", "area": "Asset Management", "foto": "" },
+    { "nome": "Desafio Itaú Asset", "area": "Quant Finance", "foto": "" },
+    { "nome": "Desafio Galapagos Capital", "area": "Wealth Management", "foto": "" },
+    { "nome": "Desafio Turim", "area": "Wealth Management", "foto": "" }
+  ]
+}
