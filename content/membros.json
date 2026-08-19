@@ -1,13 +1,31 @@
 {
-  "_comentario": "Cada membro: nome, diretoria (Presidência | Equity Research | Risco & Quant | Mercado | Pessoas), cargo, foto (arquivo em assets/img/membros/, opcional), linkedin (opcional).",
-  "diretorias": ["Presidência", "Equity Research", "Risco & Quant", "Mercado", "Pessoas"],
+  "_comentario": "Cada membro: nome, diretoria (Presidência | Equity Research | Gestão e Risco | Mercado | Pessoas), cargo, foto (arquivo em assets/membros/, opcional — sem foto o card mostra as iniciais), linkedin (opcional). A ordem dentro de cada diretoria é a ordem de exibição.",
+  "diretorias": ["Presidência", "Equity Research", "Gestão e Risco", "Mercado", "Pessoas"],
   "membros": [
-    { "nome": "Nome Sobrenome", "diretoria": "Presidência", "cargo": "Presidente", "foto": "", "linkedin": "" },
-    { "nome": "Nome Sobrenome", "diretoria": "Presidência", "cargo": "VP ALFA Asset", "foto": "", "linkedin": "" },
-    { "nome": "Nome Sobrenome", "diretoria": "Presidência", "cargo": "VP ALFA Núcleo", "foto": "", "linkedin": "" },
-    { "nome": "Nome Sobrenome", "diretoria": "Equity Research", "cargo": "Diretor(a)", "foto": "", "linkedin": "" },
-    { "nome": "Nome Sobrenome", "diretoria": "Risco & Quant", "cargo": "Diretor(a)", "foto": "", "linkedin": "" },
-    { "nome": "Nome Sobrenome", "diretoria": "Mercado", "cargo": "Diretor(a)", "foto": "", "linkedin": "" },
-    { "nome": "Nome Sobrenome", "diretoria": "Pessoas", "cargo": "Diretor(a)", "foto": "", "linkedin": "" }
+    { "nome": "Ananda Botelho", "diretoria": "Presidência", "cargo": "Presidente", "foto": "", "linkedin": "" },
+    { "nome": "Haroldo Fazolo Flores", "diretoria": "Presidência", "cargo": "VP", "foto": "", "linkedin": "" },
+    { "nome": "Nicole Libman", "diretoria": "Presidência", "cargo": "Head do Núcleo", "foto": "", "linkedin": "" },
+
+    { "nome": "André Mattos Medeiros", "diretoria": "Equity Research", "cargo": "Diretor de Equity Research", "foto": "", "linkedin": "" },
+    { "nome": "Leticia Roquette Reis Peixoto", "diretoria": "Equity Research", "cargo": "Equity", "foto": "", "linkedin": "" },
+    { "nome": "Camilla Soares Trivellato", "diretoria": "Equity Research", "cargo": "Equity", "foto": "", "linkedin": "" },
+    { "nome": "Bruno Lopes Ferreira Viana", "diretoria": "Equity Research", "cargo": "Equity", "foto": "", "linkedin": "" },
+    { "nome": "Christian Mogami", "diretoria": "Equity Research", "cargo": "Equity", "foto": "", "linkedin": "" },
+    { "nome": "Gabriel Werner", "diretoria": "Equity Research", "cargo": "Equity", "foto": "", "linkedin": "" },
+
+    { "nome": "Guilherme Cohen Gutman", "diretoria": "Gestão e Risco", "cargo": "Diretor de Gestão e Risco", "foto": "", "linkedin": "" },
+    { "nome": "Miguel Oliveira Macedo Dias", "diretoria": "Gestão e Risco", "cargo": "Gestão e Risco", "foto": "", "linkedin": "" },
+    { "nome": "Ian Pessoni Valente", "diretoria": "Gestão e Risco", "cargo": "Gestão e Risco", "foto": "", "linkedin": "" },
+    { "nome": "André Machado de Mello Mariz", "diretoria": "Gestão e Risco", "cargo": "Gestão e Risco", "foto": "", "linkedin": "" },
+    { "nome": "Eduardo Quintella", "diretoria": "Gestão e Risco", "cargo": "Gestão e Risco", "foto": "", "linkedin": "" },
+
+    { "nome": "Joana Gontijo Garrido", "diretoria": "Mercado", "cargo": "Diretora de Mercado", "foto": "", "linkedin": "" },
+    { "nome": "Vinicius Pereira Paiva", "diretoria": "Mercado", "cargo": "Mercado", "foto": "", "linkedin": "" },
+    { "nome": "Rafael Porto Leite", "diretoria": "Mercado", "cargo": "Mercado", "foto": "", "linkedin": "" },
+    { "nome": "Marina Nagao Felzenszwalb", "diretoria": "Mercado", "cargo": "Mercado", "foto": "", "linkedin": "" },
+
+    { "nome": "Vitor Sauberman", "diretoria": "Pessoas", "cargo": "Diretor de Pessoas", "foto": "", "linkedin": "" },
+    { "nome": "Antonio Poppe Azevedo", "diretoria": "Pessoas", "cargo": "Pessoas", "foto": "", "linkedin": "" },
+    { "nome": "Guilherme Lauria Reis Franco Henriques", "diretoria": "Pessoas", "cargo": "Pessoas", "foto": "", "linkedin": "" }
   ]
 }
