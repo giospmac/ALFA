@@ -201,7 +201,7 @@ a:hover {{ color: var(--blue-600); }}
   -webkit-backdrop-filter: blur(16px) saturate(140%);
   border-bottom: 1px solid rgba(138,168,250,.16);
   flex-direction: row !important; align-items: center; flex-wrap: nowrap;
-  gap: clamp(10px, 3vw, 34px);
+  gap: clamp(16px, 3.5vw, 44px);
   padding: 0 clamp(14px, 4vw, 32px);
 }}
 .st-key-alfa_topnav [data-testid="stElementContainer"] {{ margin: 0 !important; }}
@@ -527,49 +527,67 @@ a:hover {{ color: var(--blue-600); }}
 .st-key-alfa_page > * {{ width: 100% !important; box-sizing: border-box; }}
 
 /* --- navegação por pills --- */
+/* O DOM do st.pills mudou entre gerações do Streamlit: até a 1.5x havia
+   `[data-baseweb="button-group"]` e `data-testid="stBaseButton-pills"`; da 1.6x
+   em diante o BaseWeb saiu e o estado ativo virou `aria-checked`. Todas as
+   regras abaixo cobrem as duas — por isso os seletores duplicados. */
 [data-testid="stButtonGroup"] {{ width: 100%; }}
+[data-testid="stButtonGroup"] > div,
 [data-testid="stButtonGroup"] [data-baseweb="button-group"] {{
-  display: flex; flex-wrap: wrap; gap: 6px;
+  display: flex; flex-wrap: wrap; gap: 10px;
 }}
-[data-testid="stBaseButton-pills"] [data-testid="stMarkdownContainer"],
-[data-testid="stBaseButton-pillsActive"] [data-testid="stMarkdownContainer"],
-[data-testid="stBaseButton-pills"] p, [data-testid="stBaseButton-pillsActive"] p {{
+[data-testid="stButtonGroup"] button [data-testid="stMarkdownContainer"],
+[data-testid="stButtonGroup"] button p,
+[data-testid="stButtonGroup"] button div {{
   white-space: nowrap; overflow: visible; text-overflow: clip; max-width: none;
 }}
-[data-testid="stBaseButton-pills"], [data-testid="stBaseButton-pillsActive"] {{
+[data-testid="stButtonGroup"] button {{
   max-width: none !important; width: auto !important; white-space: nowrap;
   border-radius: var(--radius-pill) !important;
   border: 1px solid transparent !important;
   font-size: .87rem !important; font-weight: 600 !important;
-  padding: 7px 16px !important; min-height: 0 !important;
+  padding: 8px 18px !important; min-height: 0 !important;
   transition: background .18s var(--ease), color .18s var(--ease), border-color .18s var(--ease) !important;
 }}
-/* pills dentro da topbar (fundo escuro) */
-.st-key-alfa_topnav [data-testid="stBaseButton-pills"] {{
-  background: transparent !important; color: var(--on-dark-soft) !important;
+/* Pílulas da topbar: transparentes até serem selecionadas. */
+.st-key-alfa_topnav [data-testid="stButtonGroup"] button {{
+  background: transparent !important;
+  border-color: transparent !important;
+  color: var(--on-dark-soft) !important;
+  box-shadow: none !important;
 }}
-.st-key-alfa_topnav [data-testid="stBaseButton-pills"]:hover {{
-  background: rgba(138,168,250,.12) !important; color: var(--on-dark) !important;
+.st-key-alfa_topnav [data-testid="stButtonGroup"] button * {{ color: inherit !important; }}
+.st-key-alfa_topnav [data-testid="stButtonGroup"] button:hover {{
+  background: rgba(138,168,250,.14) !important; color: var(--on-dark) !important;
 }}
+.st-key-alfa_topnav [data-testid="stButtonGroup"] button[aria-checked="true"],
+.st-key-alfa_topnav [data-testid="stButtonGroup"] button[kind$="Active"],
 .st-key-alfa_topnav [data-testid="stBaseButton-pillsActive"] {{
-  background: rgba(73,121,246,.9) !important; color: #fff !important;
+  background: var(--blue-500) !important; color: #fff !important;
   border-color: rgba(138,168,250,.5) !important;
   box-shadow: 0 4px 16px rgba(73,121,246,.35) !important;
 }}
 /* alinhado à esquerda de propósito: com `flex-end` + overflow o primeiro
    item fica inacessível na rolagem horizontal do mobile. */
-.st-key-alfa_topnav [data-baseweb="button-group"] {{ flex-wrap: nowrap !important; justify-content: flex-start; }}
+.st-key-alfa_topnav [data-testid="stButtonGroup"] > div,
+.st-key-alfa_topnav [data-testid="stButtonGroup"] [data-baseweb="button-group"] {{
+  flex-wrap: nowrap !important; justify-content: flex-start; gap: 16px;
+}}
 
-/* pills de sub-navegação (fundo claro) */
-.st-key-alfa_subnav [data-testid="stBaseButton-pills"] {{
+/* Pílulas da sub-navegação (fundo claro) */
+.st-key-alfa_subnav [data-testid="stButtonGroup"] button {{
   background: var(--surface) !important; color: var(--ink-soft) !important;
   border-color: var(--border) !important;
 }}
-.st-key-alfa_subnav [data-testid="stBaseButton-pills"]:hover {{
+.st-key-alfa_subnav [data-testid="stButtonGroup"] button * {{ color: inherit !important; }}
+.st-key-alfa_subnav [data-testid="stButtonGroup"] button:hover {{
   border-color: var(--blue-300) !important; color: var(--blue-600) !important;
 }}
+.st-key-alfa_subnav [data-testid="stButtonGroup"] button[aria-checked="true"],
+.st-key-alfa_subnav [data-testid="stButtonGroup"] button[kind$="Active"],
 .st-key-alfa_subnav [data-testid="stBaseButton-pillsActive"] {{
-  background: var(--navy-950) !important; color: #fff !important; border-color: var(--navy-950) !important;
+  background: var(--navy-950) !important; color: #fff !important;
+  border-color: var(--navy-950) !important;
 }}
 .st-key-alfa_subnav {{ margin-bottom: .4rem; }}
 
@@ -619,14 +637,22 @@ a:hover {{ color: var(--blue-600); }}
 [data-testid="stButton"] > button p, [data-testid="stFormSubmitButton"] > button p {{ font-weight: 600; }}
 
 /* --- inputs --- */
-[data-baseweb="base-input"], [data-baseweb="select"] > div, [data-testid="stNumberInputContainer"] {{
+[data-baseweb="base-input"], [data-baseweb="select"] > div,
+[data-testid="stTextInputRootElement"], [data-testid="stTextAreaRootElement"],
+[data-testid="stSelectbox"] > div:last-child,
+[data-testid="stNumberInputContainer"] {{
   border-radius: 12px !important; border: 1px solid var(--border) !important;
   background: var(--surface) !important; box-shadow: none !important;
 }}
-[data-baseweb="base-input"]:focus-within, [data-testid="stNumberInputContainer"]:focus-within {{
+[data-baseweb="base-input"]:focus-within,
+[data-testid="stTextInputRootElement"]:focus-within,
+[data-testid="stTextAreaRootElement"]:focus-within,
+[data-testid="stNumberInputContainer"]:focus-within {{
   border-color: var(--blue-300) !important; box-shadow: 0 0 0 3px rgba(73,121,246,.12) !important;
 }}
-input, select, textarea, [data-baseweb="select"] {{ font-family: var(--font) !important; }}
+input, select, textarea, [data-baseweb="select"], [data-testid="stSelectbox"] {{
+  font-family: var(--font) !important;
+}}
 [data-testid="stWidgetLabel"] p {{
   font-size: .78rem !important; font-weight: 600 !important; color: var(--ink-soft) !important;
   letter-spacing: .02em;
@@ -646,12 +672,17 @@ input, select, textarea, [data-baseweb="select"] {{ font-family: var(--font) !im
 [data-testid="stExpander"] summary {{ font-weight: 600; font-size: .92rem; }}
 
 /* --- abas --- */
-[data-testid="stTabs"] [data-baseweb="tab-list"] {{ gap: 4px; border-bottom: 1px solid var(--border); }}
-[data-testid="stTabs"] button[data-baseweb="tab"] {{
+[data-testid="stTabs"] [data-baseweb="tab-list"],
+[data-testid="stTabs"] [role="tablist"] {{ gap: 4px; border-bottom: 1px solid var(--border); }}
+[data-testid="stTabs"] button[data-baseweb="tab"],
+[data-testid="stTabs"] [data-testid="stTab"] {{
   font-size: .89rem !important; font-weight: 600 !important; color: var(--ink-soft);
   padding: 10px 16px;
 }}
-[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"] {{ color: var(--blue-600); }}
+[data-testid="stTabs"] button[data-baseweb="tab"][aria-selected="true"],
+[data-testid="stTabs"] [data-testid="stTab"][aria-selected="true"] {{
+  color: var(--blue-600); border-bottom-color: var(--blue-500);
+}}
 [data-testid="stTabs"] [data-baseweb="tab-highlight"] {{ background: var(--blue-500); height: 2.5px; }}
 
 /* --- slider --- */
@@ -796,9 +827,11 @@ input, select, textarea, [data-baseweb="select"] {{ font-family: var(--font) !im
 }}
 .st-key-alfa_subnav > * {{ width: 100% !important; max-width: var(--maxw); box-sizing: border-box; overflow-x: auto; scrollbar-width: none; }}
 .st-key-alfa_subnav > *::-webkit-scrollbar {{ display: none; }}
-.st-key-alfa_subnav [data-baseweb="button-group"] {{ flex-wrap: nowrap !important; }}
-.st-key-alfa_subnav [data-testid="stBaseButton-pills"],
-.st-key-alfa_subnav [data-testid="stBaseButton-pillsActive"] {{ white-space: nowrap; }}
+.st-key-alfa_subnav [data-testid="stButtonGroup"] > div,
+.st-key-alfa_subnav [data-testid="stButtonGroup"] [data-baseweb="button-group"] {{
+  flex-wrap: nowrap !important; gap: 12px;
+}}
+.st-key-alfa_subnav [data-testid="stButtonGroup"] button {{ white-space: nowrap; }}
 
 /* ====================================================================
    9. RODAPÉ
@@ -937,14 +970,17 @@ input, select, textarea, [data-baseweb="select"] {{ font-family: var(--font) !im
 /* O Streamlit envolve cada container num wrapper que continua no fluxo mesmo
    com a topbar `position: fixed` — e o `gap` do bloco vertical abria uma faixa
    clara logo abaixo da barra. Tiramos o wrapper do fluxo. */
-[data-testid="stVerticalBlockBorderWrapper"]:has(> div > .st-key-alfa_topnav) {{
+[data-testid="stVerticalBlockBorderWrapper"]:has(> div > .st-key-alfa_topnav),
+[data-testid="stLayoutWrapper"]:has(> .st-key-alfa_topnav),
+[data-testid="stLayoutWrapper"]:has(> div > .st-key-alfa_topnav) {{
   position: absolute; height: 0; overflow: visible;
 }}
 
 /* number_input: a borda tem que envolver campo + setas, não só o campo */
 [data-testid="stNumberInputContainer"] {{ overflow: hidden; }}
 [data-testid="stNumberInputContainer"] [data-baseweb="input"],
-[data-testid="stNumberInputContainer"] [data-baseweb="base-input"] {{
+[data-testid="stNumberInputContainer"] [data-baseweb="base-input"],
+[data-testid="stNumberInputContainer"] > div:first-child {{
   border: 0 !important; border-radius: 0 !important; background: transparent !important;
   box-shadow: none !important;
 }}
@@ -962,8 +998,8 @@ input, select, textarea, [data-baseweb="select"] {{ font-family: var(--font) !im
 
 /* Nas barras de navegação o grupo é nowrap: as pílulas não podem encolher,
    senão o rótulo é cortado. A barra inteira rola na horizontal. */
-.st-key-alfa_topnav [data-baseweb="button-group"] > button,
-.st-key-alfa_subnav [data-baseweb="button-group"] > button {{
+.st-key-alfa_topnav [data-testid="stButtonGroup"] button,
+.st-key-alfa_subnav [data-testid="stButtonGroup"] button {{
   flex: 0 0 auto !important;
 }}
 

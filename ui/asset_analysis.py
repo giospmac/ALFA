@@ -60,7 +60,8 @@ def _render_asset_analysis_styles() -> None:
             visibility: hidden;
         }
         .stTextInput [data-baseweb="base-input"],
-        div[data-testid="stTextInput"] [data-baseweb="base-input"] {
+        div[data-testid="stTextInput"] [data-baseweb="base-input"],
+        [data-testid="stTextInputRootElement"] {
             border-radius: 10px !important;
             border: 1px solid transparent !important;
             background: #eceae2 !important;
@@ -68,7 +69,8 @@ def _render_asset_analysis_styles() -> None:
             overflow: hidden !important;
         }
         .stTextInput [data-baseweb="base-input"] > div,
-        div[data-testid="stTextInput"] [data-baseweb="base-input"] > div {
+        div[data-testid="stTextInput"] [data-baseweb="base-input"] > div,
+        [data-testid="stTextInputRootElement"] > div {
             background: #eceae2 !important;
             box-shadow: none !important;
         }
@@ -100,7 +102,8 @@ def _render_asset_analysis_styles() -> None:
             box-shadow: none !important;
         }
         .stTextInput [data-baseweb="base-input"]:focus-within,
-        div[data-testid="stTextInput"] [data-baseweb="base-input"]:focus-within {
+        div[data-testid="stTextInput"] [data-baseweb="base-input"]:focus-within,
+        [data-testid="stTextInputRootElement"]:focus-within {
             border-color: #8aa8fa !important;
             background: #FFFFFF !important;
             box-shadow: 0 0 0 3px rgba(73,121,246,0.15) !important;

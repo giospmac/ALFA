@@ -122,6 +122,25 @@ tests/smoke_test.py renderiza todas as páginas e falha se alguma quebrar
 - **Gráficos:** `theme/plotly_theme.py`. Todos os `st.plotly_chart` usam
   `theme=None` justamente para o template ALFA prevalecer sobre o do Streamlit.
 
+### Versões do Streamlit (importante ao mexer no CSS)
+
+O CSS "agarra" o HTML do Streamlit por `data-testid`, e esses ganchos mudam
+entre versões. Da 1.6x em diante o Streamlit **removeu o BaseWeb**: sumiram os
+`data-baseweb="base-input"`, `="tab"`, `="button-group"`, o
+`stVerticalBlockBorderWrapper` virou `stLayoutWrapper` e as pílulas perderam o
+`data-testid="stBaseButton-pills"` (o estado ativo agora é `aria-checked`).
+
+Por isso vários seletores em `theme/styles.py` aparecem duplicados — a folha
+cobre as duas gerações de propósito. Ao adicionar regras novas, vale conferir
+nas duas pontas:
+
+```bash
+python tests/smoke_test.py
+```
+
+e abrir o app com a versão do Streamlit que o Cloud instala (hoje a 1.61), não
+só com a que estiver no seu ambiente.
+
 ---
 
 ## Testes

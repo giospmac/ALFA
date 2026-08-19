@@ -13,6 +13,7 @@ warnings.filterwarnings("ignore")
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(ROOT)
 sys.path.insert(0, ROOT)  # AppTest não adiciona o diretório do app ao sys.path
+APP = os.path.join(ROOT, "app.py")  # caminho absoluto: a 1.6x resolve relativo a este arquivo
 from streamlit.testing.v1 import AppTest
 
 PAGES = ["inicio", "fundo", "newsletter", "membros", "alumni", "atividades", "processo"]
@@ -21,7 +22,7 @@ TOOLS = ["carteira", "historico", "risco", "markowitz", "ativos", "comparador"]
 fails = []
 
 def run(label, state):
-    at = AppTest.from_file("app.py", default_timeout=180)
+    at = AppTest.from_file(APP, default_timeout=180)
     for k, v in state.items():
         at.session_state[k] = v
     try:
