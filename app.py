@@ -27,7 +27,16 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-from site_pages import atividades, fundo, inicio, membros, plataforma, processo  # noqa: E402
+from site_pages import (  # noqa: E402
+    alumni,
+    atividades,
+    fundo,
+    inicio,
+    membros,
+    newsletter,
+    plataforma,
+    processo,
+)
 from theme import components as c  # noqa: E402
 from theme.plotly_theme import register_templates  # noqa: E402
 from theme.styles import inject_global_css  # noqa: E402
@@ -36,11 +45,15 @@ NAV_KEY = "alfa_nav_pills"
 STATE_KEY = "page"
 PENDING_KEY = "_pending_page"
 
+#: Ordem das seções no menu — mover uma linha aqui reordena a navegação
+#: (e o rodapé) sem mexer em mais nada.
 PAGES: dict[str, tuple[str, object]] = {
     "inicio": ("Início", inicio),
     "fundo": ("O Fundo", fundo),
     "plataforma": ("Plataforma", plataforma),
+    "newsletter": ("Newsletter", newsletter),
     "membros": ("Membros", membros),
+    "alumni": ("Alumni", alumni),
     "atividades": ("Atividades", atividades),
     "processo": ("Processo Seletivo", processo),
 }

@@ -163,6 +163,15 @@ def kpi(label: str, value: str, *, note: str = "", tone: str = "", step: int = 1
     )
 
 
+def coming_soon(*, titulo: str, descricao: str, chip_texto: str = "Em breve") -> str:
+    """Estado vazio de uma página ainda sem conteúdo publicado."""
+    return reveal(
+        '<div class="alfa-empty">'
+        f'<div style="margin-bottom:14px">{chip(chip_texto)}</div>'
+        f"<h3>{esc(titulo)}</h3><p>{esc(descricao)}</p></div>"
+    )
+
+
 def member(*, nome: str, cargo: str, foto_uri: str = "", linkedin: str = "", step: int = 1) -> str:
     if foto_uri:
         avatar = f'<img src="{foto_uri}" alt="{esc(nome)}">'

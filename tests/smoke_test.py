@@ -15,7 +15,7 @@ os.chdir(ROOT)
 sys.path.insert(0, ROOT)  # AppTest não adiciona o diretório do app ao sys.path
 from streamlit.testing.v1 import AppTest
 
-PAGES = ["inicio", "fundo", "membros", "atividades", "processo"]
+PAGES = ["inicio", "fundo", "newsletter", "membros", "alumni", "atividades", "processo"]
 TOOLS = ["carteira", "historico", "risco", "stress", "markowitz", "bl", "apt",
          "ativos", "comparador", "quant"]
 

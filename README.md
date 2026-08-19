@@ -2,8 +2,9 @@
 
 Um único app Streamlit que junta:
 
-- **o site institucional** (Início, O Fundo, Membros, Atividades, Processo Seletivo),
-  com o conteúdo que hoje vive no repositório `alfapucrio.github.io`;
+- **o site institucional** (Início, O Fundo, Newsletter, Membros, Alumni, Atividades,
+  Processo Seletivo), com o conteúdo que hoje vive no repositório
+  `alfapucrio.github.io`;
 - **a plataforma quant** (Carteira, Histórico, Risco, Stress Test, Markowitz,
   Black-Litterman, APT, Análise de Ativos, Comparador, Projeções Quant), com os
   mesmos modelos e cálculos do app Streamlit atual.
@@ -56,6 +57,14 @@ e escreva o nome do arquivo no campo `"foto"` do membro.
 Textos fixos (filosofia do fundo, jornada do membro, descrição das diretorias)
 ficam no topo de cada arquivo em `site_pages/` — são listas Python simples,
 fáceis de editar.
+
+**Newsletter e Alumni** estão publicadas como placeholders ("Em breve"). Cada
+arquivo — `site_pages/newsletter.py` e `site_pages/alumni.py` — traz no
+cabeçalho o formato do JSON esperado e, no fim, o bloco de renderização já
+escrito e comentado: basta criar o JSON em `content/` e descomentar.
+
+A ordem do menu (e do rodapé) vem do dicionário `PAGES` em `app.py`: mover uma
+linha ali reordena a navegação inteira.
 
 ---
 

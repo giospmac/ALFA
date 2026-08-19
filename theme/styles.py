@@ -395,6 +395,20 @@ a:hover {{ color: var(--blue-600); }}
 .alfa-section--dark .alfa-tl-step::before {{ background: var(--navy-900); color: var(--blue-300); }}
 .alfa-section--dark .alfa-tl-step p {{ color: var(--on-dark-soft); }}
 
+/* Estado vazio (páginas ainda sem conteúdo publicado) */
+.alfa-empty {{
+  max-width: 560px; margin: 0 auto; text-align: center;
+  background: var(--surface); border: 1px dashed var(--border);
+  border-radius: var(--radius-lg); padding: clamp(34px, 5vw, 54px) clamp(22px, 4vw, 38px);
+}}
+.alfa-empty h3 {{ margin-bottom: .5rem; }}
+.alfa-empty p {{ color: var(--ink-soft); margin: 0; font-size: .95rem; }}
+[class*="st-key-alfaband_dark"] .alfa-empty,
+.alfa-section--dark .alfa-empty {{
+  background: rgba(16,26,58,.6); border-color: rgba(138,168,250,.24);
+}}
+.alfa-section--dark .alfa-empty p {{ color: var(--on-dark-soft); }}
+
 /* Membros */
 .alfa-member {{ text-align: center; }}
 .alfa-member__avatar, .alfa-member img {{
