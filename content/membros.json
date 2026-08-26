@@ -2,7 +2,7 @@
   "_comentario": "Cada membro: nome, diretoria (Presidência | Equity Research | Gestão & Risco | Mercado | Pessoas), cargo, foto (arquivo em assets/membros/, opcional — sem foto o card mostra as iniciais), linkedin (opcional). A ordem dentro de cada diretoria é a ordem de exibição.",
   "diretorias": ["Presidência", "Equity Research", "Gestão & Risco", "Mercado", "Pessoas"],
   "membros": [
-    { "nome": "Ananda Botelho", "diretoria": "Presidência", "cargo": "Presidente", "foto": "", "linkedin": "" },
+    { "nome": "Ananda Botelho", "diretoria": "Presidência", "cargo": "Presidente", "foto": "", "linkedin": "https://www.linkedin.com/in/ananda-botelho-21a60824a/" },
     { "nome": "Haroldo Fazolo Flores", "diretoria": "Presidência", "cargo": "VP", "foto": "", "linkedin": "" },
     { "nome": "Nicole Libman", "diretoria": "Presidência", "cargo": "Head do Núcleo", "foto": "", "linkedin": "" },
 
