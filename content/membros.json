@@ -3,10 +3,10 @@
   "diretorias": ["Presidência", "Equity Research", "Gestão & Risco", "Mercado", "Pessoas"],
   "membros": [
     { "nome": "Ananda Botelho", "diretoria": "Presidência", "cargo": "Presidente", "foto": "", "linkedin": "https://www.linkedin.com/in/ananda-botelho-21a60824a/" },
-    { "nome": "Haroldo Fazolo Flores", "diretoria": "Presidência", "cargo": "VP", "foto": "", "linkedin": "" },
-    { "nome": "Nicole Libman", "diretoria": "Presidência", "cargo": "Head do Núcleo", "foto": "", "linkedin": "" },
+    { "nome": "Haroldo Fazolo Flores", "diretoria": "Presidência", "cargo": "VP", "foto": "", "linkedin": "https://www.linkedin.com/in/haroldo-flores-893498316/" },
+    { "nome": "Nicole Libman", "diretoria": "Presidência", "cargo": "Head do Núcleo", "foto": "", "linkedin": "https://www.linkedin.com/in/nicole-libman-315356364/" },
 
-    { "nome": "André Mattos Medeiros", "diretoria": "Equity Research", "cargo": "Diretor de Equity Research", "foto": "", "linkedin": "" },
+    { "nome": "André Mattos Medeiros", "diretoria": "Equity Research", "cargo": "Diretor de Equity Research", "foto": "", "linkedin": "https://www.linkedin.com/in/andr%C3%A9-mattos-medeiros-150542312/" },
     { "nome": "Leticia Roquette Reis Peixoto", "diretoria": "Equity Research", "cargo": "Equity", "foto": "", "linkedin": "" },
     { "nome": "Camilla Soares Trivellato", "diretoria": "Equity Research", "cargo": "Equity", "foto": "", "linkedin": "" },
     { "nome": "Bruno Lopes Ferreira Viana", "diretoria": "Equity Research", "cargo": "Equity", "foto": "", "linkedin": "" },
@@ -19,7 +19,7 @@
     { "nome": "André Machado de Mello Mariz", "diretoria": "Gestão & Risco", "cargo": "Gestão & Risco", "foto": "", "linkedin": "" },
     { "nome": "Eduardo Quintella", "diretoria": "Gestão & Risco", "cargo": "Gestão & Risco", "foto": "", "linkedin": "" },
 
-    { "nome": "Joana Gontijo Garrido", "diretoria": "Mercado", "cargo": "Diretora de Mercado", "foto": "", "linkedin": "" },
+    { "nome": "Joana Gontijo Garrido", "diretoria": "Mercado", "cargo": "Diretora de Mercado", "foto": "", "linkedin": "https://www.linkedin.com/in/joana-gontijo-garrido-3b6786420/" },
     { "nome": "Vinicius Pereira Paiva", "diretoria": "Mercado", "cargo": "Mercado", "foto": "", "linkedin": "" },
     { "nome": "Rafael Porto Leite", "diretoria": "Mercado", "cargo": "Mercado", "foto": "", "linkedin": "" },
     { "nome": "Marina Nagao Felzenszwalb", "diretoria": "Mercado", "cargo": "Mercado", "foto": "", "linkedin": "" },
