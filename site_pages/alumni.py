@@ -11,6 +11,9 @@ O agrupamento é derivado da `posicao` pelas palavras-chave em `GRUPOS`: quem
 tiver "Presidente" ou "VP" cai em Presidência, "Diretor"/"Diretora" em
 Diretoria, e o restante em Associados. Uma posição nova que não case com
 nenhuma palavra-chave vai para o último grupo.
+
+Dentro de Presidência a posição ainda separa presidentes de vices, em dois
+blocos com cabeçalho próprio — ver `SUBGRUPOS` e `_subgrupo`.
 """
 
 from __future__ import annotations
@@ -42,10 +45,26 @@ GRUPOS: list[tuple[str, tuple[str, ...], str]] = [
     ),
 ]
 
+#: Subdivisão de Presidência, na ordem de exibição.
+SUBGRUPOS: tuple[str, str] = ("Presidentes", "Vice-presidentes")
+
 
 def _normalizar(texto: str) -> str:
     sem_acento = unicodedata.normalize("NFKD", texto).encode("ascii", "ignore").decode()
     return sem_acento.lower()
+
+
+def _subgrupo(posicao: str) -> str:
+    """Presidente ou vice, dentro de Presidência.
+
+    A checagem de "vice"/"vp" vem primeiro de propósito: "ex-Vice-Presidente"
+    contém as duas palavras, e testar por "presidente" antes o mandaria para o
+    bloco errado.
+    """
+    normalizada = _normalizar(posicao)
+    if "vp" in normalizada or "vice" in normalizada:
+        return SUBGRUPOS[1]
+    return SUBGRUPOS[0]
 
 
 def _agrupar(pessoas: list[dict]) -> dict[str, list[dict]]:
@@ -59,6 +78,34 @@ def _agrupar(pessoas: list[dict]) -> dict[str, list[dict]]:
         )
         grupos[destino].append(pessoa)
     return grupos
+
+
+def _contagem(total: int) -> str:
+    return f"{total} {'pessoa' if total == 1 else 'pessoas'}"
+
+
+def _cards(pessoas: list[dict]) -> list[str]:
+    return [
+        c.alumni_card(
+            nome=pessoa.get("nome", ""),
+            posicao=pessoa.get("posicao", ""),
+            linkedin=pessoa.get("linkedin", ""),
+            step=(index % 6) + 1,
+        )
+        for index, pessoa in enumerate(pessoas)
+    ]
+
+
+def _bloco(titulo: str, pessoas: list[dict]) -> str:
+    """Sub-bloco com cabeçalho próprio, usado dentro de Presidência."""
+    if not pessoas:
+        return ""
+    return (
+        '<div style="margin-bottom:clamp(44px,6vw,72px)">'
+        + c.section_head(kicker=_contagem(len(pessoas)), title=c.esc(titulo), level=3)
+        + c.grid(_cards(pessoas), cols=3)
+        + "</div>"
+    )
 
 
 def _render_header(total: int) -> None:
@@ -86,28 +133,17 @@ def _render_header(total: int) -> None:
 def _render_grupo(titulo: str, descricao: str, pessoas: list[dict], *, variant: str) -> None:
     if not pessoas:
         return
-    cards = [
-        c.alumni_card(
-            nome=pessoa.get("nome", ""),
-            posicao=pessoa.get("posicao", ""),
-            linkedin=pessoa.get("linkedin", ""),
-            step=(index % 6) + 1,
-        )
-        for index, pessoa in enumerate(pessoas)
-    ]
-    c.render(
-        c.section(
-            c.container(
-                c.section_head(
-                    kicker=f"{len(pessoas)} {'pessoa' if len(pessoas) == 1 else 'pessoas'}",
-                    title=titulo,
-                    subtitle=descricao,
-                )
-                + c.grid(cards, cols=3)
-            ),
-            variant=variant,
-        )
+    cabecalho = c.section_head(
+        kicker=_contagem(len(pessoas)), title=titulo, subtitle=descricao
     )
+    if titulo == GRUPOS[0][0]:
+        corpo = cabecalho + "".join(
+            _bloco(sub, [p for p in pessoas if _subgrupo(p.get("posicao", "")) == sub])
+            for sub in SUBGRUPOS
+        )
+    else:
+        corpo = cabecalho + c.grid(_cards(pessoas), cols=3)
+    c.render(c.section(c.container(corpo), variant=variant))
 
 
 def _render_cta() -> None:
