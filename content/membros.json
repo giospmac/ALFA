@@ -12,11 +12,11 @@
     { "nome": "Christian Mogami", "diretoria": "Equity Research", "cargo": "Equity", "foto": "christian-mogami.webp", "linkedin": "https://www.linkedin.com/in/chmogami/" },
     { "nome": "Gabriel Werner", "diretoria": "Equity Research", "cargo": "Equity", "foto": "gabriel-werner.webp", "linkedin": "https://www.linkedin.com/in/gabrielovwerner/" },
 
-    { "nome": "Guilherme Gutman", "diretoria": "Gestão & Risco", "cargo": "Diretor de Gestão & Risco", "foto": "", "linkedin": "https://www.linkedin.com/in/guilherme-cohen-gutman-029706399/" },
-    { "nome": "Miguel Dias", "diretoria": "Gestão & Risco", "cargo": "Gestão & Risco", "foto": "", "linkedin": "https://www.linkedin.com/in/migueloliveiramacedodias/" },
-    { "nome": "Ian Valente", "diretoria": "Gestão & Risco", "cargo": "Gestão & Risco", "foto": "", "linkedin": "https://www.linkedin.com/in/ian-valente-37254b369/" },
-    { "nome": "André Mariz", "diretoria": "Gestão & Risco", "cargo": "Gestão & Risco", "foto": "", "linkedin": "https://www.linkedin.com/in/andremmariz/" },
-    { "nome": "Eduardo Quintella", "diretoria": "Gestão & Risco", "cargo": "Gestão & Risco", "foto": "", "linkedin": "https://www.linkedin.com/in/eduardo-quintella-83975a384/" },
+    { "nome": "Guilherme Gutman", "diretoria": "Gestão & Risco", "cargo": "Diretor de Gestão & Risco", "foto": "guilherme-gutman.jpg", "linkedin": "https://www.linkedin.com/in/guilherme-cohen-gutman-029706399/" },
+    { "nome": "Miguel Dias", "diretoria": "Gestão & Risco", "cargo": "Gestão & Risco", "foto": "miguel-dias.jpg", "linkedin": "https://www.linkedin.com/in/migueloliveiramacedodias/" },
+    { "nome": "Ian Valente", "diretoria": "Gestão & Risco", "cargo": "Gestão & Risco", "foto": "ian-valente.png", "linkedin": "https://www.linkedin.com/in/ian-valente-37254b369/" },
+    { "nome": "André Mariz", "diretoria": "Gestão & Risco", "cargo": "Gestão & Risco", "foto": "andre-mariz.png", "linkedin": "https://www.linkedin.com/in/andremmariz/" },
+    { "nome": "Eduardo Quintella", "diretoria": "Gestão & Risco", "cargo": "Gestão & Risco", "foto": "eduardo-quintella.jpg", "linkedin": "https://www.linkedin.com/in/eduardo-quintella-83975a384/" },
 
     { "nome": "Joana Gontijo", "diretoria": "Mercado", "cargo": "Diretora de Mercado", "foto": "", "linkedin": "https://www.linkedin.com/in/joana-gontijo-garrido-3b6786420/" },
     { "nome": "Vinicius Paiva", "diretoria": "Mercado", "cargo": "Mercado", "foto": "", "linkedin": "https://www.linkedin.com/in/viniciuspaiva06/" },
