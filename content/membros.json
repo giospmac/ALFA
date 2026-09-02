@@ -6,11 +6,11 @@
     { "nome": "Haroldo Flores", "diretoria": "Presidência", "cargo": "VP", "foto": "haroldo-flores.webp", "linkedin": "https://www.linkedin.com/in/haroldo-flores-893498316/" },
     { "nome": "Nicole Libman", "diretoria": "Presidência", "cargo": "Head do Núcleo", "foto": "nicole-libman.webp", "linkedin": "https://www.linkedin.com/in/nicole-libman-315356364/" },
 
-    { "nome": "André Medeiros", "diretoria": "Equity Research", "cargo": "Diretor de Equity Research", "foto": "", "linkedin": "https://www.linkedin.com/in/andr%C3%A9-mattos-medeiros-150542312/" },
-    { "nome": "Leticia Peixoto", "diretoria": "Equity Research", "cargo": "Equity", "foto": "", "linkedin": "https://www.linkedin.com/in/let%C3%ADcia-roquette-reis-peixoto-967220426/" },
-    { "nome": "Camilla Trivellato", "diretoria": "Equity Research", "cargo": "Equity", "foto": "", "linkedin": "https://www.linkedin.com/in/camilla-trivellato-383b5838b/" },
-    { "nome": "Christian Mogami", "diretoria": "Equity Research", "cargo": "Equity", "foto": "", "linkedin": "https://www.linkedin.com/in/chmogami/" },
-    { "nome": "Gabriel Werner", "diretoria": "Equity Research", "cargo": "Equity", "foto": "", "linkedin": "https://www.linkedin.com/in/gabrielovwerner/" },
+    { "nome": "André Medeiros", "diretoria": "Equity Research", "cargo": "Diretor de Equity Research", "foto": "andre-medeiros.webp", "linkedin": "https://www.linkedin.com/in/andr%C3%A9-mattos-medeiros-150542312/" },
+    { "nome": "Leticia Peixoto", "diretoria": "Equity Research", "cargo": "Equity", "foto": "leticia-peixoto.webp", "linkedin": "https://www.linkedin.com/in/let%C3%ADcia-roquette-reis-peixoto-967220426/" },
+    { "nome": "Camilla Trivellato", "diretoria": "Equity Research", "cargo": "Equity", "foto": "camilla-trivellato.webp", "linkedin": "https://www.linkedin.com/in/camilla-trivellato-383b5838b/" },
+    { "nome": "Christian Mogami", "diretoria": "Equity Research", "cargo": "Equity", "foto": "christian-mogami.webp", "linkedin": "https://www.linkedin.com/in/chmogami/" },
+    { "nome": "Gabriel Werner", "diretoria": "Equity Research", "cargo": "Equity", "foto": "gabriel-werner.webp", "linkedin": "https://www.linkedin.com/in/gabrielovwerner/" },
 
     { "nome": "Guilherme Gutman", "diretoria": "Gestão & Risco", "cargo": "Diretor de Gestão & Risco", "foto": "", "linkedin": "https://www.linkedin.com/in/guilherme-cohen-gutman-029706399/" },
     { "nome": "Miguel Dias", "diretoria": "Gestão & Risco", "cargo": "Gestão & Risco", "foto": "", "linkedin": "https://www.linkedin.com/in/migueloliveiramacedodias/" },
