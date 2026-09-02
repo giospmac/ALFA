@@ -21,7 +21,7 @@ except ImportError:
 
 
 TRADING_DAYS_PER_YEAR = 252
-ANNUAL_CDI_RATE = 0.1075
+ANNUAL_CDI_RATE = 0.1415
 TREASURY_URL = (
     "https://www.tesourotransparente.gov.br/ckan/dataset/"
     "df56aa42-484a-4a59-8184-7676580c81e3/resource/"
@@ -172,6 +172,39 @@ def _business_date_range(start_date: datetime, end_date: datetime) -> pd.Datetim
     return pd.date_range(start=start_date, end=end_date, freq="B")
 
 
+@st.cache_data(ttl=3600, show_spinner=False)
+def _fetch_bcb_cdi_daily(start: str, end: str) -> pd.Series:
+    """CDI daily rates (as fractions) from BCB SGS series 12."""
+    if sgs is None:
+        return pd.Series(dtype=float)
+    try:
+        df = sgs.get({"cdi": 12}, start=start, end=end)
+        if df.empty or "cdi" not in df.columns:
+            return pd.Series(dtype=float)
+        series = pd.to_numeric(df["cdi"], errors="coerce").dropna() / 100
+        series.index = pd.DatetimeIndex(series.index)
+        return series.sort_index()
+    except Exception:
+        return pd.Series(dtype=float)
+
+
+@st.cache_data(ttl=3600, show_spinner=False)
+def current_annual_cdi() -> float:
+    """Current CDI annual rate from BCB; falls back to ANNUAL_CDI_RATE."""
+    if sgs is None:
+        return ANNUAL_CDI_RATE
+    try:
+        end = pd.Timestamp.today().strftime("%Y-%m-%d")
+        start = (pd.Timestamp.today() - pd.Timedelta(days=10)).strftime("%Y-%m-%d")
+        df = sgs.get({"cdi": 12}, start=start, end=end)
+        if df.empty or "cdi" not in df.columns:
+            return ANNUAL_CDI_RATE
+        last_daily = float(df["cdi"].iloc[-1]) / 100
+        return (1 + last_daily) ** TRADING_DAYS_PER_YEAR - 1
+    except Exception:
+        return ANNUAL_CDI_RATE
+
+
 def _build_cdi_series(index: pd.Index) -> pd.Series:
     if len(index) == 0:
         return pd.Series(dtype=float)
@@ -179,6 +212,19 @@ def _build_cdi_series(index: pd.Index) -> pd.Series:
     sorted_index = pd.DatetimeIndex(pd.to_datetime(index, errors="coerce")).dropna().sort_values()
     if len(sorted_index) == 0:
         return pd.Series(dtype=float)
+
+    start = (sorted_index.min() - pd.Timedelta(days=5)).strftime("%Y-%m-%d")
+    end = sorted_index.max().strftime("%Y-%m-%d")
+    bcb_daily = _fetch_bcb_cdi_daily(start, end)
+
+    if not bcb_daily.empty:
+        cum = (1 + bcb_daily).cumprod()
+        cum = cum / cum.iloc[0] * 100
+        combined_idx = cum.index.union(sorted_index)
+        cum = cum.reindex(combined_idx).ffill().bfill()
+        result = cum.reindex(sorted_index)
+        if result.notna().sum() > 0:
+            return pd.Series(result.ffill().bfill().values, index=sorted_index, name="CDI")
 
     daily_rate = (1 + ANNUAL_CDI_RATE) ** (1 / TRADING_DAYS_PER_YEAR) - 1
     values = np.empty(len(sorted_index), dtype=float)
@@ -359,7 +405,7 @@ class TreasuryDataManager:
         return pd.Series(values, index=date_range)
 
     def _stable_selic_series(self, date_range: pd.DatetimeIndex, initial_price: float) -> pd.Series:
-        daily_rate = (1 + ANNUAL_CDI_RATE) ** (1 / TRADING_DAYS_PER_YEAR) - 1
+        daily_rate = (1 + current_annual_cdi()) ** (1 / TRADING_DAYS_PER_YEAR) - 1
         growth = np.power(1 + daily_rate, np.arange(len(date_range), dtype=float))
         return pd.Series(initial_price * growth, index=date_range)
 
@@ -1193,7 +1239,8 @@ def capm_alpha_beta_correlation(
         return None
 
     ibov_returns = combined["ibov"]
-    cdi_daily = (1 + ANNUAL_CDI_RATE) ** (1 / TRADING_DAYS_PER_YEAR) - 1
+    cdi_annual = current_annual_cdi()
+    cdi_daily = (1 + cdi_annual) ** (1 / TRADING_DAYS_PER_YEAR) - 1
 
     try:
         model = sm.OLS(combined["portfolio"], sm.add_constant(ibov_returns)).fit()
@@ -1231,7 +1278,8 @@ def performance_indices(
 
     portfolio_ret = combined["portfolio"]
     ibov_ret = combined["ibov"]
-    cdi_daily = (1 + ANNUAL_CDI_RATE) ** (1 / TRADING_DAYS_PER_YEAR) - 1
+    cdi_annual = current_annual_cdi()
+    cdi_daily = (1 + cdi_annual) ** (1 / TRADING_DAYS_PER_YEAR) - 1
 
     mean_portfolio = portfolio_ret.mean()
     portfolio_volatility = portfolio_ret.std()
@@ -1258,9 +1306,9 @@ def performance_indices(
             "tracking_error": float(tracking_error),
         },
         "anual": {
-            "sharpe": float((annual_return - ANNUAL_CDI_RATE) / annual_volatility) if annual_volatility > 0 else 0.0,
-            "sortino": float((annual_return - ANNUAL_CDI_RATE) / annual_downside) if annual_downside > 0 else 0.0,
-            "treynor": float((annual_return - ANNUAL_CDI_RATE) / beta) if beta != 0 else 0.0,
+            "sharpe": float((annual_return - cdi_annual) / annual_volatility) if annual_volatility > 0 else 0.0,
+            "sortino": float((annual_return - cdi_annual) / annual_downside) if annual_downside > 0 else 0.0,
+            "treynor": float((annual_return - cdi_annual) / beta) if beta != 0 else 0.0,
             "tracking_error": float(annual_tracking_error),
         },
     }
