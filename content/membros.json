@@ -7,24 +7,24 @@
     { "nome": "Nicole Libman", "diretoria": "Presidência", "cargo": "Head do Núcleo", "foto": "", "linkedin": "https://www.linkedin.com/in/nicole-libman-315356364/" },
 
     { "nome": "André Medeiros", "diretoria": "Equity Research", "cargo": "Diretor de Equity Research", "foto": "", "linkedin": "https://www.linkedin.com/in/andr%C3%A9-mattos-medeiros-150542312/" },
-    { "nome": "Leticia Peixoto", "diretoria": "Equity Research", "cargo": "Equity", "foto": "", "linkedin": "" },
-    { "nome": "Camilla Trivellato", "diretoria": "Equity Research", "cargo": "Equity", "foto": "", "linkedin": "" },
-    { "nome": "Christian Mogami", "diretoria": "Equity Research", "cargo": "Equity", "foto": "", "linkedin": "" },
-    { "nome": "Gabriel Werner", "diretoria": "Equity Research", "cargo": "Equity", "foto": "", "linkedin": "" },
+    { "nome": "Leticia Peixoto", "diretoria": "Equity Research", "cargo": "Equity", "foto": "", "linkedin": "https://www.linkedin.com/in/let%C3%ADcia-roquette-reis-peixoto-967220426/" },
+    { "nome": "Camilla Trivellato", "diretoria": "Equity Research", "cargo": "Equity", "foto": "", "linkedin": "https://www.linkedin.com/in/camilla-trivellato-383b5838b/" },
+    { "nome": "Christian Mogami", "diretoria": "Equity Research", "cargo": "Equity", "foto": "", "linkedin": "https://www.linkedin.com/in/chmogami/" },
+    { "nome": "Gabriel Werner", "diretoria": "Equity Research", "cargo": "Equity", "foto": "", "linkedin": "https://www.linkedin.com/in/gabrielovwerner/" },
 
-    { "nome": "Guilherme Gutman", "diretoria": "Gestão & Risco", "cargo": "Diretor de Gestão & Risco", "foto": "", "linkedin": "" },
-    { "nome": "Miguel Dias", "diretoria": "Gestão & Risco", "cargo": "Gestão & Risco", "foto": "", "linkedin": "" },
-    { "nome": "Ian Valente", "diretoria": "Gestão & Risco", "cargo": "Gestão & Risco", "foto": "", "linkedin": "" },
-    { "nome": "André Mariz", "diretoria": "Gestão & Risco", "cargo": "Gestão & Risco", "foto": "", "linkedin": "" },
-    { "nome": "Eduardo Quintella", "diretoria": "Gestão & Risco", "cargo": "Gestão & Risco", "foto": "", "linkedin": "" },
+    { "nome": "Guilherme Gutman", "diretoria": "Gestão & Risco", "cargo": "Diretor de Gestão & Risco", "foto": "", "linkedin": "https://www.linkedin.com/in/guilherme-cohen-gutman-029706399/" },
+    { "nome": "Miguel Dias", "diretoria": "Gestão & Risco", "cargo": "Gestão & Risco", "foto": "", "linkedin": "https://www.linkedin.com/in/migueloliveiramacedodias/" },
+    { "nome": "Ian Valente", "diretoria": "Gestão & Risco", "cargo": "Gestão & Risco", "foto": "", "linkedin": "https://www.linkedin.com/in/ian-valente-37254b369/" },
+    { "nome": "André Mariz", "diretoria": "Gestão & Risco", "cargo": "Gestão & Risco", "foto": "", "linkedin": "https://www.linkedin.com/in/andremmariz/" },
+    { "nome": "Eduardo Quintella", "diretoria": "Gestão & Risco", "cargo": "Gestão & Risco", "foto": "", "linkedin": "https://www.linkedin.com/in/eduardo-quintella-83975a384/" },
 
     { "nome": "Joana Gontijo", "diretoria": "Mercado", "cargo": "Diretora de Mercado", "foto": "", "linkedin": "https://www.linkedin.com/in/joana-gontijo-garrido-3b6786420/" },
-    { "nome": "Vinicius Paiva", "diretoria": "Mercado", "cargo": "Mercado", "foto": "", "linkedin": "" },
-    { "nome": "Rafael Porto", "diretoria": "Mercado", "cargo": "Mercado", "foto": "", "linkedin": "" },
+    { "nome": "Vinicius Paiva", "diretoria": "Mercado", "cargo": "Mercado", "foto": "", "linkedin": "https://www.linkedin.com/in/viniciuspaiva06/" },
+    { "nome": "Rafael Porto", "diretoria": "Mercado", "cargo": "Mercado", "foto": "", "linkedin": "https://www.linkedin.com/in/rafael-porto-leite-4a61063a8/" },
     { "nome": "Marina Nagao", "diretoria": "Mercado", "cargo": "Mercado", "foto": "", "linkedin": "" },
 
-    { "nome": "Vitor Sauberman", "diretoria": "Pessoas", "cargo": "Diretor de Pessoas", "foto": "", "linkedin": "" },
-    { "nome": "Antonio Poppe", "diretoria": "Pessoas", "cargo": "Pessoas", "foto": "", "linkedin": "" },
-    { "nome": "Guilherme Lauria", "diretoria": "Pessoas", "cargo": "Pessoas", "foto": "", "linkedin": "" }
+    { "nome": "Vitor Sauberman", "diretoria": "Pessoas", "cargo": "Diretor de Pessoas", "foto": "", "linkedin": "https://www.linkedin.com/in/vitor-sauberman-077b55382/" },
+    { "nome": "Antonio Poppe", "diretoria": "Pessoas", "cargo": "Pessoas", "foto": "", "linkedin": "https://www.linkedin.com/in/antonio-poppe-azevedo-6114b2357/" },
+    { "nome": "Guilherme Lauria", "diretoria": "Pessoas", "cargo": "Pessoas", "foto": "", "linkedin": "https://www.linkedin.com/in/guilherme-lauria-662435400/" }
   ]
 }
