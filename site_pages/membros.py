@@ -48,10 +48,21 @@ def _por_extenso(numero: int) -> str:
     return {2: "duas", 3: "três", 4: "quatro", 5: "cinco", 6: "seis"}.get(numero, str(numero))
 
 
+def _sort_membros(pessoas: list[dict]) -> list[dict]:
+    """Diretor(a) primeiro, depois os demais em ordem alfabética pelo nome."""
+    diretores = [p for p in pessoas if "Diretor" in p.get("cargo", "") or p.get("cargo", "") in ("Presidente", "VP", "Head do Núcleo")]
+    outros = sorted(
+        [p for p in pessoas if p not in diretores],
+        key=lambda p: p.get("nome", "").lower(),
+    )
+    return diretores + outros
+
+
 def _diretoria_block(nome: str, pessoas: list[dict]) -> str:
     """Um grupo de membros: cabeçalho da diretoria + grade de pessoas."""
     if not pessoas:
         return ""
+    pessoas = _sort_membros(pessoas)
     cards = [
         c.member(
             nome=pessoa.get("nome", ""),

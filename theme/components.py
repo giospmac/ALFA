@@ -180,10 +180,15 @@ def member(*, nome: str, cargo: str, foto_uri: str = "", linkedin: str = "", ste
         avatar = f'<div class="alfa-member__avatar">{esc(initials)}</div>'
     name_markup = esc(nome)
     if linkedin:
-        name_markup = f'<a href="{esc(linkedin)}" target="_blank" rel="noopener">{name_markup}</a>'
+        li_icon = (
+            f'<a class="alfa-member__linkedin" href="{esc(linkedin)}" target="_blank" rel="noopener" '
+            f'title="LinkedIn de {esc(nome)}" aria-label="LinkedIn de {esc(nome)}">{_LINKEDIN}</a>'
+        )
+    else:
+        li_icon = ""
     return reveal(
         f'<div class="alfa-member">{avatar}<div class="alfa-member__name">{name_markup}</div>'
-        f'<div class="alfa-member__role">{esc(cargo)}</div></div>',
+        f'<div class="alfa-member__role">{esc(cargo)}</div>{li_icon}</div>',
         step=step,
     )
 

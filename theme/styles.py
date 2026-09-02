@@ -450,11 +450,17 @@ a:hover {{ color: var(--blue-600); }}
 .alfa-member:hover .alfa-member__avatar, .alfa-member:hover img {{ transform: scale(1.05); border-color: var(--blue-500); }}
 .alfa-member__name {{ font-weight: 700; font-size: 1rem; color: var(--ink); margin-bottom: 2px; }}
 .alfa-member__role {{ color: var(--ink-soft); font-size: .86rem; }}
+.alfa-member__linkedin {{
+  display: inline-flex; margin-top: 8px;
+  color: var(--ink-soft); transition: color .2s var(--ease);
+}}
+.alfa-member__linkedin svg {{ width: 20px; height: 20px; fill: currentColor; }}
+.alfa-member__linkedin:hover {{ color: var(--blue-500); }}
 
 /* O markdown do Streamlit sublinha todo <a>. Nos nossos componentes o link
    já é sinalizado pela forma (botão, pílula, ícone), então o sublinhado só
    suja — fica reservado para os links de texto corrido do rodapé, no hover. */
-.alfa-btn, .alfa-social a, .alfa-alum__link, .alfa-tag,
+.alfa-btn, .alfa-social a, .alfa-alum__link, .alfa-member__linkedin, .alfa-tag,
 .alfa-footer a, .alfa-agenda a {{ text-decoration: none !important; }}
 .alfa-footer__grid a:hover {{ text-decoration: underline !important; }}
 .alfa-social a:hover {{ text-decoration: none !important; }}
