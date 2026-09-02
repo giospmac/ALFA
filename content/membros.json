@@ -18,13 +18,13 @@
     { "nome": "André Mariz", "diretoria": "Gestão & Risco", "cargo": "Gestão & Risco", "foto": "andre-mariz.png", "linkedin": "https://www.linkedin.com/in/andremmariz/" },
     { "nome": "Eduardo Quintella", "diretoria": "Gestão & Risco", "cargo": "Gestão & Risco", "foto": "eduardo-quintella.jpg", "linkedin": "https://www.linkedin.com/in/eduardo-quintella-83975a384/" },
 
-    { "nome": "Joana Gontijo", "diretoria": "Mercado", "cargo": "Diretora de Mercado", "foto": "", "linkedin": "https://www.linkedin.com/in/joana-gontijo-garrido-3b6786420/" },
-    { "nome": "Vinicius Paiva", "diretoria": "Mercado", "cargo": "Mercado", "foto": "", "linkedin": "https://www.linkedin.com/in/viniciuspaiva06/" },
-    { "nome": "Rafael Porto", "diretoria": "Mercado", "cargo": "Mercado", "foto": "", "linkedin": "https://www.linkedin.com/in/rafael-porto-leite-4a61063a8/" },
-    { "nome": "Marina Nagao", "diretoria": "Mercado", "cargo": "Mercado", "foto": "", "linkedin": "" },
+    { "nome": "Joana Gontijo", "diretoria": "Mercado", "cargo": "Diretora de Mercado", "foto": "joana-gontijo.jpg", "linkedin": "https://www.linkedin.com/in/joana-gontijo-garrido-3b6786420/" },
+    { "nome": "Vinicius Paiva", "diretoria": "Mercado", "cargo": "Mercado", "foto": "vinicius-paiva.png", "linkedin": "https://www.linkedin.com/in/viniciuspaiva06/" },
+    { "nome": "Rafael Porto", "diretoria": "Mercado", "cargo": "Mercado", "foto": "rafael-porto.png", "linkedin": "https://www.linkedin.com/in/rafael-porto-leite-4a61063a8/" },
+    { "nome": "Marina Nagao", "diretoria": "Mercado", "cargo": "Mercado", "foto": "marina-nagao.jpg", "linkedin": "" },
 
-    { "nome": "Vitor Sauberman", "diretoria": "Pessoas", "cargo": "Diretor de Pessoas", "foto": "", "linkedin": "https://www.linkedin.com/in/vitor-sauberman-077b55382/" },
-    { "nome": "Antonio Poppe", "diretoria": "Pessoas", "cargo": "Pessoas", "foto": "", "linkedin": "https://www.linkedin.com/in/antonio-poppe-azevedo-6114b2357/" },
-    { "nome": "Guilherme Lauria", "diretoria": "Pessoas", "cargo": "Pessoas", "foto": "", "linkedin": "https://www.linkedin.com/in/guilherme-lauria-662435400/" }
+    { "nome": "Vitor Sauberman", "diretoria": "Pessoas", "cargo": "Diretor de Pessoas", "foto": "vitor-sauberman.png", "linkedin": "https://www.linkedin.com/in/vitor-sauberman-077b55382/" },
+    { "nome": "Antonio Poppe", "diretoria": "Pessoas", "cargo": "Pessoas", "foto": "antonio-poppe.png", "linkedin": "https://www.linkedin.com/in/antonio-poppe-azevedo-6114b2357/" },
+    { "nome": "Guilherme Lauria", "diretoria": "Pessoas", "cargo": "Pessoas", "foto": "guilherme-lauria.png", "linkedin": "https://www.linkedin.com/in/guilherme-lauria-662435400/" }
   ]
 }
