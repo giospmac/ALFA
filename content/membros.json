@@ -2,9 +2,9 @@
   "_comentario": "Cada membro: nome, diretoria (Presidência | Equity Research | Gestão & Risco | Mercado | Pessoas), cargo, foto (arquivo em assets/membros/, opcional — sem foto o card mostra as iniciais), linkedin (opcional). A ordem dentro de cada diretoria é a ordem de exibição.",
   "diretorias": ["Presidência", "Equity Research", "Gestão & Risco", "Mercado", "Pessoas"],
   "membros": [
-    { "nome": "Ananda Botelho", "diretoria": "Presidência", "cargo": "Presidente", "foto": "", "linkedin": "https://www.linkedin.com/in/ananda-botelho-21a60824a/" },
-    { "nome": "Haroldo Flores", "diretoria": "Presidência", "cargo": "VP", "foto": "", "linkedin": "https://www.linkedin.com/in/haroldo-flores-893498316/" },
-    { "nome": "Nicole Libman", "diretoria": "Presidência", "cargo": "Head do Núcleo", "foto": "", "linkedin": "https://www.linkedin.com/in/nicole-libman-315356364/" },
+    { "nome": "Ananda Botelho", "diretoria": "Presidência", "cargo": "Presidente", "foto": "ananda-botelho.webp", "linkedin": "https://www.linkedin.com/in/ananda-botelho-21a60824a/" },
+    { "nome": "Haroldo Flores", "diretoria": "Presidência", "cargo": "VP", "foto": "haroldo-flores.webp", "linkedin": "https://www.linkedin.com/in/haroldo-flores-893498316/" },
+    { "nome": "Nicole Libman", "diretoria": "Presidência", "cargo": "Head do Núcleo", "foto": "nicole-libman.webp", "linkedin": "https://www.linkedin.com/in/nicole-libman-315356364/" },
 
     { "nome": "André Medeiros", "diretoria": "Equity Research", "cargo": "Diretor de Equity Research", "foto": "", "linkedin": "https://www.linkedin.com/in/andr%C3%A9-mattos-medeiros-150542312/" },
     { "nome": "Leticia Peixoto", "diretoria": "Equity Research", "cargo": "Equity", "foto": "", "linkedin": "https://www.linkedin.com/in/let%C3%ADcia-roquette-reis-peixoto-967220426/" },
