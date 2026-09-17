@@ -9,6 +9,7 @@
     { "nome": "André Medeiros", "diretoria": "Equity Research", "cargo": "Diretor de Equity Research", "foto": "andre-medeiros.webp", "linkedin": "https://www.linkedin.com/in/andr%C3%A9-mattos-medeiros-150542312/" },
     { "nome": "Christian Mogami", "diretoria": "Equity Research", "cargo": "Equity", "foto": "christian-mogami.webp", "linkedin": "https://www.linkedin.com/in/chmogami/" },
     { "nome": "Gabriel Werner", "diretoria": "Equity Research", "cargo": "Equity", "foto": "gabriel-werner.webp", "linkedin": "https://www.linkedin.com/in/gabrielovwerner/" },
+    { "nome": "Vitor Sauberman", "diretoria": "Equity Research", "cargo": "Equity", "foto": "vitor-sauberman.png", "linkedin": "https://www.linkedin.com/in/vitor-sauberman-077b55382/" },
 
     { "nome": "Guilherme Gutman", "diretoria": "Gestão & Risco", "cargo": "Diretor de Gestão & Risco", "foto": "guilherme-gutman.jpg", "linkedin": "https://www.linkedin.com/in/guilherme-cohen-gutman-029706399/" },
     { "nome": "Miguel Dias", "diretoria": "Gestão & Risco", "cargo": "Gestão & Risco", "foto": "miguel-dias.jpg", "linkedin": "https://www.linkedin.com/in/migueloliveiramacedodias/" },
@@ -23,7 +24,6 @@
     { "nome": "Marina Nagao", "diretoria": "Mercado", "cargo": "Mercado", "foto": "marina-nagao.jpg", "linkedin": "" },
 
     { "nome": "Camilla Trivellato", "diretoria": "Pessoas", "cargo": "Diretora de Pessoas", "foto": "camilla-trivellato.webp", "linkedin": "https://www.linkedin.com/in/camilla-trivellato-383b5838b/" },
-    { "nome": "Vitor Sauberman", "diretoria": "Pessoas", "cargo": "Diretor de Pessoas", "foto": "vitor-sauberman.png", "linkedin": "https://www.linkedin.com/in/vitor-sauberman-077b55382/" },
     { "nome": "Antonio Poppe", "diretoria": "Pessoas", "cargo": "Pessoas", "foto": "antonio-poppe.png", "linkedin": "https://www.linkedin.com/in/antonio-poppe-azevedo-6114b2357/" },
     { "nome": "Guilherme Lauria", "diretoria": "Pessoas", "cargo": "Pessoas", "foto": "guilherme-lauria.png", "linkedin": "https://www.linkedin.com/in/guilherme-lauria-662435400/" }
   ]
