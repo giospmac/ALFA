@@ -11,6 +11,7 @@ DESCRICOES = {
     "Presidência": "Direção geral do núcleo e das duas frentes, ALFA Asset e ALFA Núcleo.",
     "Equity Research": "Análise setorial, valuation e construção das teses de investimento.",
     "Gestão & Risco": "Controle de risco, performance vs. benchmark, automação e modelos de alocação.",
+    "IA & Dev": "Inteligência artificial, automação de processos e desenvolvimento de ferramentas internas.",
     "Mercado": "Palestras, visitas institucionais, competições e oportunidades de carreira.",
     "Pessoas": "Processo seletivo, período trainee e programa de capacitação.",
 }

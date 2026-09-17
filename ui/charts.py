@@ -77,7 +77,7 @@ def _plot_return_comparison(years: int | None, months: int | None, title: str, b
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=chart_df.index, y=chart_df["Portfolio"], mode="lines", name="Portfolio", line=dict(color=PALETTE_PRIMARY, width=2)))
     fig.add_trace(go.Scatter(x=chart_df.index, y=chart_df[benchmark], mode="lines", name=benchmark, line=dict(color=PALETTE_SECONDARY, width=2)))
-    
+
     _apply_alfa_style(fig)
     fig.update_yaxes(title_text="")
     st.plotly_chart(fig, use_container_width=True, theme=None, config={'displayModeBar': False})
