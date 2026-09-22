@@ -12,9 +12,13 @@ Como publicar uma edição nova
 Acrescente uma entrada **no topo** da lista `edicoes` em
 `content/newsletter.json`. Campos de vitrine: `numero`, `slug` (o que vai na
 URL), `data`, `titulo`, `resumo`, `periodo`, `destaques`. Campos de leitura:
-`carta`, `noticias` (tema, titulo, texto, fonte), `outros` (titulo, texto,
-fonte) e `termos` (termo, definicao). `pdf` é opcional e, quando presente,
-vira o botão de baixar.
+`carta`, `noticias` (tema, titulo, texto, fonte, mais `imagem` e `alt`
+opcionais), `outros` (titulo, texto, fonte) e `termos` (termo, definicao).
+`pdf` é opcional e, quando presente, vira o botão de baixar.
+
+As imagens ficam em `assets/newsletter/` e vão embutidas na página em base64,
+como as fotos dos membros. Por isso entram em `.webp` com no máximo 1000px de
+largura: o original do e-mail, em PNG, pesa dez vezes mais.
 
 O texto fica no JSON, não em PDF nem em HTML colado: assim a edição herda as
 cores, as fontes e o comportamento no celular do resto do site.
@@ -24,7 +28,7 @@ from __future__ import annotations
 
 import streamlit as st
 
-from site_pages._shared import load_content
+from site_pages._shared import load_content, photo_uri
 from theme import components as c
 
 PARAM_EDICAO = "ed"
@@ -143,8 +147,20 @@ def _fonte(texto: str) -> str:
     return f'<p class="alfa-muted" style="font-size:.86rem">Fonte: {c.esc(texto)}</p>'
 
 
+def _imagem(item: dict) -> str:
+    """Ilustração da notícia. Some sem deixar buraco quando o arquivo não existe."""
+    uri = photo_uri("newsletter", item.get("imagem", ""))
+    if not uri:
+        return ""
+    return (
+        f'<img src="{uri}" alt="{c.esc(item.get("alt", ""))}" loading="lazy" '
+        'style="width:100%;height:auto;display:block;border-radius:14px;'
+        'margin:4px 0 20px 0">'
+    )
+
+
 def _noticia(indice: int, item: dict) -> str:
-    """Uma notícia numerada: tema como kicker, manchete, corpo e fonte."""
+    """Uma notícia numerada: tema como kicker, manchete, imagem, corpo e fonte."""
     return (
         '<div style="margin-bottom:clamp(36px,5vw,56px)">'
         + c.section_head(
@@ -152,6 +168,7 @@ def _noticia(indice: int, item: dict) -> str:
             title=item.get("titulo", ""),
             level=3,
         )
+        + _imagem(item)
         + f'<p>{c.esc(item.get("texto", ""))}</p>'
         + (_fonte(item["fonte"]) if item.get("fonte") else "")
         + "</div>"

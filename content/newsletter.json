@@ -1,5 +1,5 @@
 {
-  "_comentario": "Cada edicao: numero, slug (usado na URL ?p=newsletter&ed=<slug>), data, titulo, resumo, periodo, pdf (link externo opcional) e destaques. O conteudo lido no site vem de carta, noticias, outros e termos. A primeira edicao da lista e a que aparece em destaque no topo.",
+  "_comentario": "Cada edicao: numero, slug (usado na URL ?p=newsletter&ed=<slug>), data, titulo, resumo, periodo, pdf (link externo opcional) e destaques. O conteudo lido no site vem de carta, noticias, outros e termos. Cada noticia aceita imagem (arquivo em assets/newsletter/, de preferencia .webp com no maximo 1000px de largura) e alt, o texto alternativo. A primeira edicao da lista e a que aparece em destaque no topo.",
   "edicoes": [
     {
       "numero": "#01",
@@ -22,31 +22,41 @@
           "tema": "Política monetária",
           "titulo": "Copom corta Selic para 13,75% ao ano e evita sinalizar próximos passos",
           "texto": "O Comitê de Política Monetária reduziu a Selic em 0,25 p.p. na quarta-feira (16/9), de 14,00% para 13,75% ao ano, quinta queda consecutiva, decisão unânime. O corte acompanhou a deflação de 0,32% do IPCA de agosto, que levou a inflação em 12 meses a 4,22% (antes 4,44% no mês anterior), abaixo do teto de 4,5% da meta. O BC evitou sinalizar o ritmo dos próximos cortes, citando \"aumento de incertezas relevantes\" às vésperas do 1º turno presidencial.",
-          "fonte": "comunicado do Banco Central; IBGE"
+          "fonte": "comunicado do Banco Central; IBGE",
+          "imagem": "01-selic-trajetoria.webp",
+          "alt": "Gráfico da trajetória da Selic, de 14,25% em janeiro de 2016 a 13,75% em setembro de 2026, com mínima de 2% em outubro de 2020. Infográfico do ALFA, fonte Banco Central."
         },
         {
           "tema": "Juros EUA",
           "titulo": "Fed sobe juros pela 1ª vez desde 2023; diferencial com a Selic encolhe",
           "texto": "O Federal Reserve elevou os juros em 0,25 p.p., para o intervalo entre 3,75% e 4,00% ao ano, na mesma quarta-feira do corte da Selic, primeira alta desde 2023, decisão unânime. O diferencial entre a Selic e o teto do Fed caiu de cerca de 10,25 p.p. para 9,75 p.p. Para Mateus Hammes, da Ludo Capital, em nota à Exame, o movimento \"estreita o diferencial de juros que historicamente sustenta parte do fluxo estrangeiro para ativos brasileiros\".",
-          "fonte": "InfoMoney; Exame"
+          "fonte": "InfoMoney; Exame",
+          "imagem": "02-fed-juros.webp",
+          "alt": "Autoridade de terno discursa ao microfone diante de bandeiras dos Estados Unidos."
         },
         {
           "tema": "Judiciário",
           "titulo": "STF adia por até 90 dias decisão sobre investigar Alexandre de Moraes",
           "texto": "O STF suspendeu na segunda-feira (15/9) o julgamento que poderia autorizar investigação contra o ministro Alexandre de Moraes, após pedido de vista de Flávio Dino, decisão pode ficar adiada até 15 de dezembro. Foi a primeira vez que uma sessão de plenário poderia abrir investigação contra um dos próprios ministros. Antes da suspensão, o colegiado rejeitou por 4 a 3 a proposta de julgar em conjunto os casos de Moraes e André Mendonça.",
-          "fonte": "Exame"
+          "fonte": "Exame",
+          "imagem": "03-stf-plenario.webp",
+          "alt": "Sessão do plenário do Supremo Tribunal Federal, com os ministros em suas bancadas."
         },
         {
           "tema": "Eleições 2026",
           "titulo": "Datafolha mantém Lula e Flávio Bolsonaro em empate técnico; indefinição pesa sobre a bolsa",
           "texto": "Pesquisa divulgada em 17/9 mostrou Lula com 46% no 2º turno contra Flávio Bolsonaro, com 44%, dentro da margem de erro de 2 p.p. No 1º turno: Lula 39%, Bolsonaro 36%, Cury 6%, Caiado 4%, Renan Santos 3%. O Ibovespa fechou sexta-feira (18/9) aos 185.229,17 pontos, -0,41% no dia e -1,06% na semana, interrompendo quatro semanas seguidas de alta; o dólar subiu 0,37% na semana, a R$ 5,144.",
-          "fonte": "Datafolha (registro BR-04029/2026); InfoMoney"
+          "fonte": "Datafolha (registro BR-04029/2026); InfoMoney",
+          "imagem": "04-eleicoes-datafolha.webp",
+          "alt": "Montagem lado a lado: Lula à esquerda e Flávio Bolsonaro à direita, ambos falando ao microfone."
         },
         {
           "tema": "Geopolítica",
           "titulo": "EUA confirmam pela 1ª vez ter uma arma em órbita; China alerta para corrida armamentista",
           "texto": "Os Estados Unidos confirmaram, pela primeira vez, possuir uma arma \"em órbita\" ao redor da Terra, reconhecimento inédito de capacidade ofensiva no espaço. A confirmação foi feita pelo secretário da Força Aérea dos EUA, Troy Meink, na segunda-feira (14/9), durante a Air, Space and Cyber Conference, sem detalhar as capacidades do equipamento nem a data em que foi colocado em órbita. No dia seguinte, um porta-voz do Ministério das Relações Exteriores da China reagiu cobrando que os EUA \"parem de expandir suas capacidades militares\". O episódio se soma a um histórico recente de tensão espacial: os EUA acusaram a Rússia, em 2024, de lançar um satélite capaz de atacar outras sondas, e a Europa revelou em fevereiro que satélites russos provavelmente interceptaram comunicações de ao menos uma dúzia de satélites europeus desde 2022. O Tratado do Espaço Sideral de 1967 veda apenas armas de destruição em massa em órbita, deixando outras capacidades fora do alcance do acordo.",
-          "fonte": "BBC News Brasil; AFP"
+          "fonte": "BBC News Brasil; AFP",
+          "imagem": "05-arma-orbita.webp",
+          "alt": "Vista da Terra a partir da órbita, com parte de um satélite no canto direito."
         }
       ],
       "outros": [
