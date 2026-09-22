@@ -69,6 +69,22 @@ def _current_page() -> str:
     return page if page in PAGES else DEFAULT_PAGE
 
 
+#: Parâmetros que uma página usa para apontar um item interno (a edição da
+#: newsletter, por exemplo). Trocar de seção pelo menu os descarta, senão o
+#: usuário voltaria para o item antigo em vez da lista.
+SUBPARAMS = ("ed",)
+
+#: Sinaliza, do callback da navegação para o próximo rerun, que os
+#: subparâmetros devem cair.
+NAV_RESET_KEY = "_nav_reset"
+
+
+def _limpar_subparams() -> None:
+    for chave in SUBPARAMS:
+        if chave in st.query_params:
+            del st.query_params[chave]
+
+
 def _set_page(page: str) -> None:
     if page not in PAGES:
         page = DEFAULT_PAGE
@@ -102,6 +118,8 @@ def _bootstrap_route() -> None:
     parâmetro junto com o estado, então os dois só divergem quando a URL muda
     por fora.
     """
+    if st.session_state.pop(NAV_RESET_KEY, False):
+        _limpar_subparams()
     pending = st.session_state.pop(PENDING_KEY, None)
     if pending:
         _set_page(pending)
@@ -114,6 +132,13 @@ def _bootstrap_route() -> None:
 
 
 def _on_nav_change() -> None:
+    """Só marca a intenção; quem limpa os subparâmetros é `_bootstrap_route`.
+
+    Apagar `st.query_params` aqui dentro não adianta: o callback roda antes do
+    rerun e o Streamlit reidrata os parâmetros a partir da URL do frontend, de
+    modo que a exclusão se perde e o item antigo volta.
+    """
+    st.session_state[NAV_RESET_KEY] = True
     label = st.session_state.get(NAV_KEY)
     if label is None:  # clicar na pílula ativa desmarca; mantemos a seção atual
         st.session_state[NAV_KEY] = LABELS[_current_page()]
