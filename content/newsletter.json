@@ -1,0 +1,20 @@
+{
+  "_comentario": "Cada edição: numero, data (como aparece no card), titulo, resumo, link e destaques (lista curta de temas). O PDF vive em static/newsletter/ e o link aponta para app/static/newsletter/<arquivo>.pdf — o Streamlit serve essa pasta porque .streamlit/config.toml tem enableStaticServing. A primeira edição da lista é a que aparece em destaque no topo da página.",
+  "edicoes": [
+    {
+      "numero": "#01",
+      "data": "20 de setembro de 2026",
+      "titulo": "Copom corta, Fed sobe: o descompasso das Américas",
+      "resumo": "Na mesma quarta-feira, o Copom levou a Selic a 13,75% e o Federal Reserve elevou os juros americanos pela primeira vez desde 2023 — o diferencial que sustenta o fluxo estrangeiro encolheu. A semana ainda teve sessão turbulenta no STF, Datafolha em empate técnico e os EUA confirmando uma arma em órbita.",
+      "periodo": "Semana de 14 a 20 de setembro de 2026",
+      "link": "app/static/newsletter/boletim-alfa-01-2026-09-20.pdf",
+      "destaques": [
+        "Política monetária",
+        "Juros EUA",
+        "Judiciário",
+        "Eleições 2026",
+        "Geopolítica"
+      ]
+    }
+  ]
+}
