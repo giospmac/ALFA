@@ -147,6 +147,12 @@ def _fonte(texto: str) -> str:
     return f'<p class="alfa-muted" style="font-size:.86rem">Fonte: {c.esc(texto)}</p>'
 
 
+#: Teto da ilustração de uma notícia, em px. A altura também é limitada porque
+#: imagem em pé (um gráfico, por exemplo) ficaria alta demais só com a largura.
+IMG_LARGURA_MAX = 480
+IMG_ALTURA_MAX = 400
+
+
 def _imagem(item: dict) -> str:
     """Ilustração da notícia. Some sem deixar buraco quando o arquivo não existe."""
     uri = photo_uri("newsletter", item.get("imagem", ""))
@@ -154,8 +160,9 @@ def _imagem(item: dict) -> str:
         return ""
     return (
         f'<img src="{uri}" alt="{c.esc(item.get("alt", ""))}" loading="lazy" '
-        'style="width:100%;height:auto;display:block;border-radius:14px;'
-        'margin:4px 0 20px 0">'
+        f'style="max-width:min(100%,{IMG_LARGURA_MAX}px);max-height:{IMG_ALTURA_MAX}px;'
+        'width:auto;height:auto;display:block;border-radius:14px;'
+        'margin:4px auto 20px auto">'
     )
 
 
