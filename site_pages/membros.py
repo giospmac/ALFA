@@ -106,7 +106,10 @@ def render(*, goto) -> None:
 
     # A Presidência não conta como diretoria na contagem do cabeçalho.
     diretorias = [d for d in ordem if d != "Presidência" and any(m.get("diretoria") == d for m in membros)]
-    _render_header(len(membros), len(diretorias))
+    # Quem atua em duas diretorias tem uma entrada em cada e aparece nas duas
+    # grades — mas é uma pessoa só, então o cabeçalho conta nomes distintos.
+    pessoas = {m.get("nome", "") for m in membros}
+    _render_header(len(pessoas), len(diretorias))
 
     if not membros:
         c.render(
