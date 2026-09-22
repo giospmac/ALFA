@@ -2,11 +2,13 @@
 
 Como publicar uma edição nova
 -----------------------------
-1. Coloque o PDF em `static/newsletter/` (o Streamlit serve essa pasta porque
-   `.streamlit/config.toml` tem `enableStaticServing`).
+1. Suba o PDF para o Drive do núcleo e compartilhe como "qualquer pessoa com o
+   link" — sem isso o visitante cai numa tela de pedir acesso.
 2. Acrescente uma entrada **no topo** da lista `edicoes` em
-   `content/newsletter.json`, com `link` apontando para
-   `app/static/newsletter/<arquivo>.pdf`.
+   `content/newsletter.json`, com `link` apontando para a URL do Drive.
+
+O PDF fica fora do repositório de propósito: um boletim semanal de ~2 MB
+engordaria o histórico do git rápido demais.
 
 A primeira entrada da lista vira o destaque do topo; as demais caem no arquivo,
 em grade. Sem nenhuma edição, a página volta ao aviso de "em breve".

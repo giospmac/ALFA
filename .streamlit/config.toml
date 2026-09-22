@@ -15,6 +15,3 @@ gatherUsageStats = false
 [client]
 toolbarMode = "minimal"
 showErrorDetails = false
-
-[server]
-enableStaticServing = true
