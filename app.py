@@ -21,7 +21,7 @@ ROOT = Path(__file__).resolve().parent
 _ICON = ROOT / "assets" / "logo-alfa-blue.png"
 
 st.set_page_config(
-    page_title="ALFA — Laboratório de Finanças Aplicadas PUC-Rio",
+    page_title="ALFA · Laboratório de Finanças Aplicadas PUC-Rio",
     page_icon=str(_ICON) if _ICON.is_file() else "📈",
     layout="wide",
     initial_sidebar_state="collapsed",

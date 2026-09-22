@@ -11,7 +11,7 @@ JORNADA = [
     {"titulo": "Inscrição", "descricao": "Formulário, avaliação técnica e comportamental, e entrevistas."},
     {"titulo": "Integração", "descricao": "Onboarding institucional, apresentação das diretorias e projetos, e acesso aos materiais de capacitação."},
     {"titulo": "Período Trainee", "descricao": "12 aulas obrigatórias de fundamentos de mercado, equity, valuation e risco. Presença mínima de 80%."},
-    {"titulo": "Extensão", "descricao": "Aulas avançadas em duas trilhas — Valuation e Finanças Quantitativas & Risco — abertas de forma opcional."},
+    {"titulo": "Extensão", "descricao": "Aulas avançadas em duas trilhas (Valuation e Finanças Quantitativas & Risco), abertas de forma opcional."},
     {"titulo": "Desafios Internos", "descricao": "Dois desafios em conjunto com os membros, focados em gestão de ativos e análise de ações."},
     {"titulo": "Fundo de Investimento", "descricao": "Trainees efetivados atuam no fundo simulado: screening, análises, modelos, teses, alocação e risco."},
     {"titulo": "Networking", "descricao": "Aulas com profissionais, visitas a bancos e gestoras, mentorias, imersões e competições acadêmicas."},

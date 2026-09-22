@@ -40,7 +40,7 @@ PROCESSO = [
 
 PILARES = [
     ("Qualidade", "Empresas com vantagens competitivas sustentáveis, boa alocação de capital e governança sólida."),
-    ("Margem de segurança", "Compramos abaixo do valor intrínseco estimado — o desconto é o que protege a tese."),
+    ("Margem de segurança", "Compramos abaixo do valor intrínseco estimado: o desconto é o que protege a tese."),
     ("Horizonte longo", "Decisões pensadas em anos, não em trimestres. Giro baixo e convicção alta."),
     ("Risco medido", "Toda posição passa pelo crivo de VaR, contribuição de risco e correlação com a carteira."),
 ]
@@ -261,7 +261,7 @@ def _render_status(portfolio_df: pd.DataFrame, historical_df: pd.DataFrame) -> N
     )
 
     if defasado:
-        atraso = f" — {(hoje - fim).days} dias atrás" if fim is not None else ""
+        atraso = f" ({(hoje - fim).days} dias atrás)" if fim is not None else ""
         st.warning(
             f"O histórico não chega até hoje{atraso}. Atualize para recalcular os indicadores.",
             icon=":material/update:",

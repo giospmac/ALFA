@@ -300,7 +300,7 @@ def footer_html(links_markup: str = "") -> str:
             </ul></div>
           </div>
           <div class="alfa-footer__bottom">
-            <span>© 2026 ALFA — Laboratório de Finanças Aplicadas PUC-Rio</span>
+            <span>© 2026 ALFA · Laboratório de Finanças Aplicadas PUC-Rio</span>
             <span>Conteúdo educacional. Nada aqui constitui recomendação de investimento.</span>
           </div>
         </div></footer>

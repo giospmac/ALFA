@@ -28,7 +28,7 @@ def _render_header() -> None:
                 + c.reveal("<h1>Newsletter</h1>", step=2)
                 + c.reveal(
                     c.lead(
-                        "As edições da newsletter do ALFA — comentário de mercado, teses em "
+                        "As edições da newsletter do ALFA: comentário de mercado, teses em "
                         "acompanhamento e o que a gestão do fundo aprendeu no período."
                     ),
                     step=3,

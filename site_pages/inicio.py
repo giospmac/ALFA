@@ -201,7 +201,7 @@ def _render_plataforma_teaser(on_platform) -> None:
                 + "<h2>As ferramentas de gestão, abertas</h2>"
                 + c.lead(
                     "Fronteira eficiente de Markowitz, VaR/CVaR, CAPM, drawdown, Monte Carlo, "
-                    "correlações e análise de ativos — os mesmos modelos que a diretoria de "
+                    "correlações e análise de ativos: os mesmos modelos que a diretoria de "
                     "Gestão &amp; Risco usa para gerir o fundo, rodando ao vivo."
                 ),
                 step=1,

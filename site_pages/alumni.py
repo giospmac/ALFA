@@ -117,7 +117,7 @@ def _render_header(total: int) -> None:
                 + c.reveal("<h1>Alumni</h1>", step=2)
                 + c.reveal(
                     c.lead(
-                        f"{contagem} que construíram o ALFA desde a fundação — de presidências e "
+                        f"{contagem} que construíram o ALFA desde a fundação, de presidências e "
                         "diretorias a associados que passaram pelas análises e pelos modelos do fundo."
                     ),
                     step=3,
@@ -152,7 +152,7 @@ def _render_cta() -> None:
             '<div class="alfa-center">'
             + c.section_head(
                 title="Passou pelo ALFA e não está aqui?",
-                subtitle="Nos escreva para entrar na lista — ou para mandar seu LinkedIn e "
+                subtitle="Nos escreva para entrar na lista, ou para mandar seu LinkedIn e "
                 "aparecer com o link no seu nome.",
                 center=True,
             )

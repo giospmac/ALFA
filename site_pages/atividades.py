@@ -37,7 +37,7 @@ def render(*, goto) -> None:
                 + c.reveal(
                     c.lead(
                         "Visitas institucionais, palestras com profissionais, imersões no mercado "
-                        "financeiro e competições — a ponte entre a sala de aula e o buy-side."
+                        "financeiro e competições: a ponte entre a sala de aula e o buy-side."
                     ),
                     step=3,
                 )
