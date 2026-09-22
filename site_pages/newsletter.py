@@ -271,8 +271,8 @@ def _render_edicao(edicao: dict) -> None:
             c.section(
                 c.container(
                     c.section_head(
-                        kicker="Glossário",
-                        title="Termos para estudar",
+                        kicker=f"{len(termos)} termos",
+                        title="Glossário",
                         subtitle="O vocabulário que apareceu nas notícias desta edição.",
                     )
                     + c.grid(cards, cols=2)
