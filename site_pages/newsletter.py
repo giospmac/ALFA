@@ -13,8 +13,11 @@ Acrescente uma entrada **no topo** da lista `edicoes` em
 `content/newsletter.json`. Campos de vitrine: `numero`, `slug` (o que vai na
 URL), `data`, `titulo`, `resumo`, `periodo`, `destaques`. Campos de leitura:
 `carta`, `noticias` (tema, titulo, texto, fonte, mais `imagem` e `alt`
-opcionais), `outros` (titulo, texto, fonte) e `termos` (termo, definicao).
-`pdf` é opcional e, quando presente, vira o botão de baixar.
+opcionais), `tabelas` (titulo, colunas, linhas, nota), `outros` (titulo,
+texto, fonte) e `termos` (termo, definicao). Todos são opcionais: a seção
+some quando a edição não traz aquele bloco, e nenhuma edição precisa ter a
+mesma estrutura da anterior. `pdf` é opcional e, quando presente, vira o
+botão de baixar.
 
 As imagens ficam em `assets/newsletter/` e vão embutidas na página em base64,
 como as fotos dos membros. Por isso entram em `.webp` com no máximo 1000px de
@@ -182,6 +185,22 @@ def _noticia(indice: int, item: dict) -> str:
     )
 
 
+def _tabela(item: dict) -> str:
+    """Uma tabela de índices: título, grade de números e a nota de fonte."""
+    linhas = [[c.esc(celula) for celula in linha] for linha in item.get("linhas", [])]
+    return (
+        '<div style="margin-bottom:clamp(32px,4vw,48px)">'
+        + c.section_head(title=item.get("titulo", ""), level=3)
+        + c.data_table(item.get("colunas", []), linhas)
+        + (_fonte_nota(item["nota"]) if item.get("nota") else "")
+        + "</div>"
+    )
+
+
+def _fonte_nota(texto: str) -> str:
+    return f'<p class="alfa-muted" style="font-size:.86rem;margin-top:10px">{c.esc(texto)}</p>'
+
+
 def _cabecalho_edicao(edicao: dict) -> None:
     c.render(
         c.section(
@@ -237,6 +256,20 @@ def _render_edicao(edicao: dict) -> None:
                     + "".join(_noticia(i, item) for i, item in enumerate(noticias, start=1))
                 ),
                 variant="surface",
+            )
+        )
+
+    tabelas = edicao.get("tabelas", [])
+    if tabelas:
+        # Faixa escura de propósito: `alfa-table` pinta o texto com --on-dark,
+        # e sobre fundo claro os números ficam ilegíveis.
+        c.render(
+            c.section(
+                c.container(
+                    c.section_head(kicker="Índices da semana", title="Os números da semana")
+                    + "".join(_tabela(t) for t in tabelas)
+                ),
+                variant="dark",
             )
         )
 

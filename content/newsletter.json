@@ -1,6 +1,186 @@
 {
-  "_comentario": "Cada edicao: numero, slug (usado na URL ?p=newsletter&ed=<slug>), data, titulo, resumo, periodo, pdf (link externo opcional) e destaques. O conteudo lido no site vem de carta, noticias, outros e termos. Cada noticia aceita imagem (arquivo em assets/newsletter/, de preferencia .webp com no maximo 1000px de largura) e alt, o texto alternativo. A primeira edicao da lista e a que aparece em destaque no topo.",
+  "_comentario": "Cada edicao: numero, slug (usado na URL ?p=newsletter&ed=<slug>), data, titulo, resumo, periodo, pdf (link externo opcional) e destaques. O conteudo lido no site vem de carta, noticias, tabelas, outros e termos, todos opcionais. Cada noticia aceita imagem (caminho dentro de assets/newsletter/, de preferencia .webp com no maximo 1000px de largura) e alt. A primeira edicao da lista e a que aparece em destaque no topo; as demais viram arquivo.",
   "edicoes": [
+    {
+      "numero": "#02",
+      "slug": "02",
+      "data": "27 de setembro de 2026",
+      "titulo": "IPCA-15 surpreende, Yduqs e Afya se fundem e o governo encerra as bets",
+      "periodo": "Semana de 21 a 27 de setembro de 2026",
+      "resumo": "A semana combinou inflação acima do esperado, uma disputa presidencial ainda empatada, a fusão bilionária entre Yduqs e Afya, novos desdobramentos do caso Banco Master sobre o Genial e o fim abrupto das bets.",
+      "destaques": [
+        "Eleições 2026",
+        "Inflação",
+        "Fusões & Aquisições",
+        "Regulação",
+        "Varejo"
+      ],
+      "carta": "Na semana de 21 a 27 de setembro, o mercado brasileiro combinou uma inflação acima do esperado, uma disputa presidencial ainda empatada, a fusão bilionária entre Yduqs e Afya, novos desdobramentos do caso Banco Master sobre o Genial e a indústria de special situations, e o fim abrupto das bets.",
+      "noticias": [
+        {
+          "tema": "Eleições 2026",
+          "titulo": "Datafolha mantém corrida presidencial em empate técnico; Ibovespa e dólar reagem",
+          "texto": "Pesquisa Datafolha divulgada na quinta-feira (24), com 2.002 entrevistas entre 22 e 24/9 (margem de erro de 2 p.p.; registro TSE BR-00304/2026), manteve Lula à frente no 1º turno com 40% contra 36% de Flávio Bolsonaro, e mostrou os dois empatados no 2º turno, com rejeição idêntica de 45% cada, terceira pesquisa seguida a repetir o quadro. Dias antes, o BTG/Nexus (21/9) já apontava empate técnico no 2º turno, o que ajudou o Ibovespa a fechar aquele pregão em alta de 0,74%, a 186.595,60 pontos, com a B3 disparando 3,64% e o dólar recuando 0,70%, a R$ 5,108. Com o empate mantido a dez dias do 1º turno (4/10), o dólar oscilou entre R$ 5,10 e R$ 5,20 na semana, sem direção clara.",
+          "fonte": "Datafolha (registro TSE BR-00304/2026); BTG/Nexus",
+          "imagem": "02/01-eleicoes-datafolha.webp",
+          "alt": "Fotos ilustrativas da notícia sobre a pesquisa Datafolha para presidente"
+        },
+        {
+          "tema": "Inflação",
+          "titulo": "IPCA-15 de setembro supera projeções; curva de juros sinaliza cortes mais tímidos na Selic",
+          "texto": "O IPCA-15 subiu 0,70% em setembro, informou o IBGE na sexta-feira (25), acima da mediana de 0,53% projetada (intervalo de 0,45% a 0,66%) e dos 0,48% de setembro de 2025. O indicador acumula 3,82% no ano e 4,47% em 12 meses (ante 4,24% até agosto), puxado pela energia elétrica residencial (+7,42%, com o fim da bonificação do excedente de Itaipu) e pelo reajuste de 14% nos cigarros. Isso reduz o espaço para o Copom aprofundar os cortes na Selic, hoje em 13,75% ao ano; a curva de juros futuros (DI) negociada na sexta-feira já oscilava entre 13,53% e 13,66% para os vencimentos entre out/26 e mar/27, patamar mais próximo da Selic atual do que os 13,25% que a XP projetava antes do dado. O Ibovespa fechou a sexta-feira em queda de 0,27%, a 183.476,86 pontos (-0,95% na semana), com o dólar em R$ 5,181 (-0,23%).",
+          "fonte": "IBGE; XP; Manchester Investimentos",
+          "imagem": "02/02-ipca15-grafico.webp",
+          "alt": "Gráfico de linha do IPCA-15 mensal, de set/2025 a set/2026: 0,48; 0,18; 0,20; 0,25; 0,20; 0,84; 0,44; 0,89; 0,62; 0,41; 0,06; -0,40; 0,70 (%). Fonte: IBGE."
+        },
+        {
+          "tema": "Fusões & Aquisições",
+          "titulo": "Yduqs e Afya assinam fusão que cria gigante de R$ 9,5 bilhões no ensino superior",
+          "texto": "Yduqs e Afya informaram na quarta-feira (24) acordo definitivo de combinação de negócios avaliado em cerca de R$ 9,5 bilhões: acionistas da Afya ficam com 69% do capital combinado e os da Yduqs com 31%, além de dividendo especial de R$ 750 milhões aos acionistas da Yduqs. A Yduqs (antiga Estácio Participações) é um dos maiores grupos de ensino superior privado do Brasil, com forte presença em cursos presenciais e a distância em todo o país; a Afya, por sua vez, é focada especificamente em educação médica, reunindo a maior rede de faculdades de medicina do país e capital negociado na Nasdaq. A Bertelsmann (controladora da Afya) torna-se maior acionista, com 47,3%, à frente de uma operação com 926 mil alunos e 5,9 mil vagas de medicina (12% da capacidade nacional). No anúncio, YDUQ3 subiu 2,95% e a Afya avançou 1,10% na Nasdaq, enquanto a Cogna (COGN3) caiu 5,22%. As estimativas de sinergia variam de R$ 1,7 a 1,8 bi (JPMorgan) a R$ 2,1 a 2,2 bi (XP, Itaú BBA, Bradesco BBI), até 24% do valor de mercado combinado, e o negócio ainda depende de análise do Cade.",
+          "fonte": "comunicados Yduqs/Afya; JPMorgan, XP, Itaú BBA, Bradesco BBI",
+          "imagem": "02/03-yduqs-afya.webp",
+          "alt": "Logos da Yduqs e da Afya"
+        },
+        {
+          "tema": "Regulação & Judiciário",
+          "titulo": "Operação Carbono Oculto atinge ex-diretor do Genial; setor de special situations reage a nova regra de FIDCs",
+          "texto": "A 3ª fase da Operação Carbono Oculto (“Crédito Oculto”), deflagrada na quinta-feira (24), mirou o ex-diretor do Banco Genial Humberto Arthur Tupinambá Neto, afastado em maio, entre outros treze suspeitos e 24 empresas em sete estados, num esquema que teria movimentado mais de R$ 120 milhões até a compra da distribuidora de combustíveis Terrana. O mesmo caso Master levou o CMN a editar, via Banco Central, a Resolução nº 5.343, que a partir de 13/10 proíbe FIDCs de adquirir direitos creditórios ligados a processos judiciais antes do trânsito em julgado, atingindo uma indústria de special situations que saltou de 5 para 57 gestoras entre 2015 e 2026, com R$ 17,4 bilhões disponíveis em junho. Daniel Kalansky (Insper; Loria e Kalansky Advogados) diz que a resolução “caiu como uma bomba” no mercado; a Associação Brasileira de Special Situations e Litigation Finance pediu a suspensão da norma.",
+          "fonte": "Polícia Federal/PGR; Banco Central (Resolução CMN nº 5.343); Spectra Investments",
+          "imagem": "02/04-carbono-oculto.webp",
+          "alt": "Fotos dos personagens da notícia sobre a Operação Carbono Oculto"
+        },
+        {
+          "tema": "Regulação & Varejo",
+          "titulo": "Governo decreta fim das bets a dez dias do primeiro turno, com impacto fiscal e no varejo",
+          "texto": "O governo federal anunciou na sexta-feira (25) medida provisória que proíbe apostas esportivas e cassino on-line no país: depósitos e propaganda vetados de imediato, saques permitidos até 5/10, plataformas fora do ar a partir de 6/10 e devolução de valores entre 9 e 14/10 pela Caixa Econômica Federal; operar apostas passa a ser crime, com pena de quatro a seis anos de prisão. O setor movimentou R$ 20,3 bilhões só no 1º semestre de 2026, com cerca de 25,2 milhões de apostadores. A arrecadação federal com bets, de cerca de R$ 800 milhões por mês, deve zerar a partir de outubro; analistas do BTG Pactual e da Sinter Futura avaliam que parte dos recursos hoje em apostas deve migrar para consumo básico ou quitação de dívidas, beneficiando primeiro Casas Bahia (BHIA3), Assaí (ASAI3) e Magazine Luiza (MGLU3).",
+          "fonte": "Diário Oficial da União (medida provisória); Goldman Sachs; BTG Pactual; Sinter Futura",
+          "imagem": "02/05-fim-das-bets.webp",
+          "alt": "Cerimônia de anúncio da medida provisória que proíbe as bets"
+        }
+      ],
+      "tabelas": [
+        {
+          "titulo": "Mercados na semana (21 a 25/9)",
+          "colunas": [
+            "Ativo",
+            "Variação",
+            "Valor"
+          ],
+          "linhas": [
+            [
+              "Ibovespa",
+              "-0,95%",
+              "183.477"
+            ],
+            [
+              "S&P 500",
+              "1,21%",
+              "7.743"
+            ],
+            [
+              "Nasdaq",
+              "2,06%",
+              "27.069"
+            ],
+            [
+              "Bitcoin",
+              "4,50%",
+              "$ 84.054"
+            ],
+            [
+              "Dólar",
+              "0,72%",
+              "R$ 5,181"
+            ]
+          ],
+          "nota": "Variação sobre a semana anterior (21 a 25/9). Bitcoin: de domingo a domingo."
+        },
+        {
+          "titulo": "Juros futuros (DI)",
+          "colunas": [
+            "Vencimento",
+            "Taxa (%)"
+          ],
+          "linhas": [
+            [
+              "out/26",
+              "13,65"
+            ],
+            [
+              "nov/26",
+              "13,66"
+            ],
+            [
+              "dez/26",
+              "13,58"
+            ],
+            [
+              "jan/27",
+              "13,55"
+            ],
+            [
+              "fev/27",
+              "13,53"
+            ],
+            [
+              "mar/27",
+              "13,54"
+            ]
+          ],
+          "nota": "Fontes: B3 e Valor PRO. Elaboração: Valor Data. Dados de 25/9/2026."
+        },
+        {
+          "titulo": "Inflação e juros",
+          "colunas": [
+            "Índice",
+            "Período",
+            "No mês",
+            "12 meses"
+          ],
+          "linhas": [
+            [
+              "IPCA (%)",
+              "ago/26",
+              "-0,32",
+              "4,22"
+            ],
+            [
+              "Selic over, ao ano (%)",
+              "—",
+              "—",
+              "13,65"
+            ]
+          ],
+          "nota": "Fontes: IBGE, Fipe e FGV; Banco Central e B3. Elaboração: Valor Data."
+        },
+        {
+          "titulo": "Atividade econômica (jul/26)",
+          "colunas": [
+            "Índice",
+            "No mês (%)"
+          ],
+          "linhas": [
+            [
+              "Produção industrial",
+              "0,2"
+            ],
+            [
+              "Receita de vendas no varejo",
+              "-0,6"
+            ],
+            [
+              "Taxa de desocupação",
+              "5,3"
+            ],
+            [
+              "IBC-Br",
+              "-0,22"
+            ]
+          ],
+          "nota": "Fontes: Banco Central e IBGE. Elaboração: Valor Data."
+        }
+      ]
+    },
     {
       "numero": "#01",
       "slug": "01",
@@ -22,41 +202,31 @@
           "tema": "Política monetária",
           "titulo": "Copom corta Selic para 13,75% ao ano e evita sinalizar próximos passos",
           "texto": "O Comitê de Política Monetária reduziu a Selic em 0,25 p.p. na quarta-feira (16/9), de 14,00% para 13,75% ao ano, quinta queda consecutiva, decisão unânime. O corte acompanhou a deflação de 0,32% do IPCA de agosto, que levou a inflação em 12 meses a 4,22% (antes 4,44% no mês anterior), abaixo do teto de 4,5% da meta. O BC evitou sinalizar o ritmo dos próximos cortes, citando \"aumento de incertezas relevantes\" às vésperas do 1º turno presidencial.",
-          "fonte": "comunicado do Banco Central; IBGE",
-          "imagem": "01-selic-trajetoria.webp",
-          "alt": "Gráfico da trajetória da Selic, de 14,25% em janeiro de 2016 a 13,75% em setembro de 2026, com mínima de 2% em outubro de 2020. Infográfico do ALFA, fonte Banco Central."
+          "fonte": "comunicado do Banco Central; IBGE"
         },
         {
           "tema": "Juros EUA",
           "titulo": "Fed sobe juros pela 1ª vez desde 2023; diferencial com a Selic encolhe",
           "texto": "O Federal Reserve elevou os juros em 0,25 p.p., para o intervalo entre 3,75% e 4,00% ao ano, na mesma quarta-feira do corte da Selic, primeira alta desde 2023, decisão unânime. O diferencial entre a Selic e o teto do Fed caiu de cerca de 10,25 p.p. para 9,75 p.p. Para Mateus Hammes, da Ludo Capital, em nota à Exame, o movimento \"estreita o diferencial de juros que historicamente sustenta parte do fluxo estrangeiro para ativos brasileiros\".",
-          "fonte": "InfoMoney; Exame",
-          "imagem": "02-fed-juros.webp",
-          "alt": "Autoridade de terno discursa ao microfone diante de bandeiras dos Estados Unidos."
+          "fonte": "InfoMoney; Exame"
         },
         {
           "tema": "Judiciário",
           "titulo": "STF adia por até 90 dias decisão sobre investigar Alexandre de Moraes",
           "texto": "O STF suspendeu na segunda-feira (15/9) o julgamento que poderia autorizar investigação contra o ministro Alexandre de Moraes, após pedido de vista de Flávio Dino, decisão pode ficar adiada até 15 de dezembro. Foi a primeira vez que uma sessão de plenário poderia abrir investigação contra um dos próprios ministros. Antes da suspensão, o colegiado rejeitou por 4 a 3 a proposta de julgar em conjunto os casos de Moraes e André Mendonça.",
-          "fonte": "Exame",
-          "imagem": "03-stf-plenario.webp",
-          "alt": "Sessão do plenário do Supremo Tribunal Federal, com os ministros em suas bancadas."
+          "fonte": "Exame"
         },
         {
           "tema": "Eleições 2026",
           "titulo": "Datafolha mantém Lula e Flávio Bolsonaro em empate técnico; indefinição pesa sobre a bolsa",
           "texto": "Pesquisa divulgada em 17/9 mostrou Lula com 46% no 2º turno contra Flávio Bolsonaro, com 44%, dentro da margem de erro de 2 p.p. No 1º turno: Lula 39%, Bolsonaro 36%, Cury 6%, Caiado 4%, Renan Santos 3%. O Ibovespa fechou sexta-feira (18/9) aos 185.229,17 pontos, -0,41% no dia e -1,06% na semana, interrompendo quatro semanas seguidas de alta; o dólar subiu 0,37% na semana, a R$ 5,144.",
-          "fonte": "Datafolha (registro BR-04029/2026); InfoMoney",
-          "imagem": "04-eleicoes-datafolha.webp",
-          "alt": "Montagem lado a lado: Lula à esquerda e Flávio Bolsonaro à direita, ambos falando ao microfone."
+          "fonte": "Datafolha (registro BR-04029/2026); InfoMoney"
         },
         {
           "tema": "Geopolítica",
           "titulo": "EUA confirmam pela 1ª vez ter uma arma em órbita; China alerta para corrida armamentista",
           "texto": "Os Estados Unidos confirmaram, pela primeira vez, possuir uma arma \"em órbita\" ao redor da Terra, reconhecimento inédito de capacidade ofensiva no espaço. A confirmação foi feita pelo secretário da Força Aérea dos EUA, Troy Meink, na segunda-feira (14/9), durante a Air, Space and Cyber Conference, sem detalhar as capacidades do equipamento nem a data em que foi colocado em órbita. No dia seguinte, um porta-voz do Ministério das Relações Exteriores da China reagiu cobrando que os EUA \"parem de expandir suas capacidades militares\". O episódio se soma a um histórico recente de tensão espacial: os EUA acusaram a Rússia, em 2024, de lançar um satélite capaz de atacar outras sondas, e a Europa revelou em fevereiro que satélites russos provavelmente interceptaram comunicações de ao menos uma dúzia de satélites europeus desde 2022. O Tratado do Espaço Sideral de 1967 veda apenas armas de destruição em massa em órbita, deixando outras capacidades fora do alcance do acordo.",
-          "fonte": "BBC News Brasil; AFP",
-          "imagem": "05-arma-orbita.webp",
-          "alt": "Vista da Terra a partir da órbita, com parte de um satélite no canto direito."
+          "fonte": "BBC News Brasil; AFP"
         }
       ],
       "outros": [

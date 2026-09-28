@@ -616,7 +616,12 @@ a:hover {{ color: var(--blue-600); }}
   display: block; height: 6px; min-width: 8px; border-radius: 99px;
   background: linear-gradient(90deg, var(--blue-500), var(--blue-300));
 }}
-@media (max-width: 640px) {{ .alfa-table td:has(.bar), .alfa-table th:last-child {{ display: none; }} }}
+/* No estreito, a coluna de barra sai — mas só em tabela que tenha barra: sem o
+   `:has(.bar)` no segundo seletor, sumia o último cabeçalho de toda tabela
+   (inclusive as que não têm barra), deixando o cabeçalho fora de registro. */
+@media (max-width: 640px) {{
+  .alfa-table td:has(.bar), .alfa-table:has(.bar) th:last-child {{ display: none; }}
+}}
 
 /* ====================================================================
    8. RE-SKIN DOS WIDGETS DO STREAMLIT
