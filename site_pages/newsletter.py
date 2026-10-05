@@ -29,6 +29,8 @@ cores, as fontes e o comportamento no celular do resto do site.
 
 from __future__ import annotations
 
+import re
+
 import streamlit as st
 
 from site_pages._shared import load_content, photo_uri
@@ -185,9 +187,17 @@ def _noticia(indice: int, item: dict) -> str:
     )
 
 
+def _celula(texto: str) -> str:
+    escapado = c.esc(texto)
+    if re.match(r"[+-]\d", texto):
+        classe = "pos" if texto.startswith("+") else "neg"
+        return f'<span class="{classe}">{escapado}</span>'
+    return escapado
+
+
 def _tabela(item: dict) -> str:
     """Uma tabela de índices: título, grade de números e a nota de fonte."""
-    linhas = [[c.esc(celula) for celula in linha] for linha in item.get("linhas", [])]
+    linhas = [[_celula(celula) for celula in linha] for linha in item.get("linhas", [])]
     return (
         '<div style="margin-bottom:clamp(32px,4vw,48px)">'
         + c.section_head(title=item.get("titulo", ""), level=3)
