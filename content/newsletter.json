@@ -2,6 +2,142 @@
   "_comentario": "Cada edicao: numero, slug (usado na URL ?p=newsletter&ed=<slug>), data, titulo, resumo, periodo, pdf (link externo opcional) e destaques. O conteudo lido no site vem de carta, noticias, tabelas, outros e termos, todos opcionais. Cada noticia aceita imagem (caminho dentro de assets/newsletter/, de preferencia .webp com no maximo 1000px de largura) e alt. A primeira edicao da lista e a que aparece em destaque no topo; as demais viram arquivo.",
   "edicoes": [
     {
+      "numero": "#03",
+      "slug": "03",
+      "data": "5 de outubro de 2026",
+      "titulo": "Primeiro turno dispara o Ibovespa, Claro fecha a compra da Desktop e a Vale perde os ganhos de 2026",
+      "periodo": "Semana de 28 de setembro a 5 de outubro de 2026",
+      "resumo": "O primeiro turno presidencial levou o Ibovespa a uma máxima histórica, a Claro concluiu a compra da Desktop, o Boletim Focus piorou as projeções de inflação e crescimento pela terceira semana seguida, e a Vale perdeu os ganhos acumulados no ano com o tombo do minério de ferro.",
+      "destaques": [
+        "Eleições 2026",
+        "Telecom & Fusões",
+        "Inflação",
+        "Commodities"
+      ],
+      "carta": "Na semana que terminou no primeiro turno das eleições presidenciais, as projeções de inflação e crescimento seguiram se deteriorando aos poucos e o minério de ferro pressionou a Vale, até que o resultado das urnas levasse o Ibovespa futuro a uma máxima histórica nesta segunda-feira.",
+      "noticias": [
+        {
+          "tema": "Eleições 2026",
+          "titulo": "Primeiro turno leva Bolsonaro à frente de Lula e dispara o Ibovespa",
+          "texto": "O primeiro turno das eleições presidenciais, no domingo (4), terminou com Flávio Bolsonaro (PL) à frente, com 47,03% dos votos, contra 45,16% de Luiz Inácio Lula da Silva (PT), diferença de 2,22 milhões de votos com 100% das urnas apuradas. O PL também elegeu 19 senadores e terá a maior bancada da Casa, com 28 cadeiras, o que o mercado lê como caminho mais curto para um ajuste fiscal. A reação nesta segunda-feira (5) foi imediata: o Ibovespa superou os 200 mil pontos pela primeira vez, subia 7,41% às 10h30, aos 206.342 pontos, e chegou a avançar 9%, tocando os 209 mil, segundo o Valor. O dólar recuava 4,84%, a R$ 4,96, menor nível desde maio, e a chance de um corte de 0,5 ponto na Selic em dezembro passou de 18% para 45% no mercado de opções. Bancos e estatais puxaram a alta, com Itaú subindo 12%, Bradesco 11% e Petrobras 10%, segundo o InfoMoney; o JPMorgan vê espaço para a bolsa subir até 11% no curto prazo.",
+          "fonte": "Valor Econômico; InfoMoney; JPMorgan",
+          "imagem": "03/01-eleicoes-resultado.webp",
+          "alt": "Gráfico comparando os votos de Flávio Bolsonaro e Lula no primeiro turno"
+        },
+        {
+          "tema": "Telecom & Fusões",
+          "titulo": "Claro conclui compra da Desktop e prepara saída da B3",
+          "texto": "A Claro NXT Telecomunicações concluiu em 2 de outubro a aquisição de 72,83% do capital votante da Desktop (DESK3), equivalente a 84,68 milhões de ações ordinárias, informou o InfoMoney. O negócio havia sido fechado em março por R$ 2,414 bilhões, ou R$ 20,82 por ação, com o valor da empresa calculado em R$ 4 bilhões descontada a dívida líquida de R$ 1,585 bilhão apurada em setembro de 2025, e recebeu aprovação do Cade sem restrições em 14 de setembro. Com o controle nas mãos, a Claro NXT vai protocolar na CVM um pedido de registro de oferta pública de aquisição (OPA) unificada para fechar o capital da Desktop e retirá-la do Novo Mercado da B3, repetindo o roteiro de outras provedoras regionais de internet compradas por operadoras maiores nos últimos anos.",
+          "fonte": "InfoMoney; Cade",
+          "imagem": "03/02-claro-desktop.webp",
+          "alt": "Logos da Claro e da Desktop"
+        },
+        {
+          "tema": "Economia",
+          "titulo": "Boletim Focus eleva inflação e reduz crescimento pela terceira semana seguida",
+          "texto": "O Boletim Focus divulgado pelo Banco Central em 28 de setembro elevou a projeção de inflação (IPCA) para 2026 de 4,92% para 4,99%, a segunda alta semanal consecutiva, enquanto a estimativa de crescimento do PIB caiu de 1,88% para 1,86%, a terceira queda seguida. A projeção para a Selic permaneceu em 13,50% ao ano e a do dólar em R$ 5,20, ambas estáveis há 15 semanas consecutivas. A combinação de inflação subindo e atividade perdendo força sugere que os economistas consultados pelo Banco Central atribuem parte da pressão de preços a fatores de oferta, já que não projetam reação do Copom na taxa básica antes do fim do ano; a estabilidade da Selic e do câmbio por 15 semanas indica que o mercado esperava o desfecho eleitoral para recalibrar as apostas sobre a política monetária de 2027.",
+          "fonte": "Banco Central (Boletim Focus)"
+        },
+        {
+          "tema": "Commodities & Mineração",
+          "titulo": "Vale perde os ganhos de 2026 com tombo do minério de ferro",
+          "texto": "As ações da Vale (VALE3) acumulavam queda de 10,58% em setembro e passaram a recuar 0,87% no acumulado do ano, fechando a R$ 69,61 na terça-feira (29), segundo o InfoMoney. O minério de ferro operava perto de US$ 94 por tonelada, US$ 3 abaixo da semana anterior, pressionado por dados mais fracos da China e por siderúrgicas com margens comprimidas, conforme relatório do Bradesco BBI. O UBS reduziu o preço-alvo da ação de R$ 85 para R$ 77, citando frete mais caro e embarques menores, e estimou que entre 100 milhões e 150 milhões de toneladas da oferta global de minério já operam no ponto de equilíbrio ao preço atual; já o Itaú BBA, mais otimista, avaliou que um minério perto de US$ 95 torna a relação entre risco e retorno da ação mais atrativa.",
+          "fonte": "InfoMoney; UBS; Itaú BBA; Bradesco BBI",
+          "imagem": "03/03-vale-minerio.webp",
+          "alt": "Painel de cotações mostrando o ticker da Vale em Nova York"
+        }
+      ],
+      "tabelas": [
+        {
+          "titulo": "Resultado do 1º turno — Presidente (Brasil)",
+          "colunas": ["Candidato", "Partido", "Votos", "Situação"],
+          "linhas": [
+            ["Flávio Bolsonaro", "PL", "47,03%", "2º turno"],
+            ["Lula", "PT", "45,16%", "2º turno"]
+          ],
+          "nota": "100% das urnas apuradas. Dados atualizados em 05/10/2026 às 09h02. Fonte: Valor Econômico (apuração em tempo real)."
+        },
+        {
+          "titulo": "Resultado do 1º turno — Governador do Rio de Janeiro",
+          "colunas": ["Candidato", "Partido", "Votos", "Situação"],
+          "linhas": [
+            ["Douglas Ruas", "PL", "49,27%", "2º turno"],
+            ["Eduardo Paes", "PSD", "42,76%", "2º turno"]
+          ],
+          "nota": "100% das urnas apuradas. Fonte: Valor Econômico (apuração em tempo real)."
+        },
+        {
+          "titulo": "Resultado do 1º turno — Governador de São Paulo",
+          "colunas": ["Candidato", "Partido", "Votos", "Situação"],
+          "linhas": [
+            ["Tarcísio", "Republicanos", "62,65%", "Eleito"],
+            ["Fernando Haddad", "PT", "36,42%", "—"]
+          ],
+          "nota": "100% das urnas apuradas. Fonte: Valor Econômico (apuração em tempo real)."
+        },
+        {
+          "titulo": "Resultado do 1º turno — Governador de Minas Gerais",
+          "colunas": ["Candidato", "Partido", "Votos", "Situação"],
+          "linhas": [
+            ["Cleitinho Azevedo", "Republicanos", "55,40%", "Eleito"],
+            ["Patrus Ananias", "PT", "26,34%", "—"]
+          ],
+          "nota": "100% das urnas apuradas. Fonte: Valor Econômico (apuração em tempo real)."
+        },
+        {
+          "titulo": "Mediana agregada (2026)",
+          "colunas": ["Índice", "Há 4 sem.", "Há 1 sem.", "Hoje"],
+          "linhas": [
+            ["IPCA (%)", "5,00", "4,99", "5,01"],
+            ["PIB total (%)", "1,93", "1,86", "1,85"],
+            ["Câmbio (R$/US$)", "5,20", "5,20", "5,20"],
+            ["Selic (% a.a.)", "13,75", "13,50", "13,50"]
+          ],
+          "nota": "Fonte: Banco Central (Boletim Focus)."
+        },
+        {
+          "titulo": "Mercados nesta segunda",
+          "colunas": ["Ativo", "Variação", "Valor"],
+          "linhas": [
+            ["Ibovespa", "+7,41%", "206.342"],
+            ["Dólar", "-4,84%", "R$ 4,96"],
+            ["Euro", "-5,40%", "R$ 5,56"],
+            ["EWZ (ETF Brasil em NY)", "+12,28%", "US$ 42,88"],
+            ["S&P 500", "+0,15%", "7.734"],
+            ["Nasdaq", "+0,45%", "27.314"],
+            ["Dow Jones", "-0,33%", "51.005"],
+            ["Bitcoin", "+1,5%", "US$ 86.416"],
+            ["Petróleo Brent", "-0,89%", "US$ 101,37"]
+          ],
+          "nota": "Menos risco fiscal no preço faz o real se valorizar e atrai capital para a bolsa; o EWZ, cotado em dólar, soma a alta das ações à valorização do real. Em Nova York, S&P 500 e Nasdaq operam sem direção própria — a alta de hoje é um evento brasileiro, não americano. Cotações intradiárias de 5/10/2026, entre 10h30 e 11h40; não são valores de fechamento. Bitcoin: variação em 24 horas. Fonte: Valor Econômico."
+        },
+        {
+          "titulo": "Maiores altas",
+          "colunas": ["Ação", "Variação", "Preço (R$)"],
+          "linhas": [
+            ["BTG Pactual BPAC11", "+26,60%", "83,58"],
+            ["Magazine Luiza MGLU3", "+26,15%", "9,60"],
+            ["B3 B3SA3", "+24,26%", "23,61"],
+            ["Cyrela CYRE3", "+22,33%", "34,24"],
+            ["Cosan CSAN3", "+21,36%", "5,00"]
+          ],
+          "nota": "As maiores altas têm em comum a sensibilidade aos juros, que despencaram com a expectativa de ajuste fiscal. BTG Pactual e B3 ganham diretamente com um mercado mais aquecido: mais volume negociado, mais ofertas de ações e mais captação. Magazine Luiza e Cyrela dependem de crédito barato para vender, seja no parcelamento do varejo, seja no financiamento imobiliário. Já a Cosan é uma holding muito endividada, e juro menor reduz sua despesa financeira. Cotações de 5/10/2026 às 11h53, sujeitas a alteração até o fechamento. Fonte: Valor PRO."
+        },
+        {
+          "titulo": "Maiores quedas",
+          "colunas": ["Ação", "Variação", "Preço (R$)"],
+          "linhas": [
+            ["Suzano SUZB3", "-6,11%", "41,64"],
+            ["Embraer EMBJ3", "-4,16%", "94,16"],
+            ["Klabin KLBN11", "-2,69%", "18,12"],
+            ["Vale VALE3", "-2,11%", "70,58"],
+            ["Usiminas USIM5", "-2,01%", "7,33"]
+          ],
+          "nota": "Do lado negativo, o fator é o câmbio. Suzano, Klabin, Embraer e Vale vendem em dólar e têm boa parte dos custos em reais, de modo que um dólar quase 5% mais barato encolhe receita e margem. A Vale mostra bem o efeito: a ação cai 2,11% em reais na B3, enquanto o ADR sobe 1,74% em dólar em Nova York, e o papel ainda carrega a fraqueza do minério de ferro. Na Usiminas, o dólar mais baixo barateia o aço importado e pressiona os preços no mercado interno. Cotações de 5/10/2026 às 11h53, sujeitas a alteração até o fechamento. Fonte: Valor PRO."
+        }
+      ]
+    },
+    {
       "numero": "#02",
       "slug": "02",
       "data": "27 de setembro de 2026",
@@ -21,41 +157,31 @@
           "tema": "Eleições 2026",
           "titulo": "Datafolha mantém corrida presidencial em empate técnico; Ibovespa e dólar reagem",
           "texto": "Pesquisa Datafolha divulgada na quinta-feira (24), com 2.002 entrevistas entre 22 e 24/9 (margem de erro de 2 p.p.; registro TSE BR-00304/2026), manteve Lula à frente no 1º turno com 40% contra 36% de Flávio Bolsonaro, e mostrou os dois empatados no 2º turno, com rejeição idêntica de 45% cada, terceira pesquisa seguida a repetir o quadro. Dias antes, o BTG/Nexus (21/9) já apontava empate técnico no 2º turno, o que ajudou o Ibovespa a fechar aquele pregão em alta de 0,74%, a 186.595,60 pontos, com a B3 disparando 3,64% e o dólar recuando 0,70%, a R$ 5,108. Com o empate mantido a dez dias do 1º turno (4/10), o dólar oscilou entre R$ 5,10 e R$ 5,20 na semana, sem direção clara.",
-          "fonte": "Datafolha (registro TSE BR-00304/2026); BTG/Nexus",
-          "imagem": "02/01-eleicoes-datafolha.webp",
-          "alt": "Fotos ilustrativas da notícia sobre a pesquisa Datafolha para presidente"
+          "fonte": "Datafolha (registro TSE BR-00304/2026); BTG/Nexus"
         },
         {
           "tema": "Inflação",
           "titulo": "IPCA-15 de setembro supera projeções; curva de juros sinaliza cortes mais tímidos na Selic",
           "texto": "O IPCA-15 subiu 0,70% em setembro, informou o IBGE na sexta-feira (25), acima da mediana de 0,53% projetada (intervalo de 0,45% a 0,66%) e dos 0,48% de setembro de 2025. O indicador acumula 3,82% no ano e 4,47% em 12 meses (ante 4,24% até agosto), puxado pela energia elétrica residencial (+7,42%, com o fim da bonificação do excedente de Itaipu) e pelo reajuste de 14% nos cigarros. Isso reduz o espaço para o Copom aprofundar os cortes na Selic, hoje em 13,75% ao ano; a curva de juros futuros (DI) negociada na sexta-feira já oscilava entre 13,53% e 13,66% para os vencimentos entre out/26 e mar/27, patamar mais próximo da Selic atual do que os 13,25% que a XP projetava antes do dado. O Ibovespa fechou a sexta-feira em queda de 0,27%, a 183.476,86 pontos (-0,95% na semana), com o dólar em R$ 5,181 (-0,23%).",
-          "fonte": "IBGE; XP; Manchester Investimentos",
-          "imagem": "02/02-ipca15-grafico.webp",
-          "alt": "Gráfico de linha do IPCA-15 mensal, de set/2025 a set/2026: 0,48; 0,18; 0,20; 0,25; 0,20; 0,84; 0,44; 0,89; 0,62; 0,41; 0,06; -0,40; 0,70 (%). Fonte: IBGE."
+          "fonte": "IBGE; XP; Manchester Investimentos"
         },
         {
           "tema": "Fusões & Aquisições",
           "titulo": "Yduqs e Afya assinam fusão que cria gigante de R$ 9,5 bilhões no ensino superior",
           "texto": "Yduqs e Afya informaram na quarta-feira (24) acordo definitivo de combinação de negócios avaliado em cerca de R$ 9,5 bilhões: acionistas da Afya ficam com 69% do capital combinado e os da Yduqs com 31%, além de dividendo especial de R$ 750 milhões aos acionistas da Yduqs. A Yduqs (antiga Estácio Participações) é um dos maiores grupos de ensino superior privado do Brasil, com forte presença em cursos presenciais e a distância em todo o país; a Afya, por sua vez, é focada especificamente em educação médica, reunindo a maior rede de faculdades de medicina do país e capital negociado na Nasdaq. A Bertelsmann (controladora da Afya) torna-se maior acionista, com 47,3%, à frente de uma operação com 926 mil alunos e 5,9 mil vagas de medicina (12% da capacidade nacional). No anúncio, YDUQ3 subiu 2,95% e a Afya avançou 1,10% na Nasdaq, enquanto a Cogna (COGN3) caiu 5,22%. As estimativas de sinergia variam de R$ 1,7 a 1,8 bi (JPMorgan) a R$ 2,1 a 2,2 bi (XP, Itaú BBA, Bradesco BBI), até 24% do valor de mercado combinado, e o negócio ainda depende de análise do Cade.",
-          "fonte": "comunicados Yduqs/Afya; JPMorgan, XP, Itaú BBA, Bradesco BBI",
-          "imagem": "02/03-yduqs-afya.webp",
-          "alt": "Logos da Yduqs e da Afya"
+          "fonte": "comunicados Yduqs/Afya; JPMorgan, XP, Itaú BBA, Bradesco BBI"
         },
         {
           "tema": "Regulação & Judiciário",
           "titulo": "Operação Carbono Oculto atinge ex-diretor do Genial; setor de special situations reage a nova regra de FIDCs",
           "texto": "A 3ª fase da Operação Carbono Oculto (“Crédito Oculto”), deflagrada na quinta-feira (24), mirou o ex-diretor do Banco Genial Humberto Arthur Tupinambá Neto, afastado em maio, entre outros treze suspeitos e 24 empresas em sete estados, num esquema que teria movimentado mais de R$ 120 milhões até a compra da distribuidora de combustíveis Terrana. O mesmo caso Master levou o CMN a editar, via Banco Central, a Resolução nº 5.343, que a partir de 13/10 proíbe FIDCs de adquirir direitos creditórios ligados a processos judiciais antes do trânsito em julgado, atingindo uma indústria de special situations que saltou de 5 para 57 gestoras entre 2015 e 2026, com R$ 17,4 bilhões disponíveis em junho. Daniel Kalansky (Insper; Loria e Kalansky Advogados) diz que a resolução “caiu como uma bomba” no mercado; a Associação Brasileira de Special Situations e Litigation Finance pediu a suspensão da norma.",
-          "fonte": "Polícia Federal/PGR; Banco Central (Resolução CMN nº 5.343); Spectra Investments",
-          "imagem": "02/04-carbono-oculto.webp",
-          "alt": "Fotos dos personagens da notícia sobre a Operação Carbono Oculto"
+          "fonte": "Polícia Federal/PGR; Banco Central (Resolução CMN nº 5.343); Spectra Investments"
         },
         {
           "tema": "Regulação & Varejo",
           "titulo": "Governo decreta fim das bets a dez dias do primeiro turno, com impacto fiscal e no varejo",
           "texto": "O governo federal anunciou na sexta-feira (25) medida provisória que proíbe apostas esportivas e cassino on-line no país: depósitos e propaganda vetados de imediato, saques permitidos até 5/10, plataformas fora do ar a partir de 6/10 e devolução de valores entre 9 e 14/10 pela Caixa Econômica Federal; operar apostas passa a ser crime, com pena de quatro a seis anos de prisão. O setor movimentou R$ 20,3 bilhões só no 1º semestre de 2026, com cerca de 25,2 milhões de apostadores. A arrecadação federal com bets, de cerca de R$ 800 milhões por mês, deve zerar a partir de outubro; analistas do BTG Pactual e da Sinter Futura avaliam que parte dos recursos hoje em apostas deve migrar para consumo básico ou quitação de dívidas, beneficiando primeiro Casas Bahia (BHIA3), Assaí (ASAI3) e Magazine Luiza (MGLU3).",
-          "fonte": "Diário Oficial da União (medida provisória); Goldman Sachs; BTG Pactual; Sinter Futura",
-          "imagem": "02/05-fim-das-bets.webp",
-          "alt": "Cerimônia de anúncio da medida provisória que proíbe as bets"
+          "fonte": "Diário Oficial da União (medida provisória); Goldman Sachs; BTG Pactual; Sinter Futura"
         }
       ],
       "tabelas": [
