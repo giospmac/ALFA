@@ -2,6 +2,137 @@
   "_comentario": "Cada edicao: numero, slug (usado na URL ?p=newsletter&ed=<slug>), data, titulo, resumo, periodo, pdf (link externo opcional) e destaques. O conteudo lido no site vem de carta, noticias, tabelas, outros e termos, todos opcionais. Cada noticia aceita imagem (caminho dentro de assets/newsletter/, de preferencia .webp com no maximo 1000px de largura) e alt. A primeira edicao da lista e a que aparece em destaque no topo; as demais viram arquivo.",
   "edicoes": [
     {
+      "numero": "#04",
+      "slug": "04",
+      "data": "11 de outubro de 2026",
+      "titulo": "Ibovespa tem a maior alta semanal desde 2020, IPCA fecha acima do teto e TSE antecipa a eleição no Rio",
+      "periodo": "Semana de 5 a 11 de outubro de 2026",
+      "resumo": "Com o resultado do primeiro turno já precificado, o Ibovespa teve a maior alta semanal desde 2020, o IPCA de setembro veio acima do esperado e do teto da meta, o TSE definiu a eleição no Rio sem segundo turno e empresas endividadas, como Cosan, Raízen, GPA e Casas Bahia, recalcularam o momento de vender ativos ou renegociar dívidas.",
+      "destaques": [
+        "Inflação",
+        "Eleições 2026",
+        "Desinvestimentos",
+        "Bancos",
+        "Crédito corporativo"
+      ],
+      "carta": "Com o resultado do primeiro turno já precificado pelo mercado, a semana combinou a maior alta semanal do Ibovespa desde 2020, uma inflação de setembro acima do esperado, a definição antecipada da eleição no Rio de Janeiro e empresas endividadas recalculando o momento de vender ativos ou renegociar dívidas.",
+      "noticias": [
+        {
+          "tema": "Economia",
+          "titulo": "IPCA de setembro fecha acima do teto da meta e reabre dúvida sobre nova pausa do Copom",
+          "texto": "O Índice de Preços ao Consumidor Amplo (IPCA) subiu 0,82% em setembro, revertendo a deflação de 0,32% de agosto, informou o IBGE na sexta-feira (9). O resultado ficou acima da mediana de 0,76% projetada pelo mercado e levou o acumulado em 12 meses a 4,58%, acima do teto de 4,5% da meta de inflação, com energia elétrica e alimentos liderando a pressão, segundo a Exame. A leitura entre economistas ficou dividida: Roberto Luis Troster, do Cefeb/Fipe, vê espaço para uma pausa no ciclo de cortes da Selic, hoje em 13,75% ao ano; Leonardo Costa, da ASA, mantém a expectativa de reduções graduais de 0,25 ponto percentual; e Claudia Moreno, do C6 Bank, já não projeta cortes em 2026. O dado contrasta com os juros futuros, que passaram a embutir mais chance de corte em dezembro pela expectativa fiscal associada a um eventual governo Bolsonaro.",
+          "fonte": "IBGE; Exame"
+        },
+        {
+          "tema": "Eleições 2026 — Rio de Janeiro",
+          "titulo": "TSE anula votos de Garotinho e Douglas Ruas é eleito governador do Rio no primeiro turno",
+          "texto": "Por 5 a 2, o Tribunal Superior Eleitoral (TSE) rejeitou na quinta-feira (8) a candidatura de Anthony Garotinho (Republicanos) ao governo do Rio de Janeiro e anulou os 274.411 votos que ele recebeu no domingo (4). Garotinho estava inelegível por condenação por improbidade administrativa, mas, como havia recurso pendente, seu nome ficou na urna e os votos foram contabilizados de forma provisória. Na apuração original, Douglas Ruas (PL) tinha 49,27% dos votos válidos, contra 42,76% de Eduardo Paes (PSD). Sem os votos de Garotinho, a base de votos válidos diminui e Ruas passa a 50,88%, cerca de 74 mil votos acima da maioria absoluta, o que dispensa o segundo turno de 25 de outubro. Falta a retotalização pelo TRE-RJ para que Ruas, de 37 anos, seja proclamado governador eleito, o mais jovem do estado desde 1959.",
+          "fonte": "TSE; Correio da Manhã; Gazeta SP",
+          "imagem": "04/01-garotinho-ruas.webp",
+          "alt": "Fotos de Anthony Garotinho e Douglas Ruas durante debate"
+        },
+        {
+          "tema": "Empresas & Desinvestimentos",
+          "titulo": "Cosan reavalia venda de ativos na Rumo e na Moove após rali eleitoral reduzir pressão por caixa",
+          "texto": "A Cosan está reavaliando a venda de parte de sua participação na Rumo (RAIL3), uma oferta adicional de ações (follow-on) da Compass (PASS3) e uma fatia da Moove, informou a Bloomberg em reportagem replicada pela InfoMoney em 7 de outubro. Algumas propostas pela posição na Rumo implicavam avaliação cerca de 30% abaixo do preço de mercado da ação. A pressa diminuiu: a holding reduziu a dívida à metade no último ano, com uma injeção de R$ 10 bilhões do BTG Pactual Holding e do Perfin Infra Fund, a venda de terras agrícolas e a abertura de capital da Compass, e, segundo a Bloomberg, o rali após o primeiro turno elevou as ações da Cosan em 24%. Com menos pressão por caixa, a empresa ganha margem para esperar propostas melhores, e o processo de desinvestimento na Rumo, conduzido pelo BTG Pactual desde junho, deve seguir mesmo depois da definição eleitoral.",
+          "fonte": "Bloomberg; InfoMoney",
+          "imagem": "04/02-cosan.webp",
+          "alt": "Logo da Cosan sobre uma paisagem rural ao entardecer"
+        },
+        {
+          "tema": "Bancos & Recomendações",
+          "titulo": "Bancos recalibram carteiras de ações com Petrobras, XP e Nubank favorecidos pela queda esperada de juros",
+          "texto": "Com Flávio Bolsonaro à frente após o primeiro turno, o Bradesco BBI e o Morgan Stanley revisaram preços-alvo e carteiras recomendadas, segundo a InfoMoney. O Bradesco BBI elevou o preço-alvo da Petrobras (PETR4) para o fim de 2027 de R$ 52 para R$ 62 e o da Cosan (CSAN3) de R$ 4,60 para R$ 6, e passou a projetar Selic de 11% ao fim de 2027, cerca de 2,5 pontos percentuais abaixo do que a curva de juros embutia antes do primeiro turno. Para abrir espaço a teses cíclicas, o banco reduziu a fatia defensiva da carteira recomendada de 20% para 15% e retirou a Axia da lista. O Morgan Stanley estima que a XP (XPBR31) pode subir cerca de 15% e o Nubank (ROXO34) cerca de 8,1% para cada ponto percentual de queda nos juros longos. As revisões indicam que a aposta dos bancos está menos no resultado eleitoral em si e mais em um ciclo mais longo de corte de juros.",
+          "fonte": "InfoMoney; Bradesco BBI; Morgan Stanley"
+        },
+        {
+          "tema": "Crédito Corporativo",
+          "titulo": "Raízen, GPA e Casas Bahia avançam em reestruturações e expõem estresse no crédito corporativo",
+          "texto": "A semana trouxe avanços em três reestruturações de grandes empresas. A Raízen levará aos acionistas, em assembleia marcada para 30 de outubro, as medidas do plano de recuperação extrajudicial homologado em julho, que reperfila cerca de R$ 61,4 bilhões em dívidas, com conversão de parte dos créditos em ações e aumento de capital de R$ 3,5 bilhões a R$ 4 bilhões pela Shell. Na quarta-feira (7), a Justiça de São Paulo homologou o plano de recuperação extrajudicial do GPA, que reorganiza R$ 4,57 bilhões em dívidas com adesão de 57,49% dos credores e permite captar até R$ 200 milhões em recursos novos. Já a Casas Bahia, em recuperação judicial desde agosto com dívida de R$ 17,3 bilhões, negocia com o Itaú um financiamento DIP de R$ 200 milhões, modalidade em que o credor tem prioridade de pagamento, para recompor estoques. Em situação bem menos pressionada, a Cosan, sócia da Shell na Raízen, reavalia vendas de ativos (artigo 3).",
+          "fonte": "Raízen; Capital Aberto; Times Brasil; Giro News"
+        }
+      ],
+      "tabelas": [
+        {
+          "titulo": "IPCA de setembro de 2026",
+          "colunas": ["Indicador", "Valor"],
+          "linhas": [
+            ["IPCA de setembro (esperado: 0,76%)", "0,82%"],
+            ["Acumulado em 12 meses", "4,58%"],
+            ["Teto da meta de inflação", "4,50%"]
+          ],
+          "nota": "Fonte: IBGE; Exame."
+        },
+        {
+          "titulo": "Governo do Rio — votos válidos de Douglas Ruas",
+          "colunas": ["Apuração", "Votos válidos"],
+          "linhas": [
+            ["Apuração de 4/10, com os votos de Garotinho", "49,27%"],
+            ["Após a anulação dos 274.411 votos pelo TSE", "50,88%"]
+          ],
+          "nota": "Fonte: TSE; Correio da Manhã; Gazeta SP."
+        },
+        {
+          "titulo": "Revisões após o 1º turno",
+          "colunas": ["Projeção", "Valor"],
+          "linhas": [
+            ["Preço-alvo de PETR4, Bradesco BBI (antes R$ 52)", "R$ 62"],
+            ["Selic no fim de 2027, Bradesco BBI", "11%"],
+            ["Alta da XP por ponto de queda dos juros longos, Morgan Stanley", "~15%"]
+          ],
+          "nota": "Fonte: InfoMoney; Bradesco BBI; Morgan Stanley."
+        },
+        {
+          "titulo": "Dívida em reestruturação",
+          "colunas": ["Empresa", "Dívida"],
+          "linhas": [
+            ["Raízen (recuperação extrajudicial)", "R$ 61,4 bi"],
+            ["GPA (recuperação extrajudicial)", "R$ 4,57 bi"],
+            ["Casas Bahia (recuperação judicial)", "R$ 17,3 bi"]
+          ],
+          "nota": "Fonte: Raízen; Capital Aberto; Times Brasil; Giro News."
+        },
+        {
+          "titulo": "Mercados na semana",
+          "colunas": ["Ativo", "Variação", "Valor"],
+          "linhas": [
+            ["Ibovespa", "+8,82%", "209.067"],
+            ["Dólar", "-4,44%", "R$ 4,99"],
+            ["Euro", "-4,94%", "R$ 5,58"],
+            ["EWZ (ETF Brasil em NY)", "+13,99%", "US$ 43,55"],
+            ["S&P 500", "+1,15%", "7.812"],
+            ["Nasdaq", "+0,64%", "27.366"],
+            ["Dow Jones", "+0,93%", "51.655"]
+          ],
+          "nota": "O Ibovespa teve a maior alta semanal desde março de 2020, concentrada na segunda-feira (+7,70%) após o 1º turno, e fechou a sexta em nível recorde. O real se valorizou com a aposta em ajuste fiscal e em juros mais baixos, e o dólar fechou a semana abaixo de R$ 5; o euro acompanha, num movimento de valorização do real, não de fraqueza das outras moedas. O EWZ sobe mais que o Ibovespa porque é cotado em dólar e soma a alta das ações à valorização do real. Em Nova York, o S&P 500 ficou perto da máxima histórica, e o Nasdaq ganhou menos porque a queda de semicondutores na quinta (-1,25% no dia) segurou o índice. Fechamento de 9/10/2026; variação sobre o fechamento de 2/10/2026. Fonte: Agência Estado; AP; Bloomberg Línea."
+        },
+        {
+          "titulo": "Maiores altas",
+          "colunas": ["Ação", "Variação (semana)"],
+          "linhas": [
+            ["Magazine Luiza MGLU3", "+60,58%"],
+            ["Vamos VAMO3", "+44,73%"],
+            ["Smart Fit SMFT3", "+43,96%"],
+            ["MRV MRVE3", "+38,90%"],
+            ["Azzas 2154 AZZA3", "+34,08%"]
+          ],
+          "nota": "As maiores altas vieram de empresas domésticas e sensíveis a juros, reprecificadas depois que os juros futuros médios e longos caíram mais de 1 ponto percentual só na segunda-feira. Magazine Luiza e Azzas 2154 dependem de crédito ao consumidor para vender, a MRV depende do financiamento imobiliário e a Vamos financia com dívida a frota que aluga. O movimento foi amplo: na semana, o índice de small caps (SMLL) subiu 20,14%, o imobiliário (IMOB) 20,77% e o de consumo (ICON) 17,70%. Variação semanal entre 2/10 e 9/10/2026. Fonte: Seu Dinheiro; TradeMap."
+        },
+        {
+          "titulo": "Maiores quedas",
+          "colunas": ["Ação", "Variação (semana)"],
+          "linhas": [
+            ["Embraer EMBJ3", "-9,20%"],
+            ["Vale VALE3", "-5,83%"],
+            ["Suzano SUZB3", "-3,79%"],
+            ["Vibra Energia VBBR3", "-3,33%"],
+            ["Klabin KLBN11", "-2,63%"]
+          ],
+          "nota": "Do lado negativo, o fator é o câmbio. Embraer, Vale, Suzano e Klabin vendem em dólar e têm boa parte dos custos em reais, de modo que um dólar 4,44% mais barato reduz a receita convertida para reais. A Vale foi a única blue chip a cair na semana e ainda carregou a volatilidade do minério de ferro. Variação semanal entre 2/10 e 9/10/2026. Fonte: Seu Dinheiro; TradeMap."
+        }
+      ]
+    },
+    {
       "numero": "#03",
       "slug": "03",
       "data": "5 de outubro de 2026",
@@ -20,17 +151,13 @@
           "tema": "Eleições 2026",
           "titulo": "Primeiro turno leva Bolsonaro à frente de Lula e dispara o Ibovespa",
           "texto": "O primeiro turno das eleições presidenciais, no domingo (4), terminou com Flávio Bolsonaro (PL) à frente, com 47,03% dos votos, contra 45,16% de Luiz Inácio Lula da Silva (PT), diferença de 2,22 milhões de votos com 100% das urnas apuradas. O PL também elegeu 19 senadores e terá a maior bancada da Casa, com 28 cadeiras, o que o mercado lê como caminho mais curto para um ajuste fiscal. A reação nesta segunda-feira (5) foi imediata: o Ibovespa superou os 200 mil pontos pela primeira vez, subia 7,41% às 10h30, aos 206.342 pontos, e chegou a avançar 9%, tocando os 209 mil, segundo o Valor. O dólar recuava 4,84%, a R$ 4,96, menor nível desde maio, e a chance de um corte de 0,5 ponto na Selic em dezembro passou de 18% para 45% no mercado de opções. Bancos e estatais puxaram a alta, com Itaú subindo 12%, Bradesco 11% e Petrobras 10%, segundo o InfoMoney; o JPMorgan vê espaço para a bolsa subir até 11% no curto prazo.",
-          "fonte": "Valor Econômico; InfoMoney; JPMorgan",
-          "imagem": "03/01-eleicoes-resultado.webp",
-          "alt": "Gráfico comparando os votos de Flávio Bolsonaro e Lula no primeiro turno"
+          "fonte": "Valor Econômico; InfoMoney; JPMorgan"
         },
         {
           "tema": "Telecom & Fusões",
           "titulo": "Claro conclui compra da Desktop e prepara saída da B3",
           "texto": "A Claro NXT Telecomunicações concluiu em 2 de outubro a aquisição de 72,83% do capital votante da Desktop (DESK3), equivalente a 84,68 milhões de ações ordinárias, informou o InfoMoney. O negócio havia sido fechado em março por R$ 2,414 bilhões, ou R$ 20,82 por ação, com o valor da empresa calculado em R$ 4 bilhões descontada a dívida líquida de R$ 1,585 bilhão apurada em setembro de 2025, e recebeu aprovação do Cade sem restrições em 14 de setembro. Com o controle nas mãos, a Claro NXT vai protocolar na CVM um pedido de registro de oferta pública de aquisição (OPA) unificada para fechar o capital da Desktop e retirá-la do Novo Mercado da B3, repetindo o roteiro de outras provedoras regionais de internet compradas por operadoras maiores nos últimos anos.",
-          "fonte": "InfoMoney; Cade",
-          "imagem": "03/02-claro-desktop.webp",
-          "alt": "Logos da Claro e da Desktop"
+          "fonte": "InfoMoney; Cade"
         },
         {
           "tema": "Economia",
@@ -42,9 +169,7 @@
           "tema": "Commodities & Mineração",
           "titulo": "Vale perde os ganhos de 2026 com tombo do minério de ferro",
           "texto": "As ações da Vale (VALE3) acumulavam queda de 10,58% em setembro e passaram a recuar 0,87% no acumulado do ano, fechando a R$ 69,61 na terça-feira (29), segundo o InfoMoney. O minério de ferro operava perto de US$ 94 por tonelada, US$ 3 abaixo da semana anterior, pressionado por dados mais fracos da China e por siderúrgicas com margens comprimidas, conforme relatório do Bradesco BBI. O UBS reduziu o preço-alvo da ação de R$ 85 para R$ 77, citando frete mais caro e embarques menores, e estimou que entre 100 milhões e 150 milhões de toneladas da oferta global de minério já operam no ponto de equilíbrio ao preço atual; já o Itaú BBA, mais otimista, avaliou que um minério perto de US$ 95 torna a relação entre risco e retorno da ação mais atrativa.",
-          "fonte": "InfoMoney; UBS; Itaú BBA; Bradesco BBI",
-          "imagem": "03/03-vale-minerio.webp",
-          "alt": "Painel de cotações mostrando o ticker da Vale em Nova York"
+          "fonte": "InfoMoney; UBS; Itaú BBA; Bradesco BBI"
         }
       ],
       "tabelas": [
