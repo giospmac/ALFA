@@ -2,6 +2,300 @@
   "_comentario": "Cada edicao: numero, slug (usado na URL ?p=newsletter&ed=<slug>), data, titulo, resumo, periodo, pdf (link externo opcional) e destaques. O conteudo lido no site vem de carta, noticias, tabelas, outros e termos, todos opcionais. Cada noticia aceita imagem (caminho dentro de assets/newsletter/, de preferencia .webp com no maximo 1000px de largura) e alt. A primeira edicao da lista e a que aparece em destaque no topo; as demais viram arquivo.",
   "edicoes": [
     {
+      "numero": "#05",
+      "slug": "05",
+      "data": "26 de outubro de 2026",
+      "titulo": "Virada de Lula no segundo turno provoca o pior dia do mercado desde a pandemia",
+      "periodo": "Sobre a virada eleitoral e o efeito no mercado, 26 de outubro de 2026",
+      "resumo": "A reeleição de Lula, na primeira virada inédita de um segundo turno presidencial no Brasil, derrubou o Ibovespa 13,88%, acionou o circuit breaker pela primeira vez desde 2020 e levou o dólar a R$ 5,41. O Tesouro cancelou leilões e o STF mandou Flávio Bolsonaro entregar os passaportes.",
+      "destaques": [
+        "Eleições 2026",
+        "Mercados",
+        "Bancos & Estatais",
+        "Investimentos",
+        "Tecnologia"
+      ],
+      "carta": "A reeleição de Lula, na primeira virada inédita de um segundo turno presidencial no Brasil, provocou nesta segunda-feira o pior dia do mercado financeiro desde a pandemia, com o Tesouro Nacional intervindo em leilões e o Supremo Tribunal Federal determinando que Flávio Bolsonaro entregue seus passaportes.",
+      "noticias": [
+        {
+          "tema": "Eleições 2026",
+          "titulo": "Lula vence em virada inédita no segundo turno",
+          "texto": "Lula foi reeleito com 64.256.232 votos, ou 51,79% dos votos válidos, contra 59.826.041 de Flávio Bolsonaro, equivalentes a 48,21%, uma diferença de 4.430.191 votos, segundo apuração final divulgada pelo InfoMoney. É a primeira vez que o candidato que chegou em segundo lugar no primeiro turno vira o resultado no segundo: naquela etapa, Flávio tinha 47,03% dos votos válidos contra 45,16% de Lula, de acordo com o Valor Econômico. A virada se decidiu em estados como Minas Gerais, onde Lula superou Flávio no segundo turno depois de ficar atrás na etapa anterior, segundo reportagem do Valor sobre o resultado no estado, historicamente decisivo para a disputa presidencial. Para o mercado, o resultado era o cenário menos esperado, já que investidores vinham posicionados para uma vitória de Flávio havia semanas, o que ajuda a explicar por que a reação do pregão desta segunda-feira foi tão mais intensa do que qualquer pesquisa eleitoral havia antecipado.",
+          "fonte": "InfoMoney; Valor Econômico",
+          "imagem": "05/01-resultado-2turno.webp",
+          "alt": "Resultado do segundo turno: Lula com 51,79% dos votos válidos e Flávio Bolsonaro com 48,21%"
+        },
+        {
+          "tema": "Mercados",
+          "titulo": "Ibovespa, dólar e juros têm pior sessão desde a pandemia",
+          "texto": "O Ibovespa chegou a cair 17,34% no pior momento do pregão, a 169.516,43 pontos, e fechou em queda de 13,88%, a 176.608,23 pontos, ante o fechamento de 205.088,74 pontos de sexta-feira (23), informou o InfoMoney. O circuit breaker, mecanismo criado na B3 em 1997 que interrompe os negócios quando o índice cai 10% em relação ao fechamento anterior, foi acionado às 9h57 e suspendeu o pregão por 30 minutos, o primeiro acionamento desde março de 2020. O dólar fechou em alta de 8,36%, a R$ 5,406, depois de ter batido R$ 5,60 durante o pregão, uma das maiores altas diárias desde a criação do Plano Real, segundo o Valor. Os juros futuros subiram mais de 260 pontos-base, e o Tesouro Nacional cancelou os leilões de títulos prefixados e indexados à inflação previstos para terça e quinta-feira, mantendo apenas o leilão de papéis atrelados à Selic, além de recomprar cerca de R$ 7,1 bilhões em títulos prefixados, segundo o InfoMoney. O Boletim Focus desta segunda-feira, concluído antes da apuração do resultado, já havia reduzido a projeção de dólar para o fim de 2026 de R$ 5,13 para R$ 5,05; a leitura da semana que vem deve ser a primeira a incorporar o tombo de hoje.",
+          "fonte": "InfoMoney; Valor Econômico; Banco Central (Boletim Focus)",
+          "imagem": "05/02-ibovespa-queda.webp",
+          "alt": "Gráfico do Ibovespa em 26 de outubro de 2026, com queda de 13,88% no fechamento"
+        },
+        {
+          "tema": "Análise de mercado",
+          "titulo": "Por que a queda foi tão forte: o mercado estava posicionado para o resultado contrário",
+          "texto": "Antes da eleição, o mercado apostava na vitória de Flávio e vinha comprando ações de bancos e estatais nas semanas anteriores ao pleito. A segunda-feira pós-eleitoral foi marcada por ampla liquidação dessas posições e por disfuncionalidade no mercado de renda fixa, já que investidores precisaram desfazer apostas montadas para o cenário que não se confirmou, segundo o Valor. Parte do tombo desta segunda-feira é, portanto, reversão do rali que essas ações tiveram após o primeiro turno, mais do que reprecificação dos fundamentos de cada empresa. O pano de fundo que sustenta essa reação é fiscal. No Congresso recém-eleito, a coalizão ligada a Flávio deve somar cerca de 40 senadores, numa Casa em que o Partido Liberal terá 28 das 81 cadeiras, e 203 dos 513 deputados, segundo relatório do BTG Pactual citado pela Exame. Isso deve exigir de Lula negociação intensa com o centro para aprovar qualquer medida fiscal relevante, condição que o mercado considera central para destravar uma eventual recuperação dos ativos brasileiros nas próximas semanas.",
+          "fonte": "Valor Econômico; Exame; BTG Pactual",
+          "imagem": "05/03-antes-depois.webp",
+          "alt": "Comparação de ativos antes e depois do segundo turno"
+        },
+        {
+          "tema": "Bancos & Estatais",
+          "titulo": "Setores lideram perdas e Bradesco BBI corta preço-alvo da Petrobras",
+          "texto": "Bancos e varejo concentraram as maiores perdas da sessão: Banco do Brasil (BBAS3) recuou 29,33%, B3 (B3SA3) caiu 36,28%, BTG Pactual (BPAC11) perdeu 24,83%, Bradesco (BBDC4) cedeu 21,70% e Magazine Luiza (MGLU3) desabou 58,23%, segundo o fechamento informado pelo InfoMoney. A exceção ficou com exportadoras como a Vale (VALE3), que fechou em alta de 4,01%, beneficiada pela disparada do dólar. A Petrobras (PETR4) não escapou da pressão, apesar de acumular alta superior a 100% em 2026 até sexta-feira. A ação caiu junto com o restante do mercado, e a presidente da estatal, Magda Chambriard, classificou a queda como um movimento especulativo que não refletiria os fundamentos da empresa. Horas depois, o Bradesco BBI cortou o preço-alvo de PETR4 para o fim de 2027 de R$ 62 para R$ 55, elevando o retorno em dividendos exigido de 8% para 10% diante de juros mais altos, mas manteve a recomendação de compra.",
+          "fonte": "InfoMoney; Bradesco BBI",
+          "imagem": "05/04-bancos-estatais.webp",
+          "alt": "Variação de bancos e estatais em 26 de outubro de 2026"
+        },
+        {
+          "tema": "Investimentos",
+          "titulo": "Exportadoras e renda fixa lideram as carteiras sugeridas para o quarto mandato de Lula",
+          "texto": "Especialistas ouvidos pelo Valor Investe veem nas empresas com receita em dólar a principal proteção para um novo mandato de Lula, caso a piora das contas públicas desvalorize o real. Gustavo Bertotti, da Fami Capital, cita Suzano, Klabin, Embraer, WEG e Gerdau; Lucas Xavier, da AW Capital, também aponta Embraer e WEG, e Josias Bento, da GT Capital, destaca Suzano e Gerdau. Entre os pesos-pesados, Petrobras e Vale aparecem como geradoras de caixa. Nos bancos, o Itaú é o preferido, enquanto o Banco do Brasil pede cautela pela inadimplência de pessoas físicas e do agronegócio. Na construção, a aposta fica com a baixa renda do Minha Casa, Minha Vida, como Cury (CURY3) e Direcional (DIRR3). Do outro lado estão o varejo e as empresas endividadas, as mais expostas a juros altos por mais tempo, e foi esse o desenho do pregão desta segunda: as cinco maiores altas da bolsa são exportadoras citadas na reportagem, enquanto Magazine Luiza e Cosan ficaram entre as maiores quedas. Na renda fixa, Xavier vê nos pós-fixados, como o Tesouro Selic, a opção mais estável; prefixados e títulos atrelados ao IPCA pagam taxas maiores em novas aplicações, mas os papéis já emitidos perdem valor quando os juros futuros sobem. Bento sugere 30% em títulos atrelados à Selic, 15% em prefixados, 25% em IPCA+, 15% em ações e 15% no exterior.",
+          "fonte": "Valor Investe; Fami Capital; AW Capital; GT Capital"
+        },
+        {
+          "tema": "Bancos & Tecnologia",
+          "titulo": "Itaú compra a NeoSpace por R$ 2,925 bilhões para desenvolver IA própria",
+          "texto": "O Itaú Unibanco assinou nesta segunda-feira (26) um acordo para comprar a totalidade das ações da NeoSpace, startup brasileira que desenvolve modelos fundacionais de dados, por R$ 2,925 bilhões, segundo o Valor. As duas empresas já trabalhavam juntas havia quase dois anos em soluções de inteligência artificial generativa para crédito, gestão financeira, atendimento e prevenção a fraudes, e a tecnologia da startup deve reforçar o ia.i, a plataforma de IA generativa do banco. A NeoSpace seguirá com gestão autônoma, sob o comando do CEO Bruno Pierobon, e a conclusão do negócio depende do aval do Cade e do Banco Central. Para Milton Maluhy Filho, CEO do Itaú, o banco quer estar entre as instituições que vão definir o próximo capítulo da indústria financeira global. O anúncio saiu no mesmo dia em que o índice financeiro da B3 caiu 22,48%, e mostra o Itaú, apontado pelos especialistas ouvidos pelo Valor Investe como o banco de fundamentos mais sólidos, apostando em tecnologia própria como fonte de crescimento.",
+          "fonte": "Valor Econômico; comunicado do Itaú Unibanco",
+          "imagem": "05/06-itau-neospace.webp",
+          "alt": "Fachada de uma agência do Itaú"
+        }
+      ],
+      "outros": [
+        {
+          "titulo": "Moraes manda Flávio Bolsonaro entregar passaportes",
+          "texto": "O ministro Alexandre de Moraes, do STF, deu 24 horas para o senador entregar os passaportes comum e diplomático e o proibiu de falar com o advogado Willer Tomaz; os dois são investigados num inquérito sobre suposta lavagem de dinheiro. Flávio disse que vai cumprir a ordem, chamou a decisão de política e pretende pedir a cassação da chapa vencedora.",
+          "fonte": "Valor Econômico"
+        },
+        {
+          "titulo": "Trump diz que eleição pareceu fraudada, mas que gosta de Lula",
+          "texto": "Sem apresentar provas, o presidente americano criticou a prorrogação da votação até as 19h, mas insistiu que não tomou partido e disse se dar muito bem com Lula. O TSE afirmou que a eleição ocorreu em total segurança e o PL reconheceu o resultado; para analistas, Trump não contestou o resultado na prática.",
+          "fonte": "Valor Econômico"
+        },
+        {
+          "titulo": "Agricultura familiar comemora; agronegócio teme juros altos",
+          "texto": "Representantes da agricultura familiar veem na reeleição a continuidade das políticas para o segmento. Já lideranças do agronegócio, que apoiou Flávio Bolsonaro, criticaram a política fiscal e apontam o custo dos insumos e o endividamento como urgências; as ações do setor caíram forte no primeiro pregão.",
+          "fonte": "Valor Econômico; Globo Rural"
+        }
+      ],
+      "tabelas": [
+        {
+          "titulo": "Indicadores e o que explica cada movimento",
+          "colunas": [
+            "Ativo",
+            "Variação",
+            "Valor"
+          ],
+          "linhas": [
+            [
+              "Ibovespa",
+              "-13,88%",
+              "176.608"
+            ],
+            [
+              "Dólar",
+              "+8,36%",
+              "R$ 5,41"
+            ],
+            [
+              "Euro (PTAX)",
+              "+8,98%",
+              "R$ 6,15"
+            ],
+            [
+              "DI jan/2028",
+              "+1,94 p.p.",
+              "14,80%"
+            ],
+            [
+              "DI jan/2031",
+              "+2,54 p.p.",
+              "15,19%"
+            ],
+            [
+              "Risco-país (CDS 5 anos)",
+              "+26%",
+              "151,7"
+            ],
+            [
+              "S&P 500",
+              "+0,70%",
+              "7.677"
+            ],
+            [
+              "Nasdaq",
+              "+0,83%",
+              "26.169"
+            ],
+            [
+              "Dow Jones",
+              "+0,28%",
+              "52.362"
+            ]
+          ],
+          "detalhes": [
+            "Maior queda diária desde março de 2020: o mercado desmontou apostas na vitória de Flávio Bolsonaro e acionou o circuit breaker.",
+            "Quem tinha deixado de se proteger contra a alta da moeda correu para comprá-la; chegou a R$ 5,60 na abertura.",
+            "Acompanha o dólar: o movimento é de desvalorização do real, não de força da moeda europeia.",
+            "O mercado passa a embutir juros mais altos por mais tempo diante da incerteza fiscal.",
+            "Vencimentos longos sobem mais por carregarem o risco fiscal de todo o novo mandato; tocou 15,94% às 11h.",
+            "Custo de proteger a dívida brasileira contra calote no maior nível desde junho de 2025 (às 15h29).",
+            "Dia positivo lá fora, com o pedido de IPO da Anthropic reanimando ações de IA: a queda no Brasil foi doméstica.",
+            "Fabricantes de chips lideraram, com novos anúncios de investimento em IA de Meta e SpaceX.",
+            "Menor alta dos três índices americanos, por ter menos peso de tecnologia."
+          ],
+          "nota": "Fechamento de 26/10/2026; variação sobre o fechamento de 23/10/2026. Euro pela PTAX do Banco Central; risco-país às 15h29. Fonte: CNN Brasil; Money Times; TradeMap; DGABC"
+        },
+        {
+          "titulo": "Índices da bolsa: onde a queda foi mais forte",
+          "colunas": [
+            "Índice",
+            "Variação"
+          ],
+          "linhas": [
+            [
+              "IMOB · Imobiliário",
+              "-28,63%"
+            ],
+            [
+              "SMLL · Small Caps",
+              "-26,52%"
+            ],
+            [
+              "ICON · Consumo",
+              "-26,14%"
+            ],
+            [
+              "IFNC · Financeiro",
+              "-22,48%"
+            ],
+            [
+              "Ibovespa",
+              "-13,88%"
+            ]
+          ],
+          "detalhes": [
+            "Construtoras e shoppings dependem de financiamento e sofrem com juros mais altos; nenhuma ação do índice subiu.",
+            "Empresas menores, mais endividadas e voltadas ao mercado interno, as mais expostas à alta dos juros.",
+            "Varejo depende de crédito barato e renda; Magazine Luiza teve a maior queda do Ibovespa (-58,23%).",
+            "Bancos e a própria B3: B3 -36,28%, Banco do Brasil -29,33%, BTG Pactual -24,83% e Bradesco -21,70%.",
+            "Caiu menos que os setoriais porque as exportadoras subiram com o dólar: só oito ações fecharam em alta."
+          ],
+          "texto": "Os índices setoriais caíram entre 1,6 e 2 vezes mais que o Ibovespa, e o padrão é o mesmo do rali do início do mês, só que invertido: os segmentos que mais dependem de juros baixos são os que mais perderam. Imobiliário e consumo sofrem porque vendem a prazo e com crédito, as small caps carregam mais dívida e menos acesso a capital, e o financeiro devolveu a aposta de que uma troca de governo favoreceria bancos e a própria B3. O Ibovespa caiu menos porque tem peso relevante de exportadoras, como Vale, Suzano e Embraer, que ganham com o dólar mais caro.",
+          "nota": "Variação no fechamento de 26/10/2026 sobre 23/10/2026. Fonte: CNN Brasil; Money Times; InfoMoney; TradeMap"
+        },
+        {
+          "titulo": "Maiores altas",
+          "colunas": [
+            "Ação",
+            "Var.",
+            "Preço (R$)"
+          ],
+          "linhas": [
+            [
+              "Suzano",
+              "+10,08%",
+              "47,40"
+            ],
+            [
+              "Embraer",
+              "+8,89%",
+              "96,20"
+            ],
+            [
+              "WEG",
+              "+4,21%",
+              "44,53"
+            ],
+            [
+              "Vale",
+              "+4,01%",
+              "64,38"
+            ],
+            [
+              "Klabin",
+              "+3,24%",
+              "18,81"
+            ]
+          ],
+          "detalhes": [
+            "SUZB3",
+            "EMBR3",
+            "WEGE3",
+            "VALE3",
+            "KLBN11"
+          ],
+          "texto": "Num dia em que só oito ações do Ibovespa subiram, as cinco maiores altas são exportadoras, e o motivo é um só: o dólar subiu 8,36%. Suzano e Klabin vendem celulose e papel em dólar, a Embraer vende aviões no exterior, a WEG tem parte relevante da receita fora do Brasil e a Vale exporta minério de ferro. Com boa parte dos custos em reais, cada real a mais por dólar vira receita e margem. É o espelho do dia 5/10, quando o dólar caiu quase 5% e Suzano, Embraer, Klabin e Vale estavam entre as maiores quedas.",
+          "nota": "Cotações de 26/10/2026 às 17h10. Fonte: Valor Econômico"
+        },
+        {
+          "titulo": "Maiores quedas",
+          "colunas": [
+            "Ação",
+            "Var.",
+            "Preço (R$)"
+          ],
+          "linhas": [
+            [
+              "Magazine Luiza",
+              "-58,23%",
+              "5,30"
+            ],
+            [
+              "Vamos",
+              "-56,79%",
+              "2,77"
+            ],
+            [
+              "Hapvida",
+              "-54,93%",
+              "3,98"
+            ],
+            [
+              "C&A",
+              "-47,47%",
+              "7,27"
+            ],
+            [
+              "Cosan",
+              "-46,73%",
+              "2,77"
+            ]
+          ],
+          "detalhes": [
+            "MGLU3",
+            "VAMO3",
+            "HAPV3",
+            "CEAB3",
+            "CSAN3"
+          ],
+          "texto": "Do lado negativo, a lista reúne empresas que dependem do mercado interno e do crédito, as mais expostas à disparada dos juros futuros. Magazine Luiza e C&A vendem a prazo e dependem do consumo das famílias; a Vamos, que aluga caminhões e máquinas, e a Cosan, holding muito endividada, carregam dívidas cujo custo sobe com os juros; e a Hapvida, operadora de planos de saúde, depende da renda e do emprego no país. A queda do Magazine Luiza foi a maior da ação em um único dia desde 1994, segundo o Valor.",
+          "nota": "Cotações de 26/10/2026 às 17h10. Fonte: Valor Econômico"
+        }
+      ],
+      "termos": [
+        {
+          "termo": "CDS (credit default swap)",
+          "definicao": "Contrato que funciona como um seguro contra o calote de um país ou de uma empresa. Quanto maior o risco percebido, mais caro fica o seguro, por isso o CDS de 5 anos é usado como termômetro do risco-país; nesta segunda, o do Brasil subiu 26%, para 151,7 pontos."
+        },
+        {
+          "termo": "Pontos-base",
+          "definicao": "Centésimo de ponto percentual: 100 pontos-base equivalem a 1 p.p. É a unidade usada para medir movimentos de juros, como a alta de 2,54 p.p., ou 254 pontos-base, do DI para janeiro de 2031 no dia."
+        },
+        {
+          "termo": "Marcação a mercado",
+          "definicao": "Atualização diária do preço de um título pelo valor que o mercado pagaria por ele hoje. Quando os juros futuros sobem, prefixados e títulos atrelados ao IPCA já emitidos perdem valor, e quem vende antes do vencimento pode ter prejuízo; quem leva o papel até o fim recebe a taxa contratada."
+        },
+        {
+          "termo": "Modelo fundacional",
+          "definicao": "Modelo de inteligência artificial treinado com um grande volume de dados para servir de base a várias aplicações diferentes, em vez de ser feito para uma tarefa só. É a tecnologia que a NeoSpace desenvolve e que o Itaú comprou por R$ 2,925 bilhões."
+        }
+      ]
+    },
+    {
       "numero": "#04",
       "slug": "04",
       "data": "11 de outubro de 2026",
@@ -27,17 +321,13 @@
           "tema": "Eleições 2026 — Rio de Janeiro",
           "titulo": "TSE anula votos de Garotinho e Douglas Ruas é eleito governador do Rio no primeiro turno",
           "texto": "Por 5 a 2, o Tribunal Superior Eleitoral (TSE) rejeitou na quinta-feira (8) a candidatura de Anthony Garotinho (Republicanos) ao governo do Rio de Janeiro e anulou os 274.411 votos que ele recebeu no domingo (4). Garotinho estava inelegível por condenação por improbidade administrativa, mas, como havia recurso pendente, seu nome ficou na urna e os votos foram contabilizados de forma provisória. Na apuração original, Douglas Ruas (PL) tinha 49,27% dos votos válidos, contra 42,76% de Eduardo Paes (PSD). Sem os votos de Garotinho, a base de votos válidos diminui e Ruas passa a 50,88%, cerca de 74 mil votos acima da maioria absoluta, o que dispensa o segundo turno de 25 de outubro. Falta a retotalização pelo TRE-RJ para que Ruas, de 37 anos, seja proclamado governador eleito, o mais jovem do estado desde 1959.",
-          "fonte": "TSE; Correio da Manhã; Gazeta SP",
-          "imagem": "04/01-garotinho-ruas.webp",
-          "alt": "Fotos de Anthony Garotinho e Douglas Ruas durante debate"
+          "fonte": "TSE; Correio da Manhã; Gazeta SP"
         },
         {
           "tema": "Empresas & Desinvestimentos",
           "titulo": "Cosan reavalia venda de ativos na Rumo e na Moove após rali eleitoral reduzir pressão por caixa",
           "texto": "A Cosan está reavaliando a venda de parte de sua participação na Rumo (RAIL3), uma oferta adicional de ações (follow-on) da Compass (PASS3) e uma fatia da Moove, informou a Bloomberg em reportagem replicada pela InfoMoney em 7 de outubro. Algumas propostas pela posição na Rumo implicavam avaliação cerca de 30% abaixo do preço de mercado da ação. A pressa diminuiu: a holding reduziu a dívida à metade no último ano, com uma injeção de R$ 10 bilhões do BTG Pactual Holding e do Perfin Infra Fund, a venda de terras agrícolas e a abertura de capital da Compass, e, segundo a Bloomberg, o rali após o primeiro turno elevou as ações da Cosan em 24%. Com menos pressão por caixa, a empresa ganha margem para esperar propostas melhores, e o processo de desinvestimento na Rumo, conduzido pelo BTG Pactual desde junho, deve seguir mesmo depois da definição eleitoral.",
-          "fonte": "Bloomberg; InfoMoney",
-          "imagem": "04/02-cosan.webp",
-          "alt": "Logo da Cosan sobre uma paisagem rural ao entardecer"
+          "fonte": "Bloomberg; InfoMoney"
         },
         {
           "tema": "Bancos & Recomendações",
@@ -55,78 +345,191 @@
       "tabelas": [
         {
           "titulo": "IPCA de setembro de 2026",
-          "colunas": ["Indicador", "Valor"],
+          "colunas": [
+            "Indicador",
+            "Valor"
+          ],
           "linhas": [
-            ["IPCA de setembro (esperado: 0,76%)", "0,82%"],
-            ["Acumulado em 12 meses", "4,58%"],
-            ["Teto da meta de inflação", "4,50%"]
+            [
+              "IPCA de setembro (esperado: 0,76%)",
+              "0,82%"
+            ],
+            [
+              "Acumulado em 12 meses",
+              "4,58%"
+            ],
+            [
+              "Teto da meta de inflação",
+              "4,50%"
+            ]
           ],
           "nota": "Fonte: IBGE; Exame."
         },
         {
           "titulo": "Governo do Rio — votos válidos de Douglas Ruas",
-          "colunas": ["Apuração", "Votos válidos"],
+          "colunas": [
+            "Apuração",
+            "Votos válidos"
+          ],
           "linhas": [
-            ["Apuração de 4/10, com os votos de Garotinho", "49,27%"],
-            ["Após a anulação dos 274.411 votos pelo TSE", "50,88%"]
+            [
+              "Apuração de 4/10, com os votos de Garotinho",
+              "49,27%"
+            ],
+            [
+              "Após a anulação dos 274.411 votos pelo TSE",
+              "50,88%"
+            ]
           ],
           "nota": "Fonte: TSE; Correio da Manhã; Gazeta SP."
         },
         {
           "titulo": "Revisões após o 1º turno",
-          "colunas": ["Projeção", "Valor"],
+          "colunas": [
+            "Projeção",
+            "Valor"
+          ],
           "linhas": [
-            ["Preço-alvo de PETR4, Bradesco BBI (antes R$ 52)", "R$ 62"],
-            ["Selic no fim de 2027, Bradesco BBI", "11%"],
-            ["Alta da XP por ponto de queda dos juros longos, Morgan Stanley", "~15%"]
+            [
+              "Preço-alvo de PETR4, Bradesco BBI (antes R$ 52)",
+              "R$ 62"
+            ],
+            [
+              "Selic no fim de 2027, Bradesco BBI",
+              "11%"
+            ],
+            [
+              "Alta da XP por ponto de queda dos juros longos, Morgan Stanley",
+              "~15%"
+            ]
           ],
           "nota": "Fonte: InfoMoney; Bradesco BBI; Morgan Stanley."
         },
         {
           "titulo": "Dívida em reestruturação",
-          "colunas": ["Empresa", "Dívida"],
+          "colunas": [
+            "Empresa",
+            "Dívida"
+          ],
           "linhas": [
-            ["Raízen (recuperação extrajudicial)", "R$ 61,4 bi"],
-            ["GPA (recuperação extrajudicial)", "R$ 4,57 bi"],
-            ["Casas Bahia (recuperação judicial)", "R$ 17,3 bi"]
+            [
+              "Raízen (recuperação extrajudicial)",
+              "R$ 61,4 bi"
+            ],
+            [
+              "GPA (recuperação extrajudicial)",
+              "R$ 4,57 bi"
+            ],
+            [
+              "Casas Bahia (recuperação judicial)",
+              "R$ 17,3 bi"
+            ]
           ],
           "nota": "Fonte: Raízen; Capital Aberto; Times Brasil; Giro News."
         },
         {
           "titulo": "Mercados na semana",
-          "colunas": ["Ativo", "Variação", "Valor"],
+          "colunas": [
+            "Ativo",
+            "Variação",
+            "Valor"
+          ],
           "linhas": [
-            ["Ibovespa", "+8,82%", "209.067"],
-            ["Dólar", "-4,44%", "R$ 4,99"],
-            ["Euro", "-4,94%", "R$ 5,58"],
-            ["EWZ (ETF Brasil em NY)", "+13,99%", "US$ 43,55"],
-            ["S&P 500", "+1,15%", "7.812"],
-            ["Nasdaq", "+0,64%", "27.366"],
-            ["Dow Jones", "+0,93%", "51.655"]
+            [
+              "Ibovespa",
+              "+8,82%",
+              "209.067"
+            ],
+            [
+              "Dólar",
+              "-4,44%",
+              "R$ 4,99"
+            ],
+            [
+              "Euro",
+              "-4,94%",
+              "R$ 5,58"
+            ],
+            [
+              "EWZ (ETF Brasil em NY)",
+              "+13,99%",
+              "US$ 43,55"
+            ],
+            [
+              "S&P 500",
+              "+1,15%",
+              "7.812"
+            ],
+            [
+              "Nasdaq",
+              "+0,64%",
+              "27.366"
+            ],
+            [
+              "Dow Jones",
+              "+0,93%",
+              "51.655"
+            ]
           ],
           "nota": "O Ibovespa teve a maior alta semanal desde março de 2020, concentrada na segunda-feira (+7,70%) após o 1º turno, e fechou a sexta em nível recorde. O real se valorizou com a aposta em ajuste fiscal e em juros mais baixos, e o dólar fechou a semana abaixo de R$ 5; o euro acompanha, num movimento de valorização do real, não de fraqueza das outras moedas. O EWZ sobe mais que o Ibovespa porque é cotado em dólar e soma a alta das ações à valorização do real. Em Nova York, o S&P 500 ficou perto da máxima histórica, e o Nasdaq ganhou menos porque a queda de semicondutores na quinta (-1,25% no dia) segurou o índice. Fechamento de 9/10/2026; variação sobre o fechamento de 2/10/2026. Fonte: Agência Estado; AP; Bloomberg Línea."
         },
         {
           "titulo": "Maiores altas",
-          "colunas": ["Ação", "Variação (semana)"],
+          "colunas": [
+            "Ação",
+            "Variação (semana)"
+          ],
           "linhas": [
-            ["Magazine Luiza MGLU3", "+60,58%"],
-            ["Vamos VAMO3", "+44,73%"],
-            ["Smart Fit SMFT3", "+43,96%"],
-            ["MRV MRVE3", "+38,90%"],
-            ["Azzas 2154 AZZA3", "+34,08%"]
+            [
+              "Magazine Luiza MGLU3",
+              "+60,58%"
+            ],
+            [
+              "Vamos VAMO3",
+              "+44,73%"
+            ],
+            [
+              "Smart Fit SMFT3",
+              "+43,96%"
+            ],
+            [
+              "MRV MRVE3",
+              "+38,90%"
+            ],
+            [
+              "Azzas 2154 AZZA3",
+              "+34,08%"
+            ]
           ],
           "nota": "As maiores altas vieram de empresas domésticas e sensíveis a juros, reprecificadas depois que os juros futuros médios e longos caíram mais de 1 ponto percentual só na segunda-feira. Magazine Luiza e Azzas 2154 dependem de crédito ao consumidor para vender, a MRV depende do financiamento imobiliário e a Vamos financia com dívida a frota que aluga. O movimento foi amplo: na semana, o índice de small caps (SMLL) subiu 20,14%, o imobiliário (IMOB) 20,77% e o de consumo (ICON) 17,70%. Variação semanal entre 2/10 e 9/10/2026. Fonte: Seu Dinheiro; TradeMap."
         },
         {
           "titulo": "Maiores quedas",
-          "colunas": ["Ação", "Variação (semana)"],
+          "colunas": [
+            "Ação",
+            "Variação (semana)"
+          ],
           "linhas": [
-            ["Embraer EMBJ3", "-9,20%"],
-            ["Vale VALE3", "-5,83%"],
-            ["Suzano SUZB3", "-3,79%"],
-            ["Vibra Energia VBBR3", "-3,33%"],
-            ["Klabin KLBN11", "-2,63%"]
+            [
+              "Embraer EMBJ3",
+              "-9,20%"
+            ],
+            [
+              "Vale VALE3",
+              "-5,83%"
+            ],
+            [
+              "Suzano SUZB3",
+              "-3,79%"
+            ],
+            [
+              "Vibra Energia VBBR3",
+              "-3,33%"
+            ],
+            [
+              "Klabin KLBN11",
+              "-2,63%"
+            ]
           ],
           "nota": "Do lado negativo, o fator é o câmbio. Embraer, Vale, Suzano e Klabin vendem em dólar e têm boa parte dos custos em reais, de modo que um dólar 4,44% mais barato reduz a receita convertida para reais. A Vale foi a única blue chip a cair na semana e ainda carregou a volatilidade do minério de ferro. Variação semanal entre 2/10 e 9/10/2026. Fonte: Seu Dinheiro; TradeMap."
         }
@@ -175,88 +578,261 @@
       "tabelas": [
         {
           "titulo": "Resultado do 1º turno — Presidente (Brasil)",
-          "colunas": ["Candidato", "Partido", "Votos", "Situação"],
+          "colunas": [
+            "Candidato",
+            "Partido",
+            "Votos",
+            "Situação"
+          ],
           "linhas": [
-            ["Flávio Bolsonaro", "PL", "47,03%", "2º turno"],
-            ["Lula", "PT", "45,16%", "2º turno"]
+            [
+              "Flávio Bolsonaro",
+              "PL",
+              "47,03%",
+              "2º turno"
+            ],
+            [
+              "Lula",
+              "PT",
+              "45,16%",
+              "2º turno"
+            ]
           ],
           "nota": "100% das urnas apuradas. Dados atualizados em 05/10/2026 às 09h02. Fonte: Valor Econômico (apuração em tempo real)."
         },
         {
           "titulo": "Resultado do 1º turno — Governador do Rio de Janeiro",
-          "colunas": ["Candidato", "Partido", "Votos", "Situação"],
+          "colunas": [
+            "Candidato",
+            "Partido",
+            "Votos",
+            "Situação"
+          ],
           "linhas": [
-            ["Douglas Ruas", "PL", "49,27%", "2º turno"],
-            ["Eduardo Paes", "PSD", "42,76%", "2º turno"]
+            [
+              "Douglas Ruas",
+              "PL",
+              "49,27%",
+              "2º turno"
+            ],
+            [
+              "Eduardo Paes",
+              "PSD",
+              "42,76%",
+              "2º turno"
+            ]
           ],
           "nota": "100% das urnas apuradas. Fonte: Valor Econômico (apuração em tempo real)."
         },
         {
           "titulo": "Resultado do 1º turno — Governador de São Paulo",
-          "colunas": ["Candidato", "Partido", "Votos", "Situação"],
+          "colunas": [
+            "Candidato",
+            "Partido",
+            "Votos",
+            "Situação"
+          ],
           "linhas": [
-            ["Tarcísio", "Republicanos", "62,65%", "Eleito"],
-            ["Fernando Haddad", "PT", "36,42%", "—"]
+            [
+              "Tarcísio",
+              "Republicanos",
+              "62,65%",
+              "Eleito"
+            ],
+            [
+              "Fernando Haddad",
+              "PT",
+              "36,42%",
+              "—"
+            ]
           ],
           "nota": "100% das urnas apuradas. Fonte: Valor Econômico (apuração em tempo real)."
         },
         {
           "titulo": "Resultado do 1º turno — Governador de Minas Gerais",
-          "colunas": ["Candidato", "Partido", "Votos", "Situação"],
+          "colunas": [
+            "Candidato",
+            "Partido",
+            "Votos",
+            "Situação"
+          ],
           "linhas": [
-            ["Cleitinho Azevedo", "Republicanos", "55,40%", "Eleito"],
-            ["Patrus Ananias", "PT", "26,34%", "—"]
+            [
+              "Cleitinho Azevedo",
+              "Republicanos",
+              "55,40%",
+              "Eleito"
+            ],
+            [
+              "Patrus Ananias",
+              "PT",
+              "26,34%",
+              "—"
+            ]
           ],
           "nota": "100% das urnas apuradas. Fonte: Valor Econômico (apuração em tempo real)."
         },
         {
           "titulo": "Mediana agregada (2026)",
-          "colunas": ["Índice", "Há 4 sem.", "Há 1 sem.", "Hoje"],
+          "colunas": [
+            "Índice",
+            "Há 4 sem.",
+            "Há 1 sem.",
+            "Hoje"
+          ],
           "linhas": [
-            ["IPCA (%)", "5,00", "4,99", "5,01"],
-            ["PIB total (%)", "1,93", "1,86", "1,85"],
-            ["Câmbio (R$/US$)", "5,20", "5,20", "5,20"],
-            ["Selic (% a.a.)", "13,75", "13,50", "13,50"]
+            [
+              "IPCA (%)",
+              "5,00",
+              "4,99",
+              "5,01"
+            ],
+            [
+              "PIB total (%)",
+              "1,93",
+              "1,86",
+              "1,85"
+            ],
+            [
+              "Câmbio (R$/US$)",
+              "5,20",
+              "5,20",
+              "5,20"
+            ],
+            [
+              "Selic (% a.a.)",
+              "13,75",
+              "13,50",
+              "13,50"
+            ]
           ],
           "nota": "Fonte: Banco Central (Boletim Focus)."
         },
         {
           "titulo": "Mercados nesta segunda",
-          "colunas": ["Ativo", "Variação", "Valor"],
+          "colunas": [
+            "Ativo",
+            "Variação",
+            "Valor"
+          ],
           "linhas": [
-            ["Ibovespa", "+7,41%", "206.342"],
-            ["Dólar", "-4,84%", "R$ 4,96"],
-            ["Euro", "-5,40%", "R$ 5,56"],
-            ["EWZ (ETF Brasil em NY)", "+12,28%", "US$ 42,88"],
-            ["S&P 500", "+0,15%", "7.734"],
-            ["Nasdaq", "+0,45%", "27.314"],
-            ["Dow Jones", "-0,33%", "51.005"],
-            ["Bitcoin", "+1,5%", "US$ 86.416"],
-            ["Petróleo Brent", "-0,89%", "US$ 101,37"]
+            [
+              "Ibovespa",
+              "+7,41%",
+              "206.342"
+            ],
+            [
+              "Dólar",
+              "-4,84%",
+              "R$ 4,96"
+            ],
+            [
+              "Euro",
+              "-5,40%",
+              "R$ 5,56"
+            ],
+            [
+              "EWZ (ETF Brasil em NY)",
+              "+12,28%",
+              "US$ 42,88"
+            ],
+            [
+              "S&P 500",
+              "+0,15%",
+              "7.734"
+            ],
+            [
+              "Nasdaq",
+              "+0,45%",
+              "27.314"
+            ],
+            [
+              "Dow Jones",
+              "-0,33%",
+              "51.005"
+            ],
+            [
+              "Bitcoin",
+              "+1,5%",
+              "US$ 86.416"
+            ],
+            [
+              "Petróleo Brent",
+              "-0,89%",
+              "US$ 101,37"
+            ]
           ],
           "nota": "Menos risco fiscal no preço faz o real se valorizar e atrai capital para a bolsa; o EWZ, cotado em dólar, soma a alta das ações à valorização do real. Em Nova York, S&P 500 e Nasdaq operam sem direção própria — a alta de hoje é um evento brasileiro, não americano. Cotações intradiárias de 5/10/2026, entre 10h30 e 11h40; não são valores de fechamento. Bitcoin: variação em 24 horas. Fonte: Valor Econômico."
         },
         {
           "titulo": "Maiores altas",
-          "colunas": ["Ação", "Variação", "Preço (R$)"],
+          "colunas": [
+            "Ação",
+            "Variação",
+            "Preço (R$)"
+          ],
           "linhas": [
-            ["BTG Pactual BPAC11", "+26,60%", "83,58"],
-            ["Magazine Luiza MGLU3", "+26,15%", "9,60"],
-            ["B3 B3SA3", "+24,26%", "23,61"],
-            ["Cyrela CYRE3", "+22,33%", "34,24"],
-            ["Cosan CSAN3", "+21,36%", "5,00"]
+            [
+              "BTG Pactual BPAC11",
+              "+26,60%",
+              "83,58"
+            ],
+            [
+              "Magazine Luiza MGLU3",
+              "+26,15%",
+              "9,60"
+            ],
+            [
+              "B3 B3SA3",
+              "+24,26%",
+              "23,61"
+            ],
+            [
+              "Cyrela CYRE3",
+              "+22,33%",
+              "34,24"
+            ],
+            [
+              "Cosan CSAN3",
+              "+21,36%",
+              "5,00"
+            ]
           ],
           "nota": "As maiores altas têm em comum a sensibilidade aos juros, que despencaram com a expectativa de ajuste fiscal. BTG Pactual e B3 ganham diretamente com um mercado mais aquecido: mais volume negociado, mais ofertas de ações e mais captação. Magazine Luiza e Cyrela dependem de crédito barato para vender, seja no parcelamento do varejo, seja no financiamento imobiliário. Já a Cosan é uma holding muito endividada, e juro menor reduz sua despesa financeira. Cotações de 5/10/2026 às 11h53, sujeitas a alteração até o fechamento. Fonte: Valor PRO."
         },
         {
           "titulo": "Maiores quedas",
-          "colunas": ["Ação", "Variação", "Preço (R$)"],
+          "colunas": [
+            "Ação",
+            "Variação",
+            "Preço (R$)"
+          ],
           "linhas": [
-            ["Suzano SUZB3", "-6,11%", "41,64"],
-            ["Embraer EMBJ3", "-4,16%", "94,16"],
-            ["Klabin KLBN11", "-2,69%", "18,12"],
-            ["Vale VALE3", "-2,11%", "70,58"],
-            ["Usiminas USIM5", "-2,01%", "7,33"]
+            [
+              "Suzano SUZB3",
+              "-6,11%",
+              "41,64"
+            ],
+            [
+              "Embraer EMBJ3",
+              "-4,16%",
+              "94,16"
+            ],
+            [
+              "Klabin KLBN11",
+              "-2,69%",
+              "18,12"
+            ],
+            [
+              "Vale VALE3",
+              "-2,11%",
+              "70,58"
+            ],
+            [
+              "Usiminas USIM5",
+              "-2,01%",
+              "7,33"
+            ]
           ],
           "nota": "Do lado negativo, o fator é o câmbio. Suzano, Klabin, Embraer e Vale vendem em dólar e têm boa parte dos custos em reais, de modo que um dólar quase 5% mais barato encolhe receita e margem. A Vale mostra bem o efeito: a ação cai 2,11% em reais na B3, enquanto o ADR sobe 1,74% em dólar em Nova York, e o papel ainda carrega a fraqueza do minério de ferro. Na Usiminas, o dólar mais baixo barateia o aço importado e pressiona os preços no mercado interno. Cotações de 5/10/2026 às 11h53, sujeitas a alteração até o fechamento. Fonte: Valor PRO."
         }

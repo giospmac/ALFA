@@ -609,6 +609,14 @@ a:hover {{ color: var(--blue-600); }}
 .alfa-table tbody tr {{ transition: background .18s var(--ease); }}
 .alfa-table tbody tr:hover {{ background: rgba(138,168,250,.07); }}
 .alfa-table .num {{ text-align: right; }}
+/* Linha com frase embaixo (`details` em data_table): o par fica num tbody
+   próprio, que acende inteiro no hover, e a frase não ganha divisória. */
+.alfa-table .alfa-table__item tr:hover {{ background: none; }}
+.alfa-table .alfa-table__item:hover {{ background: rgba(138,168,250,.07); }}
+.alfa-table .alfa-table__item tr:has(+ .alfa-table__detail) td {{ padding-bottom: 3px; }}
+.alfa-table .alfa-table__detail td {{
+  border-top: 0; padding-top: 0; font-size: .8rem; line-height: 1.5; color: var(--on-dark-soft);
+}}
 .alfa-table .pos {{ color: #5fd39b; font-weight: 600; }}
 .alfa-table .neg {{ color: #ff8f97; font-weight: 600; }}
 .alfa-table th:has(+ th:last-child), .alfa-table td:has(.bar) {{ width: 140px; }}

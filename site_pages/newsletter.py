@@ -13,11 +13,11 @@ Acrescente uma entrada **no topo** da lista `edicoes` em
 `content/newsletter.json`. Campos de vitrine: `numero`, `slug` (o que vai na
 URL), `data`, `titulo`, `resumo`, `periodo`, `destaques`. Campos de leitura:
 `carta`, `noticias` (tema, titulo, texto, fonte, mais `imagem` e `alt`
-opcionais), `tabelas` (titulo, colunas, linhas, nota), `outros` (titulo,
-texto, fonte) e `termos` (termo, definicao). Todos são opcionais: a seção
-some quando a edição não traz aquele bloco, e nenhuma edição precisa ter a
-mesma estrutura da anterior. `pdf` é opcional e, quando presente, vira o
-botão de baixar.
+opcionais), `tabelas` (titulo, colunas, linhas, nota, mais `detalhes` e
+`texto` opcionais), `outros` (titulo, texto, fonte) e `termos` (termo,
+definicao). Todos são opcionais: a seção some quando a edição não traz
+aquele bloco, e nenhuma edição precisa ter a mesma estrutura da anterior.
+`pdf` é opcional e, quando presente, vira o botão de baixar.
 
 As imagens ficam em `assets/newsletter/` e vão embutidas na página em base64,
 como as fotos dos membros. Por isso entram em `.webp` com no máximo 1000px de
@@ -196,12 +196,29 @@ def _celula(texto: str) -> str:
 
 
 def _tabela(item: dict) -> str:
-    """Uma tabela de índices: título, grade de números e a nota de fonte."""
-    linhas = [[_celula(celula) for celula in linha] for linha in item.get("linhas", [])]
+    """Uma tabela de índices: título, grade de números, comentário e a nota de fonte.
+
+    `detalhes` traz uma frase por linha, na mesma ordem de `linhas`, mostrada
+    embaixo dela: o "o que explica cada movimento" dos indicadores, ou o
+    ticker de cada ação. `texto` é o parágrafo de análise que vem depois da
+    tabela. Os dois são opcionais.
+    """
+    # Números não quebram: "US$ 86.416" partido em duas linhas lê mal.
+    linhas = [
+        [
+            _celula(celula)
+            if j == 0
+            else f'<span style="white-space:nowrap">{_celula(celula)}</span>'
+            for j, celula in enumerate(linha)
+        ]
+        for linha in item.get("linhas", [])
+    ]
+    detalhes = [c.esc(d) for d in item.get("detalhes", [])]
     return (
         '<div style="margin-bottom:clamp(32px,4vw,48px)">'
         + c.section_head(title=item.get("titulo", ""), level=3)
-        + c.data_table(item.get("colunas", []), linhas)
+        + c.data_table(item.get("colunas", []), linhas, details=detalhes)
+        + (f'<p style="margin-top:16px">{c.esc(item["texto"])}</p>' if item.get("texto") else "")
         + (_fonte_nota(item["nota"]) if item.get("nota") else "")
         + "</div>"
     )

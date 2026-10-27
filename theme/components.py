@@ -233,19 +233,35 @@ def agenda(rows: Sequence[dict]) -> str:
     return f'<div class="alfa-agenda">{"".join(items)}</div>'
 
 
-def data_table(headers: Sequence[str], rows: Sequence[Sequence[str]], *, numeric_from: int = 1) -> str:
+def data_table(
+    headers: Sequence[str],
+    rows: Sequence[Sequence[str]],
+    *,
+    numeric_from: int = 1,
+    details: Sequence[str] = (),
+) -> str:
+    """Tabela de dados. `details`, opcional, traz uma frase por linha que entra
+    numa linha própria embaixo dela, na largura toda: no celular, dentro da
+    primeira coluna, a frase ficaria espremida ao lado dos números."""
     head = "".join(
         f'<th class="{"num" if i >= numeric_from else ""}">{esc(h)}</th>' for i, h in enumerate(headers)
     )
     body = []
-    for row in rows:
+    for index, row in enumerate(rows):
         cells = "".join(
             f'<td class="{"num" if i >= numeric_from else ""}">{cell}</td>' for i, cell in enumerate(row)
         )
-        body.append(f"<tr>{cells}</tr>")
+        tr = f"<tr>{cells}</tr>"
+        if details:
+            # Cada linha e a sua frase num tbody próprio, que acende inteiro no hover.
+            if index < len(details) and details[index]:
+                tr += f'<tr class="alfa-table__detail"><td colspan="{len(row)}">{details[index]}</td></tr>'
+            tr = f'<tbody class="alfa-table__item">{tr}</tbody>'
+        body.append(tr)
+    corpo = "".join(body) if details else f'<tbody>{"".join(body)}</tbody>'
     return (
         f'<div class="alfa-table-wrap"><table class="alfa-table"><thead><tr>{head}</tr></thead>'
-        f'<tbody>{"".join(body)}</tbody></table></div>'
+        f"{corpo}</table></div>"
     )
 
 
