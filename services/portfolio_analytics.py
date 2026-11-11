@@ -298,7 +298,12 @@ def _portfolio_price_series(portfolio_df: pd.DataFrame, historical_df: pd.DataFr
     if asset_prices.empty:
         return pd.Series(dtype=float)
 
-    portfolio_prices = asset_prices.multiply(weights, axis=1).sum(axis=1)
+    # Índice de valor (base 100) com pesos constantes: soma ponderada dos
+    # *retornos* diários de cada ativo. Somar peso × preço bruto faria ativos
+    # de preço unitário alto (ex.: NTN-B ~R$ 4.400) dominarem a carteira.
+    daily_returns = asset_prices.pct_change().fillna(0.0)
+    portfolio_returns = daily_returns.multiply(weights, axis=1).sum(axis=1)
+    portfolio_prices = (1.0 + portfolio_returns).cumprod() * 100.0
     portfolio_prices.name = "Portfolio"
     return portfolio_prices.dropna()
 
