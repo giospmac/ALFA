@@ -2,8 +2,799 @@
   "_comentario": "Cada edicao: numero, slug (usado na URL ?p=newsletter&ed=<slug>), data, titulo, resumo, periodo, pdf (link externo opcional) e destaques. O conteudo lido no site vem de carta, noticias, tabelas, outros e termos, todos opcionais. Cada noticia aceita imagem (caminho dentro de assets/newsletter/, de preferencia .webp com no maximo 1000px de largura) e alt. A primeira edicao da lista e a que aparece em destaque no topo; as demais viram arquivo.",
   "edicoes": [
     {
-      "numero": "#05",
-      "slug": "05",
+      "numero": "#09",
+      "slug": "09",
+      "data": "15 de novembro de 2026",
+      "titulo": "Ajuste fiscal avança no Senado, ata do Copom afasta cortes e Jensen Huang deixa a Nvidia às vésperas do IPO da Anthropic",
+      "periodo": "Semana de 9 a 15 de novembro de 2026",
+      "resumo": "O pacote de ajuste fiscal do governo avançou no Senado e o Ibovespa teve a maior alta semanal desde o primeiro turno, mas o dólar subiu ainda mais e os estrangeiros seguiram retirando dinheiro da bolsa. A ata do Copom afastou cortes antes de 2027, o Banco do Brasil cortou pela metade a projeção de lucro, Jensen Huang renunciou à Nvidia e a Anthropic fixou a faixa de preço do IPO.",
+      "destaques": [
+        "Fiscal",
+        "Política monetária",
+        "Bancos & Balanços",
+        "Tecnologia",
+        "Mercado de capitais",
+        "Fusões & Aquisições"
+      ],
+      "carta": "Na semana em que o pacote de ajuste fiscal do governo avançou no Senado, o Ibovespa teve a maior alta semanal desde o primeiro turno, mas o dólar subiu ainda mais e os investidores estrangeiros seguiram tirando dinheiro da bolsa. A ata do Copom afastou cortes de juros antes de 2027 e o Banco do Brasil cortou pela metade sua projeção de lucro. No exterior, a renúncia de Jensen Huang abalou a Nvidia às vésperas da estreia da Anthropic na Nasdaq.",
+      "noticias": [
+        {
+          "tema": "Fiscal & Fluxo Estrangeiro",
+          "titulo": "Ajuste fiscal avança no Senado, mas estrangeiros seguem saindo da bolsa",
+          "texto": "Depois da reeleição de Luiz Inácio Lula da Silva para um quarto mandato, o governo apresentou nesta semana o chamado Plano Moretti, em referência ao ministro do Planejamento, Bruno Moretti, que prevê o congelamento de despesas caso as contas públicas fiquem abaixo do piso da meta fiscal. Segundo o ministro, as medidas podem ter impacto de R$ 50 bilhões a R$ 60 bilhões no Orçamento de 2027. O Senado aprovou o texto-base na quinta-feira (12), e os destaques serão votados na próxima semana. O anúncio ajudou o Ibovespa a subir 2,22% na segunda-feira (9), e o índice fechou a semana com alta de 2,35%, aos 172.457 pontos, enquanto o dólar avançou 2,63%, para R$ 5,655, o maior nível desde junho de 2025. A avaliação sobre o tamanho do ajuste segue dividida. O JPMorgan estima impacto entre R$ 45,1 bilhões e R$ 56,1 bilhões, mas considera o pacote insuficiente para estabilizar a dívida, e o UBS passou a recomendar exposição abaixo da média ao Brasil em sua carteira de ações emergentes para 2027. Segundo a Bloomberg, gestoras como Bradesco Asset e BB Asset seguem evitando ativos locais depois de a bolsa perder mais de R$ 700 bilhões em valor de mercado desde a eleição. O fluxo confirma a cautela: em 9 de novembro, os estrangeiros completaram a 12ª sessão seguida de saída, com R$ 4,3 bilhões retirados no mês, segundo o Valor Econômico, embora o saldo do ano ainda seja positivo em R$ 31,2 bilhões. Em editorial na segunda-feira (9), a Folha de S.Paulo apontou risco de estagnação ou recessão em 2027, citando cálculo do Ibre-FGV.",
+          "fonte": "InfoMoney; Bloomberg Línea; Valor Econômico; Folha de S.Paulo; BPMoney"
+        },
+        {
+          "tema": "Política monetária",
+          "titulo": "Ata do Copom lista quatro choques de oferta e afasta corte de juros antes de 2027",
+          "texto": "Na ata da reunião de 4 de novembro, divulgada na terça-feira (10), o Comitê de Política Monetária (Copom) detalhou por que manteve a Selic em 13,75% ao ano, interrompendo cinco cortes seguidos de 0,25 ponto percentual. O colegiado listou quatro choques de oferta: o conflito no Oriente Médio e seu efeito sobre o petróleo, o El Niño sobre a produção agrícola e a matriz energética, o fim da escala 6x1, que elevou custos trabalhistas, e a depreciação cambial associada à incerteza política. Para Gustavo Sung, da Suno, a novidade foi justamente esse grau de detalhe, pouco comum em atas anteriores. As projeções do próprio Copom apontam inflação de 5,6% em 2026 e de 4,7% em 2027, ambas acima do teto da meta, de 4,5%. Na mesma semana, o IPCA de outubro subiu 0,14%, abaixo do esperado e bem menos que os 0,82% de setembro, mas a leitura não mudou as apostas: casas como XP, Genial e Itaú, citadas pela InfoMoney, já não esperam novo corte antes de 2027. O Boletim Focus de 9 de novembro foi na mesma direção e elevou a Selic projetada para o fim de 2026 de 13,50% para 13,75%, ou seja, o mercado deixou de esperar um último corte em dezembro. A projeção de inflação para 2027 subiu pela quarta semana seguida, para 4,90%, e as de crescimento recuaram para 1,75% em 2026 e 1,15% em 2027.",
+          "fonte": "Banco Central (ata do Copom e Boletim Focus); InfoMoney; IBGE"
+        },
+        {
+          "tema": "Bancos & Balanços",
+          "titulo": "Banco do Brasil lucra R$ 1,3 bilhão no trimestre e corta pela metade a projeção para 2026",
+          "texto": "O Banco do Brasil (BBAS3) teve lucro líquido ajustado de R$ 1,27 bilhão no terceiro trimestre, queda de 66,5% em um ano e de 67,5% em relação ao segundo trimestre, muito abaixo dos cerca de R$ 3 bilhões esperados pelo mercado, segundo estimativas compiladas pela Bloomberg. O retorno sobre o patrimônio líquido (ROE) caiu para 2,8%, ante 8,3% no trimestre anterior. O peso veio do custo do crédito, que chegou a R$ 21,2 bilhões, alta de 18,4% em um ano, puxado pela inadimplência em parte da carteira do agronegócio e por provisões pontuais para grandes empresas. A inadimplência acima de 90 dias subiu para 6,08%, ante 4,51% um ano antes. O banco também revisou todas as projeções para o ano (tabela abaixo): o lucro ajustado esperado caiu de R$ 18 a 22 bilhões para R$ 9 a 11 bilhões, e o custo do crédito previsto subiu para R$ 80 a 83 bilhões. Analistas destacaram a falta de sinais de estabilização da carteira e a possibilidade de a inadimplência continuar pressionando os próximos trimestres. As ações caíram 11,85% na semana, a segunda maior queda do Ibovespa, e fecharam a R$ 15,10. Como os dividendos do banco são calculados sobre o lucro, a revisão também reduz o retorno esperado pelo acionista em 2026.",
+          "fonte": "Banco do Brasil; Eu Quero Investir; Seu Dinheiro; Bloomberg"
+        },
+        {
+          "tema": "Tecnologia & Governança",
+          "titulo": "Jensen Huang deixa o comando da Nvidia após 33 anos, em meio a investigação",
+          "texto": "A Nvidia anunciou na quinta-feira (12) que Jensen Huang, cofundador da empresa, renunciou aos cargos de presidente, CEO e membro do conselho, com efeito imediato. A diretora financeira, Colette Kress, assumiu como CEO interina, acumulando as duas funções, e o conselho passou a ter um presidente próprio pela primeira vez, Harvey Jones. A empresa não informou o motivo, mas a saída veio depois de reportagens do New York Times sobre um relacionamento de Huang com uma executiva de uma cliente de Singapura que autoridades americanas suspeitam ser espiã chinesa e, na véspera, sobre um segundo relacionamento, com uma subordinada. O conselho já havia aberto uma investigação independente, e o caso também é acompanhado pelo FBI e pelo Congresso americano, que convocou Huang a depor. As ações chegaram a cair cerca de 14% na abertura de quinta e fecharam em baixa de 4,34%; na sexta, recuaram mais 3,12%, e o valor de mercado da empresa ficou abaixo de US$ 4 trilhões. Analistas apontam o risco de dependência de uma única pessoa: parte relevante dos acordos com a cadeia de fornecedores e dos compromissos financeiros da Nvidia foi negociada pessoalmente por Huang. Ainda assim, o Nasdaq fechou a semana em alta de 2,27%, apoiado por outras fabricantes de chips, como AMD e Broadcom. O próximo teste é o balanço do terceiro trimestre fiscal, marcado para terça-feira (17), o primeiro sob a nova gestão.",
+          "fonte": "Nvidia (formulário 8-K à SEC); NPR; Al Jazeera; CNN; Associated Press",
+          "imagem": "09/01-nvidia-huang.webp",
+          "alt": "Logo da Nvidia ao lado de Jensen Huang"
+        },
+        {
+          "tema": "Mercado de Capitais & IA",
+          "titulo": "Anthropic fixa faixa de preço do IPO e estreia na Nasdaq na quinta-feira (19)",
+          "texto": "A Anthropic, criadora do assistente Claude, fixou entre US$ 70 e US$ 78 a faixa de preço de sua oferta pública inicial de ações (IPO), com cerca de 825 milhões de ações classe A, e deve definir o preço final na quarta-feira (18) para estrear na Nasdaq no dia seguinte, sob o código ANT. No topo da faixa, a oferta pode levantar até US$ 64,4 bilhões e avaliar a empresa em cerca de US$ 1 trilhão, ou US$ 1,4 trilhão em base totalmente diluída. Google e Nvidia se comprometeram a comprar US$ 10 bilhões em ações cada, numa colocação privada atrelada à operação, que pode elevar o volume total para até US$ 90,4 bilhões. Se confirmada nesses termos, será uma das maiores aberturas de capital da história, poucos meses depois da estreia da SpaceX. O preço, porém, divide especialistas ouvidos pela InfoMoney, que o consideram exigente: a avaliação equivale a cerca de 12 vezes a receita, e a empresa teve prejuízo operacional no terceiro trimestre. Para o investidor brasileiro, entrar na oferta é praticamente inviável; o acesso deve se dar pelo mercado secundário a partir de 19 de novembro, por corretoras com acesso à Nasdaq. A estreia ocorre em uma semana sensível para o setor de inteligência artificial, que também acompanha o balanço da Nvidia na terça-feira (17).",
+          "fonte": "Exame; InfoMoney; Fast Company Brasil; BPMoney; Nasdaq; Bora Investir (B3)"
+        },
+        {
+          "tema": "Alimentos & Fusões",
+          "titulo": "JBS compra Flora e Canal Rural da J&F por US$ 553 milhões",
+          "texto": "A JBS anunciou na segunda-feira (9) a compra da Flora, fabricante das marcas Minuano, Francis, Neutrox e OX, e do Canal Rural, veículo voltado ao agronegócio, ambos vendidos pela J&F, holding da família Batista que também controla a própria JBS. Segundo a Exame, as duas operações somam US$ 553 milhões, cerca de R$ 3 bilhões: US$ 542 milhões pela Flora e US$ 11 milhões pelo Canal Rural, este sujeito a ajuste pela dívida líquida no fechamento. De acordo com a Reuters, US$ 367 milhões relativos à participação na Flora serão pagos integralmente em ações classe A que a JBS mantém em tesouraria, além da assunção das dívidas da empresa. A operação devolve à JBS um negócio separado do grupo em 2007 e dá à companhia acesso a uma rede de distribuição de produtos secos e não refrigerados, que ela hoje não tem. O diretor financeiro, Guilherme Cavalcanti, disse à Reuters que a Flora se encaixa melhor na operação de alimentos do que nos demais ativos da J&F e destacou a monetização de créditos fiscais que a reorganização permite. O pagamento em ações preserva o caixa e, segundo a Exame, não deve alterar a alavancagem, num trimestre em que o lucro líquido da JBS caiu 71,7%, para US$ 164 milhões, pressionado pelas cotas de exportação de carne à China.",
+          "fonte": "Exame; Reuters; InfoMoney",
+          "imagem": "09/02-jbs.webp",
+          "alt": "Letreiro da JBS sobre um prédio, contra o céu"
+        }
+      ],
+      "tabelas": [
+        {
+          "titulo": "Boletim Focus de 9/11: mediana",
+          "colunas": [
+            "Mediana Focus",
+            "Semana anterior",
+            "Focus de 9/11"
+          ],
+          "linhas": [
+            [
+              "Selic no fim de 2026",
+              "13,50%",
+              "13,75%"
+            ],
+            [
+              "IPCA 2026",
+              "5,22%",
+              "5,22%"
+            ],
+            [
+              "IPCA 2027",
+              "4,76%",
+              "4,90%"
+            ],
+            [
+              "PIB 2026",
+              "1,76%",
+              "1,75%"
+            ],
+            [
+              "PIB 2027",
+              "1,20%",
+              "1,15%"
+            ],
+            [
+              "Dólar no fim de 2026",
+              "R$ 5,34",
+              "R$ 5,35"
+            ]
+          ],
+          "nota": "Fonte: Banco Central (Boletim Focus)"
+        },
+        {
+          "titulo": "Banco do Brasil: projeções para 2026",
+          "colunas": [
+            "Projeção para 2026",
+            "Anterior",
+            "Revisada"
+          ],
+          "linhas": [
+            [
+              "Lucro líquido ajustado",
+              "R$ 18 a 22 bi",
+              "R$ 9 a 11 bi"
+            ],
+            [
+              "Custo do crédito",
+              "R$ 65 a 70 bi",
+              "R$ 80 a 83 bi"
+            ],
+            [
+              "Margem financeira bruta",
+              "+7% a +11%",
+              "+2,5% a +4,5%"
+            ],
+            [
+              "Carteira de crédito",
+              "+0,5% a +4,5%",
+              "-2% a 0%"
+            ]
+          ],
+          "nota": "Fonte: Banco do Brasil; Eu Quero Investir; Seu Dinheiro; Bloomberg"
+        },
+        {
+          "titulo": "IPO da Anthropic: termos anunciados",
+          "colunas": [
+            "Item",
+            "Termos anunciados"
+          ],
+          "linhas": [
+            [
+              "Faixa de preço por ação",
+              "US$ 70 a US$ 78"
+            ],
+            [
+              "Ações ofertadas",
+              "cerca de 825 milhões (classe A)"
+            ],
+            [
+              "Captação no topo da faixa",
+              "até US$ 64,4 bilhões"
+            ],
+            [
+              "Valor de mercado no topo",
+              "cerca de US$ 1 tri (US$ 1,4 tri diluído)"
+            ],
+            [
+              "Definição do preço",
+              "quarta-feira, 18 de novembro"
+            ],
+            [
+              "Estreia",
+              "quinta-feira, 19 de novembro, Nasdaq (ANT)"
+            ]
+          ],
+          "nota": "Fonte: Exame; InfoMoney; Fast Company Brasil; BPMoney; Nasdaq; Bora Investir (B3)"
+        },
+        {
+          "titulo": "Mercados na semana",
+          "colunas": [
+            "Indicador",
+            "Fechamento",
+            "Semana"
+          ],
+          "linhas": [
+            [
+              "Ibovespa",
+              "172.457,76 pts",
+              "+2,35%"
+            ],
+            [
+              "Dólar",
+              "R$ 5,655",
+              "+2,63%*"
+            ],
+            [
+              "S&P 500",
+              "7.561,67 pts",
+              "+2,51%"
+            ],
+            [
+              "Nasdaq",
+              "25.136,27 pts",
+              "+2,27%"
+            ],
+            [
+              "Dow Jones",
+              "52.347,55 pts",
+              "+2,07%"
+            ],
+            [
+              "Petróleo Brent",
+              "US$ 95,84",
+              "-2,54%**"
+            ],
+            [
+              "Bitcoin",
+              "US$ 65.400",
+              "-15%***"
+            ]
+          ],
+          "detalhes": [
+            "Melhor semana desde o 1º turno. O Senado aprovou o texto-base do ajuste fiscal e balanços como o do Magazine Luiza animaram, mas o Banco do Brasil pesou.",
+            "Maior nível desde junho de 2025. Inflação americana acima do esperado e falas duras do Fed fortaleceram o dólar no mundo, somadas às dúvidas sobre o tamanho do ajuste fiscal.",
+            "Primeira semana positiva em cinco, com os 11 setores em alta, apesar da queda de sexta puxada por tecnologia.",
+            "Outras fabricantes de chips, como AMD e Broadcom, compensaram a queda da Nvidia após a saída de Jensen Huang.",
+            "Menos exposto a tecnologia, foi o único dos três índices a subir na sexta-feira.",
+            "A AIE projetou excedente de oferta no 4º trimestre, o primeiro desde o início da guerra no Irã, sem acordo à vista entre EUA e Irã.",
+            "Rompeu US$ 70 mil pela primeira vez desde agosto, com liquidações bilionárias, saídas de ETFs e a aversão a risco em tecnologia."
+          ],
+          "nota": "Fechamento de 13/11/2026; variação sobre o fechamento de 6/11/2026. *As fontes divergem entre 2,63% e 2,66% de alta semanal do dólar. **Brent: queda de 2,54% segundo o Estadão Conteúdo; outras fontes indicam 1,93%. ***Bitcoin: cotação de 15/11 e variação em sete dias. Fonte: InfoMoney; Valor Econômico; Exame; Associated Press; Estadão Conteúdo; ForkLog"
+        },
+        {
+          "titulo": "Maiores altas",
+          "colunas": [
+            "Empresa",
+            "Fechamento",
+            "Semana"
+          ],
+          "linhas": [
+            [
+              "Magazine Luiza",
+              "R$ 7,81",
+              "+39,22%"
+            ],
+            [
+              "Minerva",
+              "R$ 3,41",
+              "+30,65%"
+            ],
+            [
+              "Hapvida",
+              "R$ 5,68",
+              "+27,64%"
+            ],
+            [
+              "MBRF",
+              "R$ 18,25",
+              "+16,91%"
+            ],
+            [
+              "MRV",
+              "R$ 5,04",
+              "+13,26%"
+            ]
+          ],
+          "detalhes": [
+            "MGLU3",
+            "BEEF3",
+            "HAPV3",
+            "MBRF3",
+            "MRVE3"
+          ],
+          "texto": "As maiores altas vieram dos balanços do terceiro trimestre. O Magazine Luiza subiu 39% depois de mostrar forte recuperação operacional e voltar a divulgar vendas mensais, algo que não fazia desde a pandemia, com a crise da Casas Bahia abrindo espaço para ganhar mercado; mesmo assim, a ação segue bem abaixo dos R$ 12,69 de antes do segundo turno. A Hapvida veio acima do esperado e reduziu a dívida líquida, apesar de um lucro 68% menor em um ano, e a Minerva aprovou um programa de recompra de ações. MBRF e MRV completam a lista.",
+          "nota": "Variação entre o fechamento de 6/11/2026 e o de 13/11/2026, entre as ações do Ibovespa. Fonte: Seu Dinheiro; Money Times; InfoMoney; Visno Invest"
+        },
+        {
+          "titulo": "Maiores quedas",
+          "colunas": [
+            "Empresa",
+            "Fechamento",
+            "Semana"
+          ],
+          "linhas": [
+            [
+              "CSN",
+              "R$ 3,72",
+              "-15,65%"
+            ],
+            [
+              "Banco do Brasil",
+              "R$ 15,10",
+              "-11,85%"
+            ],
+            [
+              "CSN Mineração",
+              "R$ 4,64",
+              "-7,75%"
+            ],
+            [
+              "Brava Energia",
+              "R$ 14,50",
+              "-6,69%"
+            ],
+            [
+              "Vivara",
+              "R$ 16,86",
+              "-5,86%"
+            ]
+          ],
+          "detalhes": [
+            "CSNA3",
+            "BBAS3",
+            "CMIN3",
+            "BRAV3",
+            "VIVA3"
+          ],
+          "texto": "Do lado negativo, os balanços também explicam o movimento. A CSN teve prejuízo de R$ 1,25 bilhão no trimestre, ante lucro de R$ 76 milhões um ano antes, e a ação despencou 12% só na sexta-feira; a controlada CSN Mineração também recuou. O Banco do Brasil, tema do artigo 03, perdeu 11,85% depois do lucro muito abaixo do esperado e do corte das projeções para o ano. Brava Energia e Vivara completam a lista.",
+          "nota": "Variação entre o fechamento de 6/11/2026 e o de 13/11/2026, entre as ações do Ibovespa. Fonte: Seu Dinheiro; Money Times; InfoMoney; Visno Invest"
+        }
+      ]
+    },
+    {
+      "numero": "#08",
+      "slug": "08",
+      "data": "8 de novembro de 2026",
+      "titulo": "Copom interrompe os cortes da Selic, Nasdaq tem a maior queda diária em 19 meses e Petrobras perde quase R$ 200 bilhões",
+      "periodo": "Semana de 2 a 8 de novembro de 2026",
+      "resumo": "O Copom interrompeu o ciclo de cortes e manteve a Selic em 13,75%, os democratas conquistaram o Congresso americano nas eleições de meio de mandato, o Nasdaq caiu 5,5% num único dia, a Yduqs avançou na incorporação da Afya, a Petrobras teve a pior semana desde 2021 com a queda do petróleo e o Paraguai destituiu e prendeu o presidente Santiago Peña.",
+      "destaques": [
+        "Política monetária",
+        "Estados Unidos",
+        "Tecnologia",
+        "Fusões & Aquisições",
+        "Petróleo",
+        "América Latina"
+      ],
+      "carta": "Na primeira semana de novembro, encurtada pelo feriado de Finados, a pausa do Banco Central no corte de juros e o avanço da fusão entre Yduqs e Afya dividiram a atenção no Brasil com a queda do petróleo, que derrubou a Petrobras. No exterior, as eleições de meio de mandato mudaram o controle do Congresso americano e abalaram as ações de tecnologia, enquanto o Paraguai destituiu e prendeu o presidente Santiago Peña.",
+      "noticias": [
+        {
+          "tema": "Política monetária",
+          "titulo": "Copom interrompe ciclo de cortes e mantém a Selic em 13,75% ao ano",
+          "texto": "O Comitê de Política Monetária (Copom) decidiu, por unanimidade, manter a taxa Selic em 13,75% ao ano na reunião de 4 de novembro, interrompendo uma sequência de cinco cortes consecutivos de 0,25 ponto percentual que vinha sendo aplicada desde o início do ciclo de flexibilização monetária, em março, segundo o comunicado do Banco Central. O mercado chegou dividido à reunião: das 75 instituições consultadas pelo Projeções Broadcast, 39 esperavam um último corte, para 13,50%, e 36 apostavam na pausa, que prevaleceu diante da deterioração do cenário fiscal depois da reeleição de Lula. No texto, o colegiado classificou o nível atual de juros como \"substancialmente contracionista\" e descreveu o ambiente externo como mais adverso, com aumento das incertezas. Segundo o Boletim Focus citado pelo próprio Copom, a expectativa de inflação subiu para 5,2% em 2026 e 4,8% em 2027, ambas mais distantes do centro da meta, enquanto a projeção do Banco Central para o horizonte relevante, o segundo trimestre de 2028, passou de 3,2% para 3,5%. Analistas consultados pelo InfoMoney, como Josias Bento, da gestora GT Capital, e Beto Saadia, da Nomos, avaliam que o tom do comunicado ficou mais duro e que o balanço de riscos passou a pender para uma eventual alta de juros nas próximas reuniões, não para novos cortes. Projeções de casas como XP e BV Asset apontam Selic estável em 13,75% até o fim de 2026, com a retomada de cortes só prevista a partir de 2027.",
+          "fonte": "Banco Central; InfoMoney; Estadão Conteúdo (Projeções Broadcast)"
+        },
+        {
+          "tema": "Estados Unidos & Política",
+          "titulo": "Democratas conquistam maioria na Câmara e no Senado nas eleições de meio de mandato",
+          "texto": "O Partido Democrata conquistou a maioria nas duas Casas do Congresso americano nas eleições de meio de mandato realizadas na terça-feira (3), segundo a Agência Brasil, com base na Reuters. No Senado, os democratas chegaram a 54 cadeiras, contando os independentes que votam com o partido, enquanto os republicanos perderam sete, com as disputas no Alasca e no Mississippi ainda indefinidas na quarta-feira (4). Na Câmara, os democratas garantiram a maioria de 218 cadeiras ainda com parte da apuração em andamento. O partido também ampliou o número de governos estaduais, com viradas em estados como Geórgia e Ohio. Analistas ouvidos pela Reuters associam o resultado à insatisfação dos eleitores com a condução da economia e com a guerra dos Estados Unidos contra o Irã, que elevou o preço da gasolina. O presidente Donald Trump reconheceu a derrota, mas sinalizou que pretende usar o poder de veto para barrar projetos aprovados pela nova maioria, que assume em janeiro. Com o Congresso dividido em relação à Casa Branca, os investidores passam a considerar mais incerteza sobre a agenda legislativa nos próximos dois anos, da política fiscal à regulação de setores como o de inteligência artificial.",
+          "fonte": "Agência Brasil; Reuters; BBC"
+        },
+        {
+          "tema": "Tecnologia & Mercado Americano",
+          "titulo": "Nasdaq cai 5,5% após eleições de meio de mandato e ações de tecnologia perdem US$ 2,5 trilhões",
+          "texto": "O Nasdaq Composite caiu 5,5% na quinta-feira (5), a maior queda diária desde abril de 2025, e entrou em correção, quase 12% abaixo do recorde de 6 de outubro, segundo o InfoMoney, com base na Reuters. O Nasdaq 100 recuou 6,4%, eliminando US$ 2,5 trilhões em valor de mercado, e o índice de semicondutores da Filadélfia despencou 12%. Entre as maiores quedas estiveram AMD (17%), Nebius (15%), CoreWeave (10%) e Nvidia (9%), enquanto Microsoft perdeu 3,6% e Amazon e Alphabet, 2,2% cada. A venda veio depois das eleições de meio de mandato, em que o Partido Democrata ampliou sua presença no Congresso e nos governos estaduais: investidores passaram a precificar uma fiscalização mais rigorosa sobre a inteligência artificial, sobretudo sobre a construção de data centers. O receio é que o freio venha menos de Washington e mais da resistência local. Bruce Zaro, da Granite Wealth Management, espera forte oposição das comunidades a novos data centers, muitos dos quais ainda dependem de licenças, e analistas do UBS estimam que cerca de 30% do crescimento de capacidade de data centers esperado nos Estados Unidos até 2028 pode ser afetado por pausas nas obras. Para Ted Parkhill, da Incline Investment Management, o mercado deixou de precificar apenas a promessa da IA e passou a olhar para o custo dela. O Nasdaq recuperou parte das perdas na sexta-feira (6), com alta de 1,06%, mas fechou a semana em queda de 3,37%.",
+          "fonte": "InfoMoney; Reuters; UBS"
+        },
+        {
+          "tema": "Educação & Fusões",
+          "titulo": "Yduqs avança na incorporação da Afya e convoca assembleia para 25 de novembro",
+          "texto": "O conselho de administração da Yduqs (YDUQ3) aprovou nesta quarta-feira (4) o protocolo que estabelece os termos da incorporação da Afya, com a extinção da companhia de ensino médico e sua sucessão integral pela Yduqs, informou o InfoMoney. O colegiado também convocou a assembleia geral extraordinária que deve referendar a operação para 25 de novembro. As negociações foram confirmadas em agosto, quando as ações da Yduqs chegaram a subir 12,45% em pregão intradiário, cotadas a R$ 8,85, e a combinação de negócios foi formalizada em setembro. A fusão cria a maior rede privada de ensino superior do país, com cerca de 5.888 vagas de medicina somadas entre as duas companhias, equivalente a 15% do mercado, segundo cálculo do Itaú BBA citado pelo InfoMoney. O JPMorgan, que elevou a recomendação da Afya de neutra para compra ao incorporar as estimativas do negócio, projeta sinergias de R$ 1,8 bilhão e retorno total de 61% para a Afya e 46% para a Yduqs até o fim de 2027, incluindo dividendos. Antes do acordo, a diferença de múltiplos já indicava a lógica da combinação: a Yduqs negociava a 4,8 vezes o lucro estimado para 2026, contra 8,4 vezes da Afya.",
+          "fonte": "InfoMoney; Itaú BBA; JPMorgan"
+        },
+        {
+          "tema": "Petróleo & Commodities",
+          "titulo": "Petrobras perde quase R$ 200 bilhões em valor de mercado e tem a pior semana desde 2021",
+          "texto": "As ações da Petrobras recuaram cerca de 14% nos quatro pregões da semana, a maior queda entre os 76 ativos do Ibovespa no período, segundo o Estadão. A companhia, que havia atingido o recorde de R$ 819,8 bilhões em valor de mercado em 16 de outubro, passou a valer R$ 628,2 bilhões, uma perda de cerca de R$ 191,6 bilhões. Foi a terceira semana seguida de queda e a pior desde fevereiro de 2021, quando os papéis caíram mais de 20% diante das ameaças do então presidente Jair Bolsonaro de interferir na política de preços. O gatilho foi o petróleo: sinais de avanço nas negociações diplomáticas entre Estados Unidos e Irã derrubaram o Brent, que fechou a sexta-feira (6) a US$ 98,32 por barril, devolvendo parte da alta acumulada desde o início do conflito, no fim de fevereiro. Mesmo assim, a Petrobras ainda vale mais de R$ 100 bilhões acima dos R$ 532,2 bilhões de antes da guerra. Analistas tratam o movimento como ajuste, e não como mudança de tese. Gustavo Cruz, estrategista-chefe da Sincra, avalia ser difícil imaginar a Petrobras devolvendo todos os ganhos com o fim do conflito e cita as notícias positivas da Margem Equatorial, enquanto Rafael Passos, sócio da Ajax Asset, recomenda cautela no curto prazo, mas destaca a produção crescente, a forte geração de caixa e o desconto da ação em relação às concorrentes. O Morgan Stanley vê espaço para dividendos extraordinários em 2027. O próximo teste é o balanço do terceiro trimestre, que sai na terça-feira (10): segundo o Broadcast Prévias, os analistas projetam lucro líquido ajustado de US$ 8,82 bilhões, ante US$ 5,24 bilhões no mesmo período de 2025.",
+          "fonte": "Estadão; Broadcast Prévias; Brasil em Folhas"
+        },
+        {
+          "tema": "América Latina",
+          "titulo": "Paraguai destitui e prende o presidente Santiago Peña após o colapso do Ueno Bank",
+          "texto": "O Senado do Paraguai aprovou por unanimidade, na sexta-feira (6), a destituição do presidente Santiago Peña por \"mau desempenho\" no cargo, com os votos de todos os 44 senadores presentes, e o vice-presidente Pedro Alliana assumiu a Presidência. Minutos depois da votação, o Ministério Público ordenou a detenção de Peña e de Carlos Carvallo, ex-presidente do Banco Central do Paraguai (BCP), e no sábado (7) o juiz Humberto Otazú decretou a prisão preventiva do ex-presidente, segundo a CNN Brasil, com base na Reuters. Peña chegou a tentar renunciar na quinta-feira (5), mas o Senado não aceitou o pedido; a renúncia lhe daria uma cadeira vitalícia no Senado e, com ela, imunidade parlamentar. O caso tem origem no Ueno Bank, banco digital com o qual Peña já teve ligações empresariais. Em 2 de novembro, o BCP iniciou a resolução da instituição depois que ajustes nas demonstrações financeiras mostraram o índice de solvência abaixo da metade do mínimo exigido, e o Ministério Público acusou 27 pessoas por operações irregulares, com saldos sob investigação de cerca de US$ 167 milhões e 343 bilhões de guaranis, segundo a Gazeta Mercantil. Peña e Carvallo são acusados de irregularidades na aplicação de recursos públicos e previdenciários no banco; a defesa do ex-presidente nega responsabilidade pessoal. A queda de Peña, que governava desde 2023 e tinha mandato até 2028, abre um período de instabilidade política em um dos principais parceiros do Brasil no Mercosul e em Itaipu.",
+          "fonte": "CNN Brasil; Reuters; Gazeta Mercantil; Misto Brasil"
+        }
+      ],
+      "tabelas": [
+        {
+          "titulo": "Senado dos EUA: resultado parcial",
+          "colunas": [
+            "Bloco",
+            "Cadeiras"
+          ],
+          "linhas": [
+            [
+              "Democratas",
+              "54"
+            ],
+            [
+              "Republicanos",
+              "44"
+            ],
+            [
+              "Aguardando resultado",
+              "2"
+            ]
+          ],
+          "nota": "35 das 100 cadeiras em disputa; maioria a partir de 51. Democratas incluem independentes que votam com o partido. Fonte: Associated Press, via BBC; atualizado em 4/11/2026."
+        },
+        {
+          "titulo": "Mercados na semana",
+          "colunas": [
+            "Ativo",
+            "Variação",
+            "Valor"
+          ],
+          "linhas": [
+            [
+              "Ibovespa",
+              "+0,34%",
+              "168.498"
+            ],
+            [
+              "Small caps (EWZS)",
+              "-0,81%",
+              "US$ 22,37"
+            ],
+            [
+              "Dólar",
+              "+1,18%",
+              "R$ 5,51"
+            ],
+            [
+              "Juros futuros (DI jan/29)",
+              "-27 pb*",
+              "14,67%"
+            ],
+            [
+              "Juros futuros (DI jan/31)",
+              "-30 pb*",
+              "14,90%"
+            ],
+            [
+              "S&P 500",
+              "-3,07%",
+              "7.377"
+            ],
+            [
+              "Nasdaq",
+              "-3,37%",
+              "24.579"
+            ],
+            [
+              "Dow Jones",
+              "-0,94%",
+              "51.286"
+            ],
+            [
+              "Brent",
+              "-12%**",
+              "US$ 98,32"
+            ],
+            [
+              "Bitcoin",
+              "-2,2%***",
+              "US$ 75,8 mil"
+            ]
+          ],
+          "detalhes": [
+            "Primeira semana positiva depois de três, encurtada pelo feriado de Finados. Bancos e Vale subiram com balanços, mas a dúvida sobre o ajuste fiscal limitou os ganhos.",
+            "ETF de small caps brasileiras negociado em Nova York e cotado em dólar, o que faz a alta da moeda americana pesar sobre o retorno.",
+            "Payroll forte nos EUA (165 mil vagas, ante cerca de 60 mil esperadas) elevou as apostas de alta de juros pelo Fed em dezembro.",
+            "Correção da disparada pós-eleição, mais técnica do que de melhora fiscal; o Copom manteve a Selic e afastou uma alta no curto prazo.",
+            "Mesmo movimento nos vencimentos longos, que seguem sensíveis ao risco fiscal.",
+            "Pior semana desde abril de 2025, com investidores precificando regulação mais dura da IA após o resultado das eleições de meio de mandato.",
+            "Caiu 5,52% na quinta-feira (5), a maior queda diária em 19 meses, com perda de mais de US$ 2 trilhões em valor de mercado.",
+            "Queda menor por ter menos peso de tecnologia.",
+            "Apostas em um acordo entre EUA e Irã e sinais de excesso de oferta global derrubaram o barril.",
+            "Saídas de cerca de US$ 1,28 bilhão dos ETFs de bitcoin nos EUA e maior aposta em alta de juros pelo Fed."
+          ],
+          "nota": "Fechamento de 6/11/2026; variação sobre o fechamento de 30/10/2026 (B3 fechada em 2/11, Finados). *Queda aproximada da taxa na semana. **As fontes divergem entre 12% e 16% de queda semanal do Brent. ***Bitcoin: variação em sete dias até 7/11. Fonte: InfoMoney; Google Finance; Estadão Conteúdo; Campo Grande News; Brasil em Folhas; CryptoTicker"
+        },
+        {
+          "titulo": "Maiores altas",
+          "colunas": [
+            "Ação",
+            "Variação (semana)"
+          ],
+          "linhas": [
+            [
+              "C&A",
+              "+23,82%"
+            ],
+            [
+              "Cosan",
+              "+18,88%"
+            ],
+            [
+              "Smart Fit",
+              "+17,59%"
+            ],
+            [
+              "CSN",
+              "+13,66%"
+            ],
+            [
+              "Cyrela",
+              "+12,93%"
+            ]
+          ],
+          "detalhes": [
+            "CEAB3",
+            "CSAN3",
+            "SMFT3",
+            "CSNA3",
+            "CYRE3"
+          ],
+          "texto": "As maiores altas vieram de notícias de cada empresa, mais do que de um movimento geral do mercado. C&A e Smart Fit subiram com balanços do terceiro trimestre acima do esperado; no caso da C&A, analistas destacaram a margem e o baixo endividamento. A Cosan avançou com a notícia de negociações adiantadas para vender 25% da Compass a uma gestora ligada a Abu Dhabi, o que ajudaria a reduzir a dívida da holding, e a CSN reagiu ao avanço da venda da CSN Cimentos para a chinesa Huaxin, tema da edição passada. A Cyrela, incorporadora sensível ao custo do financiamento imobiliário, acompanhou o recuo dos juros futuros.",
+          "nota": "Variação entre o fechamento de 30/10/2026 e o de 6/11/2026, entre as ações do Ibovespa. Fonte: Seu Dinheiro; TradeMap"
+        },
+        {
+          "titulo": "Maiores quedas",
+          "colunas": [
+            "Ação",
+            "Variação (semana)"
+          ],
+          "linhas": [
+            [
+              "Brava Energia",
+              "-15,64%"
+            ],
+            [
+              "Tenda",
+              "-15,44%"
+            ],
+            [
+              "PRIO",
+              "-15,40%"
+            ],
+            [
+              "Petrobras ON",
+              "-14,66%"
+            ],
+            [
+              "Petrobras PN",
+              "-13,94%"
+            ]
+          ],
+          "detalhes": [
+            "BRAV3",
+            "TEND3",
+            "PRIO3",
+            "PETR3",
+            "PETR4"
+          ],
+          "texto": "Do lado negativo, o petróleo explica quase tudo. O Brent caiu cerca de 12% na semana, com apostas em um acordo entre Estados Unidos e Irã e sinais de excesso de oferta global, e Petrobras, PRIO e Brava, cuja receita acompanha o preço do barril, despencaram; para a Petrobras, foi a pior semana desde fevereiro de 2021. PRIO e Brava ainda foram pressionadas pela prorrogação, até o fim de 2026, do imposto de 12% sobre a exportação de petróleo. A Tenda caiu depois de um lucro do terceiro trimestre cerca de 40% abaixo do consenso, com margem bruta menor.",
+          "nota": "Variação entre o fechamento de 30/10/2026 e o de 6/11/2026, entre as ações do Ibovespa. Fonte: Seu Dinheiro; TradeMap"
+        }
+      ]
+    },
+    {
+      "numero": "#07",
+      "slug": "07",
+      "data": "1º de novembro de 2026",
+      "titulo": "Flávio Bolsonaro deixa o Brasil, Ibovespa tem a pior semana desde 2020 e a Alphabet decepciona no balanço",
+      "periodo": "Semana de 26 de outubro a 1º de novembro de 2026",
+      "resumo": "Com a reeleição de Lula já precificada, o Ibovespa teve a pior semana desde março de 2020 e o dólar subiu mais de 9%, enquanto Flávio Bolsonaro deixou o país, o desemprego caiu a 5,2%, o Fed manteve os juros em decisão dividida, a CSN fechou exclusividade para vender a CSN Cimentos e a Alphabet decepcionou no lucro.",
+      "destaques": [
+        "Política & Justiça",
+        "Mercado de trabalho",
+        "Política monetária",
+        "Fusões & Aquisições",
+        "Tecnologia"
+      ],
+      "carta": "A semana que se encerra neste domingo (1º) reuniu sinais de que a política monetária global, os resultados corporativos nos Estados Unidos e o desdobramento político da eleição brasileira avançam por trilhos distintos, mas todos pesam sobre o apetite por risco com que investidores entram em novembro.",
+      "noticias": [
+        {
+          "tema": "Política & Justiça",
+          "titulo": "Flávio Bolsonaro deixa o Brasil driblando proibição de Moraes e chega aos Estados Unidos",
+          "texto": "Flávio Bolsonaro atravessou a fronteira com a Argentina na terça-feira (27), às 22h50, pela ponte Tancredo Neves, entre Foz do Iguaçu e Puerto Iguazú, e chegou aos Estados Unidos na manhã de quarta-feira (28), acompanhado da mulher e das duas filhas, segundo o InfoMoney. A família seguiu de jato particular, com escala em Guayaquil, no Equador, até o aeroporto executivo de Opa-locka, em Miami, numa rota que evitou o espaço aéreo brasileiro ao passar por Paraguai, Bolívia e Peru. A viagem ocorreu dois dias depois de o ministro Alexandre de Moraes, do Supremo Tribunal Federal (STF), determinar que o senador entregasse seus passaportes e ficasse proibido de deixar o país. A restrição de Moraes está ligada a uma investigação sobre suposta lavagem de dinheiro e evasão de divisas que envolve o senador e um empresário apontado como seu amigo, segundo o InfoMoney. Em vídeo publicado nas redes sociais, Flávio negou a intenção de deixar o país e classificou a medida como uma tentativa de intimidação, enquanto o governo americano concedeu vistos a ele e à família e permitiu a entrada no território dos Estados Unidos. O episódio ocorre no mesmo momento em que o senador anuncia que vai pedir a anulação do resultado da eleição, ampliando a incerteza institucional que o mercado já vinha monitorando desde a vitória de Lula no segundo turno.",
+          "fonte": "InfoMoney"
+        },
+        {
+          "tema": "Economia",
+          "titulo": "Desemprego cai a 5,2% no terceiro trimestre, menor nível desde 2012, e tensiona espaço para cortes da Selic",
+          "texto": "A taxa de desemprego no trimestre encerrado em setembro caiu a 5,2%, a menor para um terceiro trimestre desde 2012, informou o Instituto Brasileiro de Geografia e Estatística (IBGE) nesta sexta-feira (30). O resultado ficou em linha com a mediana das projeções de mercado apuradas antes da divulgação, segundo o InfoMoney, e representa queda em relação aos 5,4% do segundo trimestre e aos 5,6% do mesmo período de 2025. O número de desocupados recuou para 5,6 milhões, 4,0% a menos que no trimestre anterior, enquanto a população ocupada atingiu o recorde de 103,6 milhões de pessoas, alta de 1,2% em doze meses. O aperto no mercado de trabalho divide os economistas sobre o espaço remanescente para o Banco Central cortar a Selic. Rodolfo Margato, da XP, projeta que o desemprego suba a 5,4% até o fim de 2026 e a 6,5% até o fim de 2027, à medida que a economia perde ritmo, enquanto André Matos, CEO da MA7 Capital, avalia que a persistência de salários pressionados mantém a inflação de serviços resistente, a parcela mais difícil de trazer para a meta. Já Leandro Padulla, economista da ASA, nota que o avanço de 1,7% no rendimento real do trimestre indica que o mercado de trabalho ainda deve sustentar o consumo das famílias nos próximos meses.",
+          "fonte": "IBGE; InfoMoney"
+        },
+        {
+          "tema": "Política monetária",
+          "titulo": "Fed mantém juros entre 3,75% e 4% em decisão dividida, com duas dissidências por alta",
+          "texto": "O Federal Reserve manteve a taxa básica de juros dos Estados Unidos na faixa entre 3,75% e 4,00% nesta quarta-feira (28), em linha com a expectativa do mercado, mas por uma votação de 10 a 2, segundo o InfoMoney. As diretoras Lisa Cook e Beth Hammack, presidente do Fed de Cleveland, discordaram da decisão e defenderam uma alta de 0,25 ponto percentual, reabrindo a divergência que já havia aparecido na reunião anterior, em setembro, quando o Federal Reserve elevou os juros em 0,25 ponto. O comunicado do Comitê de Política Monetária (FOMC) classificou a inflação americana como ainda elevada e deixou aberta a possibilidade de novas altas, dependendo dos próximos dados. A manutenção reflete a dificuldade do Fed em separar choques temporários de pressões mais persistentes: o comunicado atribuiu parte da inflação ao custo de energia elevado pelo ataque dos Estados Unidos ao Irã, aos efeitos residuais das tarifas de importação e à demanda forte do setor de inteligência artificial, segundo o InfoMoney. \"O Comitê garantirá a estabilidade de preços\", afirmou o Federal Reserve em seu comunicado, sinalizando que a prioridade de conter os preços segue acima da de sustentar o crescimento. Para o mercado brasileiro, uma política americana mais dura por mais tempo tende a manter o dólar fortalecido e reduz o espaço de alívio para moedas emergentes.",
+          "fonte": "InfoMoney; Federal Reserve"
+        },
+        {
+          "tema": "Fusões & Aquisições",
+          "titulo": "CSN fecha exclusividade com a chinesa Huaxin para vender a CSN Cimentos por R$ 12,7 bilhões",
+          "texto": "A CSN (CSNA3) assinou nesta sexta-feira (30) um acordo de exclusividade de dez dias com a Huaxin Building Materials Group para negociar a venda da CSN Cimentos, avaliada em R$ 12,7 bilhões de valor de empresa (enterprise value, ou EV), segundo informou o InfoMoney. O preço implica um múltiplo de 7,0 a 7,5 vezes o Ebitda do negócio, acima dos 4,5 a 5,0 vezes em que a própria CSN é negociada na bolsa. A operação é o resultado de um processo competitivo aberto em março, no qual a Huaxin apresentou a proposta mais vantajosa entre os interessados. Segundo estimativa da XP citada pelo InfoMoney, a venda reduziria a dívida líquida da CSN de R$ 42,1 bilhões para R$ 29,4 bilhões, e a alavancagem consolidada cairia de cerca de 3,5 vezes para 2,8 vezes o Ebitda ao excluir a contribuição da unidade vendida. O banco BBI estimou economia anual de quase R$ 1,5 bilhão em despesas financeiras, e o JPMorgan apontou que os recursos dão à companhia um caminho para liquidar um empréstimo-ponte de cerca de R$ 6 bilhões, embora avalie que a alavancagem da siderúrgica permaneça elevada mesmo após o negócio.",
+          "fonte": "InfoMoney; XP; Bradesco BBI; JPMorgan"
+        },
+        {
+          "tema": "Tecnologia & Resultados",
+          "titulo": "Alphabet decepciona no lucro, tem caixa negativo pelo segundo trimestre seguido e ação cai 9,2%",
+          "texto": "A Alphabet, controladora do Google, faturou US$ 127,6 bilhões no terceiro trimestre de 2026, alta de 25% em relação ao mesmo período de 2025, mas um pouco abaixo da previsão de US$ 127,96 bilhões reunida pela FactSet, segundo o InfoMoney. O lucro por ação veio a US$ 2,12, bem abaixo dos US$ 3,02 esperados pelo mercado, enquanto a receita do Google Cloud praticamente dobrou em relação a 2025 e chegou a US$ 30,7 bilhões. A receita de serviços, que inclui a busca, somou US$ 96,3 bilhões, também abaixo dos US$ 98,52 bilhões projetados. As ações caíram 9,2% no after hours da Bolsa de Nova York após a divulgação do balanço. O ponto que mais chamou atenção dos investidores foi o fluxo de caixa livre, que ficou negativo em US$ 9,1 bilhões, uma deterioração em relação ao trimestre anterior, quando já havia sido negativo em US$ 5,9 bilhões, segundo o InfoMoney. A combinação de crescimento forte na nuvem com geração de caixa cada vez mais pressionada reforça a preocupação do mercado com o ritmo de investimento das grandes empresas de tecnologia em inteligência artificial, cujo retorno financeiro ainda não aparece nos resultados na mesma velocidade dos gastos com infraestrutura. Resta saber se a pressão sobre o caixa da Alphabet é um caso isolado ou um sinal do que o mercado deve esperar das demais empresas de tecnologia que ainda vão divulgar resultados nas próximas semanas.",
+          "fonte": "InfoMoney; FactSet"
+        }
+      ],
+      "tabelas": [
+        {
+          "titulo": "Taxa de desocupação (%), trimestral",
+          "colunas": [
+            "Trimestre",
+            "Taxa de desocupação (%)"
+          ],
+          "linhas": [
+            [
+              "1º tri 2024",
+              "7,9"
+            ],
+            [
+              "2º tri 2024",
+              "6,9"
+            ],
+            [
+              "3º tri 2024",
+              "6,4"
+            ],
+            [
+              "4º tri 2024",
+              "6,2"
+            ],
+            [
+              "1º tri 2025",
+              "7,0"
+            ],
+            [
+              "2º tri 2025",
+              "5,8"
+            ],
+            [
+              "3º tri 2025",
+              "5,6"
+            ],
+            [
+              "4º tri 2025",
+              "5,1"
+            ],
+            [
+              "1º tri 2026",
+              "6,1"
+            ],
+            [
+              "2º tri 2026",
+              "5,4"
+            ],
+            [
+              "3º tri 2026",
+              "5,2"
+            ]
+          ],
+          "nota": "Fonte: IBGE, PNAD Contínua"
+        },
+        {
+          "titulo": "Mercados na semana",
+          "colunas": [
+            "Ativo",
+            "Variação",
+            "Valor"
+          ],
+          "linhas": [
+            [
+              "Ibovespa",
+              "-18,12%",
+              "167.922"
+            ],
+            [
+              "Dólar",
+              "+9,15%",
+              "R$ 5,44"
+            ],
+            [
+              "Euro",
+              "+8,11%",
+              "R$ 6,07"
+            ],
+            [
+              "Juros futuros (DI jan/29)",
+              "+250 pb*",
+              "14,94%"
+            ],
+            [
+              "Risco-país (CDS 5 anos)",
+              "+18,25%",
+              "141 pts"
+            ],
+            [
+              "S&P 500",
+              "-0,57%",
+              "7.580"
+            ],
+            [
+              "Nasdaq",
+              "-2,00%",
+              "25.437"
+            ],
+            [
+              "Dow Jones",
+              "-0,85%",
+              "51.770"
+            ],
+            [
+              "Brent",
+              "+2,40%**",
+              "US$ 117,64"
+            ],
+            [
+              "Bitcoin",
+              "-5%**",
+              "US$ 77 mil"
+            ]
+          ],
+          "detalhes": [
+            "Pior semana desde março de 2020: a reeleição de Lula desfez as apostas em ajuste fiscal e juros menores, com saída de capital estrangeiro e cinco quedas seguidas.",
+            "Maior alta semanal desde 2008 e maior cotação de 2026, com incerteza fiscal e espera pela equipe econômica do novo mandato.",
+            "Acompanha o dólar: o movimento é de desvalorização do real, não de força da moeda europeia.",
+            "Taxas médias e longas subiram mais de 250 pontos-base e o mercado abandonou as apostas de corte da Selic; o desemprego de 5,2% reforça a cautela.",
+            "Proteção contra calote do Brasil ficou mais cara com dúvidas sobre gastos públicos e trajetória da dívida.",
+            "Balanços de tecnologia e temor sobre o retorno dos gastos com inteligência artificial (Alphabet, Amazon, Intel).",
+            "Mais exposto a tecnologia, sofreu mais com a dúvida sobre IA e geração de caixa das big techs.",
+            "Queda menor por ter menos peso de tecnologia; aversão a risco antes das eleições de meio de mandato nos EUA.",
+            "Subiu com receio de nova ação dos EUA contra o Irã.",
+            "Menor nível em seis semanas após roubo de cerca de US$ 6,3 bilhões na Binance, que suspendeu saques."
+          ],
+          "nota": "Fechamento de 30/10/2026; variação sobre o fechamento de 23/10/2026. *Alta aproximada dos vencimentos médios e longos na semana. **Variação do dia 30/10 (Bitcoin no meio da tarde); a variação semanal não foi publicada nas fontes consultadas. Risco-país em 31/10. Fonte: InfoMoney; CNN Brasil; Seu Dinheiro; Infobae; Poder360; Yahoo Finance"
+        },
+        {
+          "titulo": "Maiores altas",
+          "colunas": [
+            "Ação",
+            "Variação (semana)"
+          ],
+          "linhas": [
+            [
+              "Suzano",
+              "+16,63%"
+            ],
+            [
+              "WEG",
+              "+13,69%"
+            ],
+            [
+              "Embraer",
+              "+13,06%"
+            ],
+            [
+              "TIM",
+              "+1,41%"
+            ],
+            [
+              "Vale",
+              "+0,05%"
+            ]
+          ],
+          "detalhes": [
+            "SUZB3",
+            "WEGE3",
+            "EMBJ3",
+            "TIMS3",
+            "VALE3"
+          ],
+          "texto": "Numa semana em que o Ibovespa caiu 18%, só três ações do índice subiram mais de 10%, e as três são exportadoras. Suzano, WEG e Embraer vendem boa parte da produção em dólar, e uma alta de mais de 9% da moeda americana aumenta receita e margem em reais, o que fez desses papéis um refúgio enquanto o resto da bolsa desabava. A TIM, de receita recorrente e pouco ligada ao ciclo de crédito, teve comportamento defensivo. A Vale fechou praticamente estável: ganhou com o câmbio, mas foi contida pelo minério mais fraco na China e por um balanço do terceiro trimestre considerado fraco.",
+          "nota": "Variação entre o fechamento de 23/10/2026 e o de 30/10/2026, entre as ações do Ibovespa. Fonte: InfoMoney"
+        },
+        {
+          "titulo": "Maiores quedas",
+          "colunas": [
+            "Ação",
+            "Variação (semana)"
+          ],
+          "linhas": [
+            [
+              "Vamos",
+              "-62,71%"
+            ],
+            [
+              "Magazine Luiza",
+              "-58,31%"
+            ],
+            [
+              "Cosan",
+              "-55,77%"
+            ],
+            [
+              "Hapvida",
+              "-52,77%"
+            ],
+            [
+              "C&A",
+              "-52,60%"
+            ]
+          ],
+          "detalhes": [
+            "VAMO3",
+            "MGLU3",
+            "CSAN3",
+            "HAPV3",
+            "CEAB3"
+          ],
+          "texto": "As maiores quedas são o rali do pós-primeiro turno andando para trás: ações sensíveis a juros, que vinham subindo com a aposta em ajuste fiscal, perderam mais da metade do valor em cinco pregões. Vamos, de locação de caminhões, e Cosan, holding, são muito endividadas, e juros futuros mais altos encarecem essa dívida. Magazine Luiza e C&A dependem de crédito ao consumidor e de renda disponível, e a Hapvida, operadora de saúde voltada a um público mais sensível ao ciclo econômico, sofre com a mesma leitura de consumo mais fraco. Parte da queda também veio da desmontagem de posições de quem apostava na vitória da oposição.",
+          "nota": "Variação entre o fechamento de 23/10/2026 e o de 30/10/2026, entre as ações do Ibovespa. Fonte: InfoMoney"
+        }
+      ]
+    },
+    {
+      "numero": "#06",
+      "slug": "06",
       "data": "26 de outubro de 2026",
       "titulo": "Virada de Lula no segundo turno provoca o pior dia do mercado desde a pandemia",
       "periodo": "Sobre a virada eleitoral e o efeito no mercado, 26 de outubro de 2026",
@@ -21,33 +812,25 @@
           "tema": "Eleições 2026",
           "titulo": "Lula vence em virada inédita no segundo turno",
           "texto": "Lula foi reeleito com 64.256.232 votos, ou 51,79% dos votos válidos, contra 59.826.041 de Flávio Bolsonaro, equivalentes a 48,21%, uma diferença de 4.430.191 votos, segundo apuração final divulgada pelo InfoMoney. É a primeira vez que o candidato que chegou em segundo lugar no primeiro turno vira o resultado no segundo: naquela etapa, Flávio tinha 47,03% dos votos válidos contra 45,16% de Lula, de acordo com o Valor Econômico. A virada se decidiu em estados como Minas Gerais, onde Lula superou Flávio no segundo turno depois de ficar atrás na etapa anterior, segundo reportagem do Valor sobre o resultado no estado, historicamente decisivo para a disputa presidencial. Para o mercado, o resultado era o cenário menos esperado, já que investidores vinham posicionados para uma vitória de Flávio havia semanas, o que ajuda a explicar por que a reação do pregão desta segunda-feira foi tão mais intensa do que qualquer pesquisa eleitoral havia antecipado.",
-          "fonte": "InfoMoney; Valor Econômico",
-          "imagem": "05/01-resultado-2turno.webp",
-          "alt": "Resultado do segundo turno: Lula com 51,79% dos votos válidos e Flávio Bolsonaro com 48,21%"
+          "fonte": "InfoMoney; Valor Econômico"
         },
         {
           "tema": "Mercados",
           "titulo": "Ibovespa, dólar e juros têm pior sessão desde a pandemia",
           "texto": "O Ibovespa chegou a cair 17,34% no pior momento do pregão, a 169.516,43 pontos, e fechou em queda de 13,88%, a 176.608,23 pontos, ante o fechamento de 205.088,74 pontos de sexta-feira (23), informou o InfoMoney. O circuit breaker, mecanismo criado na B3 em 1997 que interrompe os negócios quando o índice cai 10% em relação ao fechamento anterior, foi acionado às 9h57 e suspendeu o pregão por 30 minutos, o primeiro acionamento desde março de 2020. O dólar fechou em alta de 8,36%, a R$ 5,406, depois de ter batido R$ 5,60 durante o pregão, uma das maiores altas diárias desde a criação do Plano Real, segundo o Valor. Os juros futuros subiram mais de 260 pontos-base, e o Tesouro Nacional cancelou os leilões de títulos prefixados e indexados à inflação previstos para terça e quinta-feira, mantendo apenas o leilão de papéis atrelados à Selic, além de recomprar cerca de R$ 7,1 bilhões em títulos prefixados, segundo o InfoMoney. O Boletim Focus desta segunda-feira, concluído antes da apuração do resultado, já havia reduzido a projeção de dólar para o fim de 2026 de R$ 5,13 para R$ 5,05; a leitura da semana que vem deve ser a primeira a incorporar o tombo de hoje.",
-          "fonte": "InfoMoney; Valor Econômico; Banco Central (Boletim Focus)",
-          "imagem": "05/02-ibovespa-queda.webp",
-          "alt": "Gráfico do Ibovespa em 26 de outubro de 2026, com queda de 13,88% no fechamento"
+          "fonte": "InfoMoney; Valor Econômico; Banco Central (Boletim Focus)"
         },
         {
           "tema": "Análise de mercado",
           "titulo": "Por que a queda foi tão forte: o mercado estava posicionado para o resultado contrário",
           "texto": "Antes da eleição, o mercado apostava na vitória de Flávio e vinha comprando ações de bancos e estatais nas semanas anteriores ao pleito. A segunda-feira pós-eleitoral foi marcada por ampla liquidação dessas posições e por disfuncionalidade no mercado de renda fixa, já que investidores precisaram desfazer apostas montadas para o cenário que não se confirmou, segundo o Valor. Parte do tombo desta segunda-feira é, portanto, reversão do rali que essas ações tiveram após o primeiro turno, mais do que reprecificação dos fundamentos de cada empresa. O pano de fundo que sustenta essa reação é fiscal. No Congresso recém-eleito, a coalizão ligada a Flávio deve somar cerca de 40 senadores, numa Casa em que o Partido Liberal terá 28 das 81 cadeiras, e 203 dos 513 deputados, segundo relatório do BTG Pactual citado pela Exame. Isso deve exigir de Lula negociação intensa com o centro para aprovar qualquer medida fiscal relevante, condição que o mercado considera central para destravar uma eventual recuperação dos ativos brasileiros nas próximas semanas.",
-          "fonte": "Valor Econômico; Exame; BTG Pactual",
-          "imagem": "05/03-antes-depois.webp",
-          "alt": "Comparação de ativos antes e depois do segundo turno"
+          "fonte": "Valor Econômico; Exame; BTG Pactual"
         },
         {
           "tema": "Bancos & Estatais",
           "titulo": "Setores lideram perdas e Bradesco BBI corta preço-alvo da Petrobras",
           "texto": "Bancos e varejo concentraram as maiores perdas da sessão: Banco do Brasil (BBAS3) recuou 29,33%, B3 (B3SA3) caiu 36,28%, BTG Pactual (BPAC11) perdeu 24,83%, Bradesco (BBDC4) cedeu 21,70% e Magazine Luiza (MGLU3) desabou 58,23%, segundo o fechamento informado pelo InfoMoney. A exceção ficou com exportadoras como a Vale (VALE3), que fechou em alta de 4,01%, beneficiada pela disparada do dólar. A Petrobras (PETR4) não escapou da pressão, apesar de acumular alta superior a 100% em 2026 até sexta-feira. A ação caiu junto com o restante do mercado, e a presidente da estatal, Magda Chambriard, classificou a queda como um movimento especulativo que não refletiria os fundamentos da empresa. Horas depois, o Bradesco BBI cortou o preço-alvo de PETR4 para o fim de 2027 de R$ 62 para R$ 55, elevando o retorno em dividendos exigido de 8% para 10% diante de juros mais altos, mas manteve a recomendação de compra.",
-          "fonte": "InfoMoney; Bradesco BBI",
-          "imagem": "05/04-bancos-estatais.webp",
-          "alt": "Variação de bancos e estatais em 26 de outubro de 2026"
+          "fonte": "InfoMoney; Bradesco BBI"
         },
         {
           "tema": "Investimentos",
@@ -59,9 +842,7 @@
           "tema": "Bancos & Tecnologia",
           "titulo": "Itaú compra a NeoSpace por R$ 2,925 bilhões para desenvolver IA própria",
           "texto": "O Itaú Unibanco assinou nesta segunda-feira (26) um acordo para comprar a totalidade das ações da NeoSpace, startup brasileira que desenvolve modelos fundacionais de dados, por R$ 2,925 bilhões, segundo o Valor. As duas empresas já trabalhavam juntas havia quase dois anos em soluções de inteligência artificial generativa para crédito, gestão financeira, atendimento e prevenção a fraudes, e a tecnologia da startup deve reforçar o ia.i, a plataforma de IA generativa do banco. A NeoSpace seguirá com gestão autônoma, sob o comando do CEO Bruno Pierobon, e a conclusão do negócio depende do aval do Cade e do Banco Central. Para Milton Maluhy Filho, CEO do Itaú, o banco quer estar entre as instituições que vão definir o próximo capítulo da indústria financeira global. O anúncio saiu no mesmo dia em que o índice financeiro da B3 caiu 22,48%, e mostra o Itaú, apontado pelos especialistas ouvidos pelo Valor Investe como o banco de fundamentos mais sólidos, apostando em tecnologia própria como fonte de crescimento.",
-          "fonte": "Valor Econômico; comunicado do Itaú Unibanco",
-          "imagem": "05/06-itau-neospace.webp",
-          "alt": "Fachada de uma agência do Itaú"
+          "fonte": "Valor Econômico; comunicado do Itaú Unibanco"
         }
       ],
       "outros": [
@@ -292,6 +1073,253 @@
         {
           "termo": "Modelo fundacional",
           "definicao": "Modelo de inteligência artificial treinado com um grande volume de dados para servir de base a várias aplicações diferentes, em vez de ser feito para uma tarefa só. É a tecnologia que a NeoSpace desenvolve e que o Itaú comprou por R$ 2,925 bilhões."
+        }
+      ]
+    },
+    {
+      "numero": "#05",
+      "slug": "05",
+      "data": "18 de outubro de 2026",
+      "titulo": "Senado aprova o fim da escala 6x1, pesquisas apertam o segundo turno e juros da França vão ao maior nível em 24 anos",
+      "periodo": "Semana de 12 a 18 de outubro de 2026",
+      "resumo": "Na semana que antecedeu o debate final do segundo turno, o Senado aprovou o fim da escala 6x1 por 75 a 1, as pesquisas mostraram Flávio Bolsonaro e Lula dentro da margem de erro, o IBC-Br e o CPI americano reacenderam o debate sobre juros e os protestos na França levaram os rendimentos ao maior nível em 24 anos.",
+      "destaques": [
+        "Eleições 2026",
+        "Trabalho & Legislação",
+        "Atividade econômica",
+        "Inflação nos EUA",
+        "Europa"
+      ],
+      "carta": "Na semana que antecede o debate final antes do segundo turno de 25 de outubro, o Congresso aprovou uma das maiores mudanças trabalhistas desde 1988, a atividade econômica brasileira mostrou fraqueza, a inflação nos Estados Unidos seguiu resistente e a crise política francesa chegou às ruas e pressionou os juros.",
+      "noticias": [
+        {
+          "tema": "Eleições 2026",
+          "titulo": "Pesquisas apertam o segundo turno e consolidam favoritismo de Flávio Bolsonaro",
+          "texto": "As pesquisas divulgadas na semana mostraram o segundo turno de 25 de outubro dentro da margem de erro, com o favoritismo migrando para Flávio Bolsonaro (PL). A Quaest, publicada em 14 de outubro, apontou 46% para Flávio e 44% para Lula (PT) no cenário estimulado, com margem de erro de 2 pontos percentuais. Dois dias depois, o Datafolha elevou a vantagem para 51% a 49% em votos válidos, e o PoderData mostrou empate de 50% a 50%, segundo a InfoMoney. Cientistas políticos, caso de Bruno Soller, da Real Time Big Data, já descrevem Flávio como favorito quase consolidado; a Exame, porém, classificou os candidatos como tecnicamente empatados. Para o mercado, a perspectiva de uma gestão identificada com o ajuste fiscal ajuda a explicar a alta de 8,82% do Ibovespa na semana seguinte ao primeiro turno, ainda que a cautela tenha prevalecido agora, com o índice recuando 1,74% à espera do debate de domingo na Band.",
+          "fonte": "Quaest; Datafolha; PoderData; InfoMoney; Exame"
+        },
+        {
+          "tema": "Trabalho & Legislação",
+          "titulo": "Senado aprova fim da escala 6x1 por 75 a 1, numa das maiores mudanças trabalhistas desde 1988",
+          "texto": "O Senado aprovou em dois turnos, na quarta-feira (14), a Proposta de Emenda à Constituição (PEC) 221/2019, que extingue a escala 6x1 (seis dias de trabalho por um de descanso) e reduz a jornada semanal máxima de 44 para 40 horas sem corte de salário, por 75 votos a 1, segundo a Exame. Como o texto já havia passado pela Câmara sem mudança de mérito, segue direto para promulgação pela Mesa do Congresso, sem sanção presidencial. Pela regra de transição, as empresas terão 60 dias após a promulgação para adotar a escala 5x2 e o limite de 42 horas semanais, com nova redução, a 40 horas, entre o 12º e o 14º mês de vigência. O único voto contrário, do senador Hamilton Mourão (Republicanos-RS), atribuiu a adesão de Flávio Bolsonaro a um cálculo eleitoral, segundo a InfoMoney. A mudança eleva o custo da hora trabalhada nos setores intensivos em mão de obra, como varejo, serviços e comércio, com impacto sobre margens esperado nos balanços dos próximos trimestres.",
+          "fonte": "Exame; InfoMoney"
+        },
+        {
+          "tema": "Atividade econômica",
+          "titulo": "Atividade econômica mais fraca reabre debate sobre o fim dos cortes da Selic",
+          "texto": "O Índice de Atividade Econômica do Banco Central (IBC-Br), considerado uma prévia do PIB, subiu 0,30% em agosto frente a julho na série com ajuste sazonal, divulgou o Banco Central na sexta-feira (16), em linha com a mediana apurada pela Reuters. O próprio Banco Central, porém, revisou o dado de julho de queda de 0,20% para queda de 0,40%. Na comparação com agosto de 2025, o índice avançou 1,2%, e o acumulado em 12 meses chegou a 1,6%; por setor, a indústria cresceu 0,9%, os serviços 0,2% e a agropecuária recuou 1,8% no mês. A revisão de julho reforça a leitura, já disseminada entre casas como a ASA, de que o PIB do terceiro trimestre pode encolher frente ao segundo. O dado chega enquanto o Copom debate se interrompe, no início de novembro, o ciclo de cortes da Selic, hoje em 13,75% ao ano: a atividade mais fraca favorece a continuidade da flexibilização, enquanto o IPCA de 4,58% em 12 meses, acima do teto da meta, sustenta o argumento contrário.",
+          "fonte": "Banco Central; Reuters; IBGE"
+        },
+        {
+          "tema": "Economia internacional",
+          "titulo": "Inflação ao consumidor dos EUA sobe 3,7% em 12 meses, acima do esperado pelo mercado",
+          "texto": "O índice de preços ao consumidor (CPI, na sigla em inglês) dos Estados Unidos subiu 0,6% em setembro frente a agosto, em linha com a mediana da pesquisa Reuters, mas avançou 3,7% em 12 meses, acima da projeção de 3,6%, informou a InfoMoney em 14 de outubro. O núcleo, que exclui alimentação e energia, subiu 0,3% no mês, 0,1 ponto percentual acima do esperado. A gasolina, com alta de 9,1%, respondeu por mais da metade do avanço do índice geral; a energia como um todo subiu 5,2%, acelerando frente aos 2,1% de agosto, e os custos de moradia (shelter) subiram 0,4%. O dado saiu com atraso por causa da paralisação (shutdown) do governo americano, que deixou o Federal Reserve com menos informação às vésperas da reunião de outubro. Com a inflação acima da meta de 2% e um núcleo resistente, diminui o espaço para novos cortes de juros, o que tende a manter o dólar e os rendimentos dos títulos do Tesouro americano sensíveis a cada nova leitura de preços.",
+          "fonte": "InfoMoney; Reuters"
+        },
+        {
+          "tema": "Europa & Risco Fiscal",
+          "titulo": "Protestos e crise fiscal elevam juros da França ao maior nível em 24 anos",
+          "texto": "Mais de 1.800 pessoas foram detidas na França depois do dia nacional de mobilização de sábado, 17 de outubro, convocado por sindicatos, estudantes e ex-integrantes do movimento dos coletes amarelos contra o custo de vida, informou o ministro do Interior, Laurent Nuñez, segundo a InfoMoney. Cerca de 550 mil pessoas participaram dos atos, 110 mil delas em Paris, e mais de 150 policiais ficaram feridos. O rendimento do título público francês de dez anos (OAT) superou 5% na semana, o maior nível em 24 anos, enquanto o Parlamento discute um orçamento que tenta reduzir um déficit acima de 5% do PIB. O primeiro-ministro Sébastien Lecornu minimizou o saldo dos distúrbios, e o presidente Emmanuel Macron prometeu punir os responsáveis por vandalismo e saques. A combinação de protestos com juros em alta reforça entre investidores a leitura de que a França carrega um risco fiscal comparável ao das economias do sul da Europa, pressão que tende a persistir até a aprovação de um orçamento capaz de estabilizar a dívida antes da eleição presidencial de 2027.",
+          "fonte": "InfoMoney"
+        }
+      ],
+      "tabelas": [
+        {
+          "titulo": "Segundo turno: pesquisas da semana",
+          "colunas": [
+            "Pesquisa",
+            "Flávio Bolsonaro x Lula"
+          ],
+          "linhas": [
+            [
+              "Quaest (14/10), cenário estimulado",
+              "46% x 44%"
+            ],
+            [
+              "Datafolha (16/10), votos válidos",
+              "51% x 49%"
+            ],
+            [
+              "PoderData (16/10), empate",
+              "50% x 50%"
+            ]
+          ],
+          "nota": "Fonte: Quaest; Datafolha; PoderData; InfoMoney; Exame"
+        },
+        {
+          "titulo": "IBC-Br de agosto de 2026",
+          "colunas": [
+            "Indicador",
+            "Valor"
+          ],
+          "linhas": [
+            [
+              "Agosto ante julho (mediana: 0,30%)",
+              "+0,30%"
+            ],
+            [
+              "Julho revisado (antes: -0,20%)",
+              "-0,40%"
+            ],
+            [
+              "Selic atual, com Copom no início de novembro",
+              "13,75%"
+            ]
+          ],
+          "nota": "Fonte: Banco Central; Reuters; IBGE"
+        },
+        {
+          "titulo": "CPI dos EUA em setembro de 2026",
+          "colunas": [
+            "Indicador",
+            "Valor"
+          ],
+          "linhas": [
+            [
+              "Alta no mês, em linha com a mediana",
+              "0,6%"
+            ],
+            [
+              "Acumulado em 12 meses (esperado: 3,6%)",
+              "3,7%"
+            ],
+            [
+              "Núcleo no mês, 0,1 p.p. acima do esperado",
+              "0,3%"
+            ]
+          ],
+          "nota": "Fonte: InfoMoney; Reuters"
+        },
+        {
+          "titulo": "Mercados na semana",
+          "colunas": [
+            "Ativo",
+            "Variação",
+            "Valor"
+          ],
+          "linhas": [
+            [
+              "Ibovespa",
+              "-1,74%",
+              "205.430"
+            ],
+            [
+              "Dólar",
+              "+1,75%",
+              "R$ 5,07"
+            ],
+            [
+              "Euro",
+              "+1,86%",
+              "R$ 5,69"
+            ],
+            [
+              "EWZ (ETF Brasil em NY)",
+              "-3,95%",
+              "US$ 41,83"
+            ],
+            [
+              "S&P 500",
+              "-1,95%",
+              "7.659"
+            ],
+            [
+              "Nasdaq",
+              "-4,48%",
+              "26.140"
+            ],
+            [
+              "Dow Jones",
+              "+0,67%",
+              "52.002"
+            ]
+          ],
+          "detalhes": [
+            "Devolveu parte do rali do 1º turno com as pesquisas mais apertadas para o 2º turno; a alta do petróleo segurou o índice na sexta (+0,54%).",
+            "Voltou acima de R$ 5 com a maior incerteza eleitoral e a aversão a risco no exterior; na quinta subiu 1,15% em um único dia.",
+            "Acompanha o dólar: o movimento é de desvalorização do real, não de força da moeda europeia.",
+            "Cai mais que o Ibovespa porque é cotado em dólar e soma a queda das ações à desvalorização do real.",
+            "Venda de ações de chips e inteligência artificial e inflação americana acima do esperado.",
+            "Pior semana desde junho, concentrada nas empresas ligadas a inteligência artificial (-2,15% só na sexta).",
+            "Único dos três a subir: tem menos peso de tecnologia que o S&P 500 e o Nasdaq."
+          ],
+          "nota": "Fechamento de 16/10/2026; variação sobre o fechamento de 9/10/2026 (semana de quatro pregões na B3, com feriado em 12/10). Fonte: InfoMoney; AP; Investing.com"
+        },
+        {
+          "titulo": "Maiores altas",
+          "colunas": [
+            "Ação",
+            "Variação (semana)"
+          ],
+          "linhas": [
+            [
+              "PRIO",
+              "+8,77%"
+            ],
+            [
+              "Petrobras PN",
+              "+6,57%"
+            ],
+            [
+              "Petrobras ON",
+              "+5,44%"
+            ],
+            [
+              "Ambev",
+              "+5,32%"
+            ],
+            [
+              "Telefônica Brasil (Vivo)",
+              "+4,71%"
+            ]
+          ],
+          "detalhes": [
+            "PRIO3",
+            "PETR4",
+            "PETR3",
+            "ABEV3",
+            "VIVT3"
+          ],
+          "texto": "As maiores altas vieram do petróleo. O Brent subiu cerca de 5% na semana e fechou a sexta acima de US$ 109, com ataques a navios no Estreito de Ormuz e no Mar Vermelho, o que impulsionou a PRIO e a Petrobras; o Bank of America elevou os preços-alvo das duas, para R$ 74 e R$ 70. A Petrobras renovou sete vezes no mês o recorde de valor de mercado e encerrou a semana valendo R$ 819,9 bilhões. Ambev e Vivo completam a lista como empresas de receita mais previsível, que costumam atrair investidores em semanas de aversão a risco.",
+          "nota": "Variação semanal entre 9/10 e 16/10/2026. Fonte: TradeMap; Money Times"
+        },
+        {
+          "titulo": "Maiores quedas",
+          "colunas": [
+            "Ação",
+            "Variação (semana)"
+          ],
+          "linhas": [
+            [
+              "Vamos",
+              "-17,35%"
+            ],
+            [
+              "Direcional",
+              "-14,63%"
+            ],
+            [
+              "Tenda",
+              "-12,72%"
+            ],
+            [
+              "CSN",
+              "-12,71%"
+            ],
+            [
+              "Azzas 2154",
+              "-10,69%"
+            ]
+          ],
+          "detalhes": [
+            "VAMO3",
+            "DIRR3",
+            "TEND3",
+            "CSNA3",
+            "AZZA3"
+          ],
+          "texto": "Do lado negativo, a semana devolveu parte do rali do primeiro turno nas ações mais sensíveis a juros. A Vamos, que aluga caminhões e máquinas e é muito endividada, chegou a cair 10,79% só na terça (13), quando as pesquisas mostraram a disputa mais apertada, e a Azzas 2154 depende de crédito ao consumidor. Entre as construtoras, pesaram as prévias operacionais do terceiro trimestre: a Direcional registrou vendas líquidas 27% menores que um ano antes, e a Tenda viu os distratos subirem para 19,5% das vendas brutas, ambas citando critérios mais rígidos de financiamento da Caixa e efeitos de greve.",
+          "nota": "Variação semanal entre 9/10 e 16/10/2026. Fonte: TradeMap; Money Times"
         }
       ]
     },
